@@ -75,7 +75,7 @@ window.gm.getScenePic = function(id){
   return('assets/bg_park.png')//return('assets/bg/bg_VR_1.png');//todo placehodler
 }
 /*
-* prints a (svg-) map  
+* prints a (svg-) map into 
 */
 window.gm.printMap=function(MapName,playerTile,reveal) {
   var width=600,height=300;

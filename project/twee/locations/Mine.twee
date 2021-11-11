@@ -377,6 +377,47 @@ TODO BAD END
 </article><article id="LogPanel"></article></section>
 
 
+:: AM_Lv2_H5
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."</p>
+You are surprised to hear someones voice down here  - maybe there are some survivors here.
+<p class="tPC">"Hello? Can someone hear me? I need help, there was...."</p>
+Before you an continue the voice interupts again.
+<p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."</p>
+<p class="tPC">'Either they dont listen or this is a fucking voice recording'</p>
+<p class="tPC">"What contamination? Is there some radioactivity or biohazard?"</p>
+You remeber the areas that you had to travel through. You didnt see a warning sign pointing out some hazardous danger.
+<p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."</p>
+<p class="tPC">I'm not going to strip naked here. Let me in !</p>
+<p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."<p>
+<p class="tPC">'I will just remove the overall'</p>
+You open the zipper and strip off the overall. So that they notice that this pisses you off you throw it angrily on the floor.
+<p class="tPC">"So here, please. Now get that decontamination started!"</p>
+<p class="tNPC1">"Please place decontaminated items in the containment bin."</p>
+A metal box unlocks. You step closer and peer inside. Its empty.
+<p class="tPC">"Fine, here you go."</p> 
+With that you throw the messy cloth inside the box and forcefully slam the hood shut.
+<p class="tPC">'I just hope I get that back.'</p> 
+Your worries are interupted as the voice repeats once again.
+<p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."<p>
+<p class="tPC">"What?! Is this a joke?"</p>
+You nestle at your undergarments.
+<p class="tPC">"You really want to see me naked !"</p>
+Again the voice repeats in monotone voice. 
+<p class="tNPC1">"Contamination detected. Please remove all...<p>
+<p class="tPC">"Damn you..."</p>
+You undo your bra and step out of your pantys, trying to cover up yourself as best as possible.</br>
+You walk over to the bin to place your undergarments inside. As you open the lid of the box you are surprised that your overall is gone.
+<p class="tPC">"Hey where is my stuff?"</p>
+<p class="tNPC1">"Contaminated gear has to be cleaned separatly."</p>
+So what now do you also place your undergarments inside the box?
+<p class="tPC">'I just hope that this is not a mistake.'</p>
+You shiver at the tought to run around naked in this devasted area.
+
+</article><article id="LogPanel"></article></section>
+
+
 
 :: AM_Lv2_G2_Attack [_back_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
