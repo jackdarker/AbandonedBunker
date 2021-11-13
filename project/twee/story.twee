@@ -1,5 +1,5 @@
 :: StoryTitle
-DLCSeason
+AlienEvasion
 
 
 :: StoryData
@@ -20,17 +20,6 @@ DLCSeason
 
 :: Story JavaScript [script]
 
-:: Start
-Select a Link:
-<ul>
-    <li>[[_SuperSimpleStory_]]</li>
-	<li>[[_ImagesAndOtherMedia_]]</li>
-    <li>[[_VariablesAndScript_]]</li>
-	<li>[[_ControlElements_]]</li>
-    <li>[[_Inventory_]]</li>
-    <li>[[_SaveAndRestore_]]</li>
-    <li>[[StartPage]]</li>
-</ul>
 
 :: NewGamePlus
 You finished the game in some way but maybe you have missed something. </br>

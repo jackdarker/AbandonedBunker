@@ -22,6 +22,13 @@ This game is powered by twine/tweego and snowman.</br>
 <article><%window.gm.initGame();window.gm.player.location=window.passage.name;%>
 This is just some experiment to see if I can get some kind of dungeon crawler working in twine.
 </br> Enter the dungeon and search for the stairs. Avoid those inhabiting this scary space. 
-</br><p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLair();window.gm.dng.enterDungeon();'>Explore the dungeon</a></p>
+</br><p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv1();window.gm.dng.enterDungeon();'>Explore the dungeon</a></p>
 <p class='author'>Loading of savegame is only possible in game.</p>
+</article>
+
+:: Level2Intro
+<article><%window.gm.initGame();window.gm.player.location=window.passage.name;%>
+</br> 
+</br><p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv2();window.gm.dng.enterDungeon();'>Level2</a></p>
+<p class='author'>You might save now.</p>
 </article>

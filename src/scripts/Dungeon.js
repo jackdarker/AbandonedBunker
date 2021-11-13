@@ -158,8 +158,8 @@ class DngRoom {
         //this.origResumeFct = this.floor.dungeon.inRoomedDungeonResume;
         this.fromRoom = from;
         this.it = 0;//a counter to keep track from what iteration to continue
-        this.floor.dungeon.resumeRoom=this.moveIterator.bind(this);
-        this.floor.dungeon.resumeRoom();
+        //this.floor.dungeon.resumeRoom=this.moveIterator.bind(this);
+        this.moveIterator();
     }
 
     // Whats that good for: onExit or onEnter might trigger an interaction/combat that we have to finish first befor displaying navigation buttons again.
@@ -178,7 +178,6 @@ class DngRoom {
             dir = element;// as DngDirection;
             if (dir.roomA == this.fromRoom && dir.roomB==this) {
                 if (dir.onExit()){
-                    //this.floor.dungeon.inRoomedDungeonResume = this.moveIterator
                     return;
                 }
             }
@@ -194,25 +193,24 @@ class DngRoom {
             dir = element1;// as DngDirection;
             if (dir.roomA==this && dir.roomB == this.fromRoom) {
                 if (dir.onEnter()) {
-                    //this.floor.dungeon.inRoomedDungeonResume = this.moveIterator
                     return;
                 }
             }
         }
         _it = _it +1; 
         if (_it > this.it && this.onEnter()) {
-            this.it = _it; //this.floor.dungeon.inRoomedDungeonResume = this.moveIterator
+            this.it = _it;
             return;
         }
         _it = _it +1; 
         if (_it > this.it && this.floor.dungeon.onEnterRoom!==null && this.floor.dungeon.onEnterRoom(this)) { //todo if there are multiple events on enter?
-            this.it = _it; //this.floor.dungeon.inRoomedDungeonResume = this.moveIterator
-            return;
+            /*this.it = _it;
+            return;*/
         } 
         
-        
-        this.floor.dungeon.inRoomedDungeonResume = this.floor.dungeon.resumeRoomMenu;//this.origResumeFct;
-        this.floor.dungeon.inRoomedDungeonResume();
+        this.floor.dungeon.resumeRoom();
+        //this.floor.dungeon.inRoomedDungeonResume = this.floor.dungeon.resumeRoomMenu;//this.origResumeFct;
+        //this.floor.dungeon.inRoomedDungeonResume();
     
     }
     //gets called when entering the floor or room; override it to update the other properties
@@ -286,7 +284,7 @@ class DngOperation {
     onTrigger() { };
 }
 /**
- * persistData should be a "pointer" to a location where to store dungeon data f.e. story.state.dng.myDungeon
+ * 
  */
 class DngDungeon	{
     constructor(name,descr) {
@@ -304,7 +302,8 @@ class DngDungeon	{
         this.Mapper = new DngMapper();//DngMapper; 
         this.buttons=[];
         this.onEnterRoom=null; //global onEnter
-        this.inRoomedDungeonResume = this.inRoomedDungeonDefeat = null;
+        this.fctStack=[];
+        this.inRoomedDungeonResume = null;
         this.evtData={id:0},this.renderEvent = function(id){ return("You have to set a function to renderEvent before calling renderNext"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));};
         this.Mobs=[]; //list of mobs on actual floor
     }
@@ -345,7 +344,7 @@ class DngDungeon	{
     enterDungeon() {
         //this.Mapper = new DngMapper();
         this.actualRoom = null;
-        this.resumeRoom=this.resumeRoomMenu;
+        //this.resumeRoom=this.resumeRoomMenu;
         var Entry = null;
         var Exit = null;
         var Room;
@@ -363,7 +362,6 @@ class DngDungeon	{
         if (Entry == null || Exit == null) {
             throw new Error('Error: Dungeon-Exit or Entry missing');
         }
-        this.inRoomedDungeonDefeat = this.exitDungeon;
         this.floorChange(Entry.floor,Entry.floor);
         this.moveToRoom(Entry);
        // playerMenu();
@@ -436,8 +434,16 @@ class DngDungeon	{
         $("div#panel")[0].appendChild(table);
 
     }
+    pushFct(fct) {
+        this.fctStack.push(fct);
+    }
     resumeRoom() {
-
+        if(this.fctStack.length<=0) {
+            this.resumeRoomMenu();
+            return;
+        }
+        let fct=this.fctStack.shift();
+        fct();
     }
     resumeRoomMenu() {
         /*		Menu Layout
@@ -516,17 +522,15 @@ class DngDungeon	{
     tickMobs(it=0) {
         //a tick could cause a mob to do something that should be noted on the screen
         //MobA detects MobB-> show notification; MobB finds player -> combat; next 
-        this.resumeRoom=this.resumeRoomMenu;
+        //this.resumeRoom=this.resumeRoomMenu;
         for(var i=this.Mobs.length-1-it;i>=0;i--) {
             var mob = this.Mobs[i];
             it+=1;
             if (mob.tick()) {
                 //
-                this.resumeRoom = this.tickMobs.bind(this,it);
-                return;
+                //this.resumeRoom = this.tickMobs.bind(this,it); return;
             };
         }
-        this.resumeRoom();
     }
 }
 class DngMob {
@@ -538,94 +542,34 @@ class DngMob {
             path:[],
             idle:'wait',    // wait / hide
             mode:'idle',    // hunt / seek / wait / return / flee
-            oldmode:'idle',
-            waitBeforeHome:3,
-            enabled:true
         }
     }
     //needs to be set with ._parent=window.gm.util.refToParent(this);
     get dungeon() {return this._parent();}
-    decide(){
-        let floor = this.dungeon.actualRoom.floor;
-        let grid = floor.allRooms();
-        let graph = new window.Graph(grid);
-        let end=null,path=null;
-        let room=floor.getRoom(this.dungeon.actualRoom.name),//player
-        start = floor.getRoom(this.data.actualTile);
-        //check line of sight
-        const checkView=[{x:2,y:0},{x:0,y:2},{x:-2,y:0},{x:0,y:-2},{x:1,y:0},{x:0,y:1},{x:-1,y:0},{x:0,y:-1}];
-        for(var i=checkView.length-1;i>=0;i--) {
-            if(room.x===start.x+checkView[i].x && room.y===start.y+checkView[i].y){
-                //ignore if room is not connected in straight line
-                path = window.astar.search(graph,new window.GraphNode(start,1),new window.GraphNode(room,1),{closest:false});
-                if(path.length===Math.abs(checkView[i].x)+Math.abs(checkView[i].y)) {
-                    end=room;  //found player
-                    this.data.mode='hunt';
-                    break;
-                }
-            }
-        }
-        if(end===null) {//check noise
-            const checkHear=[{x:-1,y:1},{x:1,y:1},{x:-1,y:-1},{x:1,y:-1},{x:1,y:0},{x:0,y:1},{x:-1,y:0},{x:0,y:-1}];
-            for(var i=checkHear.length-1;i>=0;i--) {
-                if(room.x===start.x+checkHear[i].x && room.y===start.y+checkHear[i].y){
-                    end=room;  //found player
-                    this.data.mode='hunt';
-                    break;
-                }
-            }
-        }
-        //check smell
-        //decide
-        if(end===null) { //lost player
-            if(this.data.mode==='hunt') {
-                this.data.waitBeforeHome=3; this.data.mode='wait';
-            } else if(this.data.mode==='wait') {
-                this.data.waitBeforeHome-=1;
-                if(this.data.waitBeforeHome<=0) {
-                    this.data.mode==='return';
-                    end = floor.getRoom(this.data.homeTile);
-                }
-            } else if(this.data.mode==='return') {
-                if(this.data.actualTile===this.data.homeTile) {
-                    this.data.mode==='idle';
-                }
-            }
-        }
-        if(end!==null) {
-            start = new window.GraphNode(start,1)
-            end = new window.GraphNode(end,1);
-            path = window.astar.search(graph,start,end);
-            this.data.path=path.map((el)=>{return(el.origNode.name);})
-        }
-    }
-    //return true if scene plays 
-    //to return back to dungeon add to scene window.gm.printLink('Next','window.gm.dng.resumeRoom()')
-    do() {
-        let res=false, nextTile=this.data.path.shift();
-        if(nextTile!==undefined && nextTile!=='' && nextTile!==this.data.actualTile) {
-            this.data.actualTile=nextTile; //move to
-        }
-        if(this.data.oldmode!==this.data.mode ){
-            this.data.oldmode=this.data.mode;
-            //window.story.show('MinoRant');
-            this.dungeon.renderEvent = function(me){return function(id){ return(me.data.name+" huffs angryly.</br>"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));}}(this);
-            this.dungeon.renderNext(1);
-            return(true);
-        } else if (this.dungeon.actualRoom.name===this.data.actualTile) {
-            res=this.onCollidePlayer();
-        } else {
-        }
-        return(res);
-    }
-    onCollidePlayer() {
-        this.dungeon.renderEvent = function(me){return function(id){ return(me.data.name+" found you.</br>"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));}}(this);
-        this.dungeon.renderNext(1);
-        return(true);
-    }
+    get enabled() {return(true);}
+    /*
+    * implement sensors here
+    */
+    decide(){    }
+    /* 
+    * implements action
+    * return true if scene plays 
+    * to return back to dungeon add to scene window.gm.printLink('Next','window.gm.dng.resumeRoom()')
+    */
+   do() { return(false); }
+    /**
+     * implement what happens if player is met
+     * return true if scene plays 
+     */
+    onCollidePlayer() { return(false); }
+    /**
+     * implement what happens if mob is met
+     * return true if scene plays 
+     */
+    onCollideMob(mob) { return(false); }
     //call to calculate
     tick() {
-        if(!this.data.enabled) return;
+        if(!this.enabled) return;
         this.decide();
         return(this.do());
     }
@@ -837,141 +781,3 @@ class DngMapper {
         return _line;
     }
 }
-/*
-class BinaryHeap {
-    constructor(scoreFunction) {
-    this.content = [];
-    this.scoreFunction = scoreFunction;
-  }
-    push(element) {
-      // Add the new element to the end of the array.
-      this.content.push(element);
-  
-      // Allow it to sink down.
-      this.sinkDown(this.content.length - 1);
-    }
-    pop() {
-      // Store the first element so we can return it later.
-      var result = this.content[0];
-      // Get the element at the end of the array.
-      var end = this.content.pop();
-      // If there are any elements left, put the end element at the
-      // start, and let it bubble up.
-      if (this.content.length > 0) {
-        this.content[0] = end;
-        this.bubbleUp(0);
-      }
-      return result;
-    }
-    remove(node) {
-      var i = this.content.indexOf(node);
-  
-      // When it is found, the process seen in 'pop' is repeated
-      // to fill up the hole.
-      var end = this.content.pop();
-  
-      if (i !== this.content.length - 1) {
-        this.content[i] = end;
-  
-        if (this.scoreFunction(end) < this.scoreFunction(node)) {
-          this.sinkDown(i);
-        } else {
-          this.bubbleUp(i);
-        }
-      }
-    }
-    size() {
-      return this.content.length;
-    }
-    rescoreElement(node) {
-      this.sinkDown(this.content.indexOf(node));
-    }
-    sinkDown(n) {
-      // Fetch the element that has to be sunk.
-      var element = this.content[n];
-  
-      // When at 0, an element can not sink any further.
-      while (n > 0) {
-  
-        // Compute the parent element's index, and fetch it.
-        var parentN = ((n + 1) >> 1) - 1;
-        var parent = this.content[parentN];
-        // Swap the elements if the parent is greater.
-        if (this.scoreFunction(element) < this.scoreFunction(parent)) {
-          this.content[parentN] = element;
-          this.content[n] = parent;
-          // Update 'n' to continue at the new position.
-          n = parentN;
-        }
-        // Found a parent that is less, no need to sink any further.
-        else {
-          break;
-        }
-      }
-    }
-    bubbleUp(n) {
-      // Look up the target element and its score.
-      var length = this.content.length;
-      var element = this.content[n];
-      var elemScore = this.scoreFunction(element);
-  
-      while (true) {
-        // Compute the indices of the child elements.
-        var child2N = (n + 1) << 1;
-        var child1N = child2N - 1;
-        // This is used to store the new position of the element, if any.
-        var swap = null;
-        var child1Score;
-        // If the first child exists (is inside the array)...
-        if (child1N < length) {
-          // Look it up and compute its score.
-          var child1 = this.content[child1N];
-          child1Score = this.scoreFunction(child1);
-  
-          // If the score is less than our element's, we need to swap.
-          if (child1Score < elemScore) {
-            swap = child1N;
-          }
-        }
-  
-        // Do the same checks for the other child.
-        if (child2N < length) {
-          var child2 = this.content[child2N];
-          var child2Score = this.scoreFunction(child2);
-          if (child2Score < (swap === null ? elemScore : child1Score)) {
-            swap = child2N;
-          }
-        }
-  
-        // If the element needs to be moved, swap it, and continue.
-        if (swap !== null) {
-          this.content[n] = this.content[swap];
-          this.content[swap] = element;
-          n = swap;
-        }
-        // Otherwise, we are done.
-        else {
-          break;
-        }
-      }
-    }
-}
-class DngPathFinder {
-    constructor(floor){
-        this.floor=floor;
-    }
-
-    static pathTo(node) {
-        var curr = node;
-        var path = [];
-        while (curr.parent) {
-            path.unshift(curr);
-            curr = curr.parent;
-        }
-        return path;
-    }
-    static getHeap() {
-        return new BinaryHeap(function(node) {
-            return node.f; });
-    }
-}*/
