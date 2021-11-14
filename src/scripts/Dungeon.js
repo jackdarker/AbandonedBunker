@@ -287,12 +287,12 @@ class DngOperation {
  * 
  */
 class DngDungeon	{
-    constructor(name,descr) {
-        this.name = name;//name of the dungeon
-        this.descr= descr;//text diplayed when entering the dungeon
-        let persistData = window.story.state.dng[name];
+    constructor() {
+        this.name = this.constructor.name;//name of the dungeon
+        //this.descr =  function() {return(this.name)};//text diplayed when entering the dungeon
+        let persistData = window.story.state.dng[this.name];
         if(persistData===undefined || persistData===null) {
-            persistData = window.story.state.dng[name]=this.persistentDngDataTemplate(); 
+            persistData = window.story.state.dng[this.name]=this.persistentDngDataTemplate(); 
         }
         //todo when loading savegame the Dungeon will be new constructed but fetches story.state to restore persistent data
         //need a way that mob-data is also pulled from there (reove mobs and restore according to persitent data)
@@ -307,6 +307,10 @@ class DngDungeon	{
         this.evtData={id:0},this.renderEvent = function(id){ return("You have to set a function to renderEvent before calling renderNext"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));};
         this.Mobs=[]; //list of mobs on actual floor
     }
+    /**
+     * override this
+     */
+    descr() {return(this.name);}
     //override this to return a data-object that will be used to store persistent data
     persistentDngDataTemplate() {return({});}
     setFloors(Floors) {  
@@ -582,7 +586,7 @@ class DngMapperInfo {
         this.name="";
         this.hidden=false;
         this.connect= 0;	//bitwise encoding of directions
-        this.boss=0;    //boss-marker
+        this.boss='';    //boss-marker
     }  
 }
 // builds the map from the dungeons info and actualRoom
@@ -722,8 +726,8 @@ class DngMapper {
             if (roomInfo.Entry && playerRoom.name != roomInfo.name) {
                 _line = "E";
             }
-            if (roomInfo.boss && playerRoom.name != roomInfo.name) {
-                _line = "B";
+            if (roomInfo.boss!=='' && playerRoom.name != roomInfo.name) {
+                _line = roomInfo.boss;
             }
             //each room/connection has to be 3 chars long or it will messup formatting !
             //todo format as table?

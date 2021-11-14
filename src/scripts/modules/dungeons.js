@@ -334,13 +334,12 @@ class MinoLairLv1 extends DngDungeon{
         return(_data);
     }
     constructor()    {
-        super("MinoLairLv1", MinoLairLv1.desc,window.story.state.dng[MinoLairLv1.name])
-        this.data.currentRoom = 1; 
+        super()
         this.Mapper = new DngMapper(this.extMapInfo.bind(this));
         this.buildFloors();
         this.onEnterRoom = this.checkCollisionPlayer;
     }
-    static desc() {return("Escape the Mean Mino");}
+    desc() {return("Escape the Mean Mino");}
     buildFloors() {
         var _floors= [];
         var firstFloor//:DngFloor;
@@ -449,10 +448,12 @@ class MinoLairLv1 extends DngDungeon{
         this.addMob(mob);
         mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='B3',mob.data.name='Hound',mob.data.targets=['C5','B3'];
         this.addMob(mob);
+        mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='F1',mob.data.name='Lurker';
+        this.addMob(mob);
     }
     exitDungeon() {
         super.exitDungeon();
-        window.story.show("ForestBorder");
+        window.story.show("Level2Intro");
     }
     checkCollisionPlayer(room) {
         //check if there is a mob
@@ -471,7 +472,7 @@ class MinoLairLv1 extends DngDungeon{
     }
     extMapInfo(roomInfo) { //show mino on map
         for(var i=this.Mobs.length-1;i>=0;i-- ){
-            if(roomInfo.name===this.Mobs[i].data.actualTile) roomInfo.boss=1;
+            if(roomInfo.name===this.Mobs[i].data.actualTile) roomInfo.boss=this.Mobs[i].data.mark;
         }
         return(roomInfo);
     }

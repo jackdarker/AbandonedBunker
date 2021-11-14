@@ -5,9 +5,9 @@ class dmTurret extends DngMob {
     constructor() {
         super();
         this.data.oldmode='idle',
-        this.data.waitBeforeHome=3,
         this.data.health=1,
-        this.data.enabled=true
+        this.data.enabled=true,
+        this.data.mark='T';
     }
 
     get enabled() {return(this.data.enabled);}
@@ -36,8 +36,12 @@ class dmGuard extends DngMob {
         super();
         this.data.oldmode=this.data.mode,
         this.data.waitBeforeHome=3,
+        this.data.moveTimer=0, //
+        //settings:
+        this.data.moveSpeed=1.5,
         this.data.enabled=true,
-        this.data.health=1
+        this.data.health=2;
+        this.data.mark='G';
     }
 
     get enabled() {return(this.data.enabled);}
@@ -103,6 +107,10 @@ class dmGuard extends DngMob {
     //return true if scene plays 
     //to return back to dungeon add to scene window.gm.printLink('Next','window.gm.dng.resumeRoom()')
     do() {
+        this.data.moveTimer-=1;
+        if(this.data.moveTimer>0) return; //speedcheck
+        this.data.moveTimer += this.data.moveSpeed; // 1 = -0.5 +1.5; next round 1,5= 0 + 1,5
+
         let res=false, nextTile=this.data.path.shift();
         if(nextTile!==undefined && nextTile!=='' && nextTile!==this.data.actualTile) {
             this.data.actualTile=nextTile; //move to
@@ -111,16 +119,16 @@ class dmGuard extends DngMob {
             this.data.oldmode=this.data.mode;
             this.dungeon.pushFct(
                 (function(){
-                    this.dungeon.renderEvent = function(me){return function(id){ return(me.data.name+" huffs angryly.</br>"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));}}(this);
+                    this.dungeon.renderEvent = function(me){return function(id){ return(
+                        me.data.name+" huffs angryly.</br> He is now "+me.data.mode +".</br>"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));}}(this);
                     this.dungeon.renderNext(1);
                 }).bind(this));
-            //return(true);
         } else if (this.dungeon.actualRoom.name===this.data.actualTile) {
             res=this.onCollidePlayer();            
         } else {
             res=this.checkCollisionMob();
         }
-        return(false);//res);
+        return(false);
     }
     checkCollisionMob() {
         //check if there is a mob
@@ -150,7 +158,10 @@ class dmPatrol extends dmGuard {
         super();
         this.data.lastTile='';
         this.data.targets=[];
+        //settings
         this.data.waitAtHome=1;
+        this.data.moveSpeed=1.5;
+        this.data.mark='P';
     }
     //todo only sees in forward direction?
     decide(){
@@ -178,9 +189,64 @@ class dmPatrol extends dmGuard {
         this.navigate(start,end);
     }
 }
-// hunts the player until out of sight, doesnt return to homebase, moes around randomly for some time, then hides
-//dmLurker
+// hunts the player until out of sight, doesnt return to homebase, moves around randomly for some time, then hides
+class dmHunter extends dmGuard {
+    constructor() {
+        super();
+        this.data.lastTile='';
+        //settings
+        this.data.waitAtHome=3;
+        this.data.mark='H';
+        this.data.moveTimer=this.data.moveSpeed=2;
+    }
+    
+    decide(){
+        let floor = this.dungeon.actualRoom.floor;
+        let grid = floor.allRooms();
+        let graph = new window.Graph(grid);
+        let end=null,path=null;
+        let room=floor.getRoom(this.dungeon.actualRoom.name),//player
+        start = floor.getRoom(this.data.actualTile);
 
+        if(this.data.mode!=='hide') this.data.mode='seek'; //
+        //check line of sight
+        const checkView=this.sensorSee();
+        for(var i=checkView.length-1;i>=0;i--) {
+            if(room.x===start.x+checkView[i].x && room.y===start.y+checkView[i].y){
+                //ignore if room is not connected in straight line
+                path = window.astar.search(graph,new window.GraphNode(start,1),
+                    new window.GraphNode(room,1),{closest:false});
+                if(path.length===Math.abs(checkView[i].x)+Math.abs(checkView[i].y)) {
+                    end=room;  //found player
+                    this.data.mode='hunt';
+                    break;
+                }
+            }
+        }
+        if(end===null && this.data.mode==='hunt'){ 
+            if(this.data.path.length>0) {
+            //lost target -> move to targets last position (finish path)
+            end = floor.getRoom(this.data.path[0]);
+            } else {
+                this.data.mode==='seek';this.data.waitAtHome=3;
+            }
+        }
+        if(this.data.mode==='seek') { //lost target and no further path -> random search for some time
+            this.data.waitAtHome-=1;
+            if(this.data.waitAtHome>0) {           
+                if(this.data.path.length<=0) { //get random goal
+                    end=floor.allRooms()[_.random(0,floor.allRooms().length-1)];
+                    this.navigate(start,end);
+                } 
+                end = floor.getRoom(this.data.path[0]);                
+            } else {
+                // stop seek and hide
+                this.data.mode='hide';
+            }
+        } 
+        this.navigate(start,end);
+    }
+}
 // flees in any direction but where hunter is
 //dmPrey
 
@@ -188,5 +254,6 @@ window.gm.dngmobs = (function (mobs) {
     mobs.MinoGuard = function () { return(new dmGuard());};  
     mobs.Turret = function () { return(new dmTurret());};
     mobs.Patrol = function () { return(new dmPatrol());};
+    mobs.Hunter = function () { return(new dmHunter());};
     return mobs; 
 }(window.gm.dngmobs || {}));
