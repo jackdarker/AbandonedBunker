@@ -25,17 +25,6 @@ window.gm.initGame= function(forceReset,NGP=null) {
     s.vars.mine= {
       mapReveal:0,
       qFoundPlantPod:0,
-      qHasSprayer:0,
-      qSprayerCharge:0,
-      qHasCrowbar:0,
-      qHasCrank:0,
-      qHasExtinguisher:0,
-      qHasLighter:0,
-      qHasPatchkit:0,
-      qHasRope:0,
-      qSanity:100,
-      qCoverallHP:100,
-      qLingeryHP:100,
       qDoorH2:0,
       qDoorF2:0,
       qDoorH5:0,
@@ -62,8 +51,8 @@ window.gm.initGame= function(forceReset,NGP=null) {
       ch.Outfit.addItem(new SkinHuman());
       ch.Outfit.addItem(new FaceHuman());
       ch.Outfit.addItem(HandsHuman.factory('human'));
-      ch.Outfit.addItem(AnusHuman.factory('human'));
-      ch.Outfit.addItem(PenisHuman.factory('human'));
+      //todo ch.Outfit.addItem(AnusHuman.factory('human'));
+      //ch.Outfit.addItem(PenisHuman.factory('human'));
       if(s._gm.debug) {
         ch.Skills.addItem(new SkillInspect());
         ch.Skills.addItem(new SkillUltraKill());
@@ -81,7 +70,40 @@ window.gm.initGame= function(forceReset,NGP=null) {
 }
 window.gm.initGameFlags = function(forceReset,NGP=null) {
   let s= window.story.state;
-
+  if (forceReset) {  
+    s.Glob=s.DngLv1 =s.DngLv2 = s.DngLv3 =null; 
+  }
+  let Glob = {
+    hasSprayer:0,
+    sprayerCharge:0,
+    hasCrowbar:0,
+    hasCrank:0,
+    hasExtinguisher:0,
+    hasLighter:0,
+    hasPatchkit:0,
+    hasRope:0,
+    qSanity:100,
+    qCoverallHP:100,
+    hasEmptyBattery: 0,
+    hasFullBattery:0
+  }
+  let DngLv1 = {
+    visitedTiles: [],
+    mapReveal: 0
+  }
+  let DngLv2 = {
+    visitedTiles: [],
+    mapReveal: 0
+  }
+  let DngLv3 = {
+    visitedTiles: [],
+    mapReveal: 0
+  }
+  //see comment in rebuildFromSave why this is done
+  s.DngLv1=window.gm.util.mergePlainObject(DngLv1,s.DngLv1);
+  s.DngLv2=window.gm.util.mergePlainObject(DngLv2,s.DngLv2);
+  s.DngLv3=window.gm.util.mergePlainObject(DngLv3,s.DngLv3);
+  s.Glob=window.gm.util.mergePlainObject(Glob,s.Glob);
 }
 
 // update non-class-objects of previous savegame

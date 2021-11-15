@@ -21,14 +21,24 @@ This game is powered by twine/tweego and snowman.</br>
 :: Intro
 <article><%window.gm.initGame();window.gm.player.location=window.passage.name;%>
 This is just some experiment to see if I can get some kind of dungeon crawler working in twine.
-</br> Enter the dungeon and search for the stairs. Avoid those inhabiting this scary space. 
-</br><p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv1();window.gm.dng.enterDungeon();'>Explore the dungeon</a></p>
+</br> Enter the dungeon and search for the stairs. Avoid those inhabiting this scary space. </br>
+<p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv1();window.gm.dng.enterDungeon();'>Level1</a></p>
+<p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv2();window.gm.dng.enterDungeon();'>Level2</a></p>
+<p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv3();window.gm.dng.enterDungeon();'>Level3</a></p>
 <p class='author'>Loading of savegame is only possible in game.</p>
 </article>
 
-:: Level2Intro
-<article><%window.gm.initGame();window.gm.player.location=window.passage.name;%>
-</br> 
-</br><p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv2();window.gm.dng.enterDungeon();'>Level2</a></p>
-<p class='author'>You might save now.</p>
-</article>
+:: Inv_Hud2
+<hr><%if(window.story.state.Glob){%>
+<p>Inventory:</p>
+<span >Sanity:<%=window.story.state.Glob.qSanity%>%</span>
+<span <%=(window.story.state.Glob.qCoverallHP>0)?'':'hidden=""'%>>Coverall:<%=window.story.state.Glob.qCoverallHP%>%</span></br>
+<span <%=window.story.state.Glob.hasSprayer?'':'hidden=""'%>>Sprayer:<%=window.story.state.Glob.sprayerCharge%> dose</span>
+<span <%=window.story.state.Glob.hasRope?'':'hidden=""'%>>Rope:<%=window.story.state.Glob.hasRope%></span>
+<span <%=(window.story.state.Glob.hasPatchkit>0)?'':'hidden=""'%>>Patchkit:<%=window.story.state.Glob.hasPatchkit%></span>
+<span <%=(window.story.state.Glob.hasFullBattery>0)?'':'hidden=""'%>>Full Battery:<%=window.story.state.Glob.hasFullBattery%></span>
+<span <%=(window.story.state.Glob.hasEmptyBattery>0)?'':'hidden=""'%>>Empty Battery:<%=window.story.state.Glob.hasEmptyBattery%></span></br>
+<span <%=window.story.state.Glob.hasLighter?'':'hidden=""'%>>Lighter</span>
+<span <%=window.story.state.Glob.hasCrowbar?'':'hidden=""'%>>Crowbar</span>
+<span <%=window.story.state.Glob.hasCrank?'':'hidden=""'%>>Crank</span>
+<%}%>

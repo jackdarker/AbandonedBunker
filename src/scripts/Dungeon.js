@@ -224,11 +224,17 @@ class DngFloor {
         this.rooms = [];//list of rooms
         this.descr = (descr===null)?function(){ return(name)}:descr;
         this.name = name; //label of the floor 
+        this.Mobs=[]; //list of mobs on actual floor
     }
-	
-    /*addRoom(room) { 
-        this.rooms.push(room);
-    };*/
+    addMob(mob) {
+        mob._parent=window.gm.util.refToParent(this);
+        this.Mobs.push(mob);
+    }
+    removeMob(mob) {
+        for(var i=this.Mobs.length-1;i>=0;i--) {
+            if(this.Mobs[i]===mob) this.Mobs.splice(i,1);
+        }
+    }
     setRooms(Rooms) { 
         this.rooms = Rooms;
         var found = null;
@@ -305,7 +311,6 @@ class DngDungeon	{
         this.fctStack=[];
         this.inRoomedDungeonResume = null;
         this.evtData={id:0},this.renderEvent = function(id){ return("You have to set a function to renderEvent before calling renderNext"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));};
-        this.Mobs=[]; //list of mobs on actual floor
     }
     /**
      * override this
@@ -477,8 +482,6 @@ class DngDungeon	{
             }
             btMask = btMask ^ (1 >>> bt);
         },this);
-        //if (player.lust >= 30) addButton(8, "Masturbate", SceneLib.masturbation.masturbateGo);
-        //addButton(13, "Inventory", inventory.inventoryMenu).hint("The inventory allows you to use an item.  Be careful as this leaves you open to a counterattack when in combat.");
         this.addButton(14, "Map", this.displayMap);//.hint("View the map of this dungeon.");
         bt = 0;
         for(el of this.actualRoom.operations) {
@@ -514,27 +517,25 @@ class DngDungeon	{
     displayMap() {
         window.story.show("DungeonMap");
     }
-    addMob(mob) {
-        mob._parent=window.gm.util.refToParent(this);
-        this.Mobs.push(mob);
+    addMob(mob,floor) {
+        this.getFloor(floor).addMob(mob);
     }
-    removeMob(mob) {
-        for(var i=this.Mobs.length-1;i>=0;i--) {
-            if(this.Mobs[i]===mob) this.Mobs.splice(i,1);
-        }
+    removeMob(mob,floor) {
+        this.getFloor(floor).removeMob(mob);
     }
     tickMobs(it=0) {
         //a tick could cause a mob to do something that should be noted on the screen
         //MobA detects MobB-> show notification; MobB finds player -> combat; next 
         //this.resumeRoom=this.resumeRoomMenu;
-        for(var i=this.Mobs.length-1-it;i>=0;i--) {
-            var mob = this.Mobs[i];
+        for(var i=this.actualRoom.floor.Mobs.length-1-it;i>=0;i--) {
+            var mob = this.actualRoom.floor.Mobs[i];
             it+=1;
             if (mob.tick()) {
                 //
                 //this.resumeRoom = this.tickMobs.bind(this,it); return;
             };
         }
+        //todo some enemies should be faster then player: each mob has AP; loop again over all mobs that still have AP until they are all 0
     }
 }
 class DngMob {
@@ -546,10 +547,13 @@ class DngMob {
             path:[],
             idle:'wait',    // wait / hide
             mode:'idle',    // hunt / seek / wait / return / flee
+            speed:1,         //1 = moves 1tile per playerturn, 2 moves 2 tiles, 0.33 moves 1 Tile in 3 turns     
+            AP:1        
         }
     }
     //needs to be set with ._parent=window.gm.util.refToParent(this);
-    get dungeon() {return this._parent();}
+    get floor() {return this._parent();}
+    get dungeon() {return this.floor.dungeon;}
     get enabled() {return(true);}
     /*
     * implement sensors here
@@ -572,8 +576,12 @@ class DngMob {
      */
     onCollideMob(mob) { return(false); }
     //call to calculate
-    tick() {
+    tick(newturn) {
+        this.data.AP=1;
         if(!this.enabled) return;
+        /*this.data.AP-=1/this.data.speed;
+        if(this.data.AP<=0) return; //speedcheck
+        this.data.moveTimer += this.data.moveSpeed; // 1 = -0.5 +1.5; next round 1,5= 0 + 1,5*/
         this.decide();
         return(this.do());
     }

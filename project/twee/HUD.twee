@@ -4,7 +4,7 @@
 <hr>
 <div><%=window.gm.util.printLocationName(window.gm.player.location)%></br>
 <hr></div>
-<%=window.gm.util.bargraph(window.story.state.vars.mine.qSanity,100,"red","Sanity: ")%>  
+<%=window.gm.util.bargraph(window.story.state.Glob.qSanity,100,"red","Sanity: ")%>  
 <form>
 <button type="button" id="status">Status</button>
 <button type="button" id="inv">Inventory</button>
@@ -22,9 +22,9 @@
 </form>
 <script>
 document.querySelector('#inv').addEventListener('click', function(){window.story.show('Inventory');});
-document.querySelector('#quests').addEventListener('click', function(){window.story.show('QuestList');});
-document.querySelector('#dashboard').addEventListener('click', function(){window.story.show('Player_Dashboard');});
-document.querySelector('#status').addEventListener('click', function(){window.story.show('Status');});
+//tododocument.querySelector('#quests').addEventListener('click', function(){window.story.show('QuestList');});
+//document.querySelector('#dashboard').addEventListener('click', function(){window.story.show('Player_Dashboard');});
+//document.querySelector('#status').addEventListener('click', function(){window.story.show('Status');});
 document.querySelector('#save').addEventListener('click', function(){window.gm.toggleDialog('#dialog_save');});
 document.querySelector('#help').addEventListener('click', function(){window.story.show('Help_Index');}); 
 document.querySelector('#settings').addEventListener('click', function(){window.story.show('Settings');}); 

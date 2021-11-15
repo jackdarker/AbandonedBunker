@@ -325,12 +325,8 @@ class ShatteredCity extends DngDungeon{
 class MinoLairLv1 extends DngDungeon{
     persistentDngDataTemplate() {
         let _data = {
-            currentRoom: 0,
-            maxRoom : 0,
-            collIt:0,
-            mobData: [],
+            mobData: []
         };
-        _data.mobData.push({homeTile: 'E3', actualTile:'E3', speed:2})
         return(_data);
     }
     constructor()    {
@@ -338,13 +334,12 @@ class MinoLairLv1 extends DngDungeon{
         this.Mapper = new DngMapper(this.extMapInfo.bind(this));
         this.buildFloors();
         this.onEnterRoom = this.checkCollisionPlayer;
+        this.addMobs();
     }
     desc() {return("Escape the Mean Mino");}
     buildFloors() {
         var _floors= [];
         var firstFloor//:DngFloor;
-        var stairUp//:DngRoom;
-        var stairDown//:DngRoom;
         firstFloor = new DngFloor("1.Floor", function() {return("floor#1.")});
         var room//:DngRoom;
         var rooms= new Map();
@@ -358,9 +353,9 @@ class MinoLairLv1 extends DngDungeon{
         rooms.set("B1", new DngRoom("B1", null,false));
         rooms.set("C1", new DngRoom("C1", null, false));
         rooms.set("D1", new DngRoom("D1", null, false));
-        rooms.set("Stairs",new DngRoom("Stairs", null,false));
+        rooms.set("E1",new DngRoom("E1", null,false));
         rooms.set("F1", new DngRoom("F1", null, false));
-        rooms.set("Entrance", new DngRoom("Entrance", null,false));
+        rooms.set("A2", new DngRoom("A2", null,false));
         rooms.set("B2", new DngRoom("B2", null,false));
         rooms.set("C2", new DngRoom("C2", null, false));
         rooms.set("D2", new DngRoom("D2", null, false));
@@ -386,9 +381,9 @@ class MinoLairLv1 extends DngDungeon{
         rooms.set("F5", new DngRoom("F5", null, false));
         /* first floor
         *  
-        * A1   B1 - C1 - D1   S    F1
+        * A1   B1 - C1 - D1   E1    F1
         * |     |        |    |    |
-        * E  - B2 - C2 - D2 - E2 - F2
+        * A2 - B2 - C2 - D2 - E2 - F2
         * |                   |    |
         * A3 - B3 - C3 - D3 - E3 - F3
         *      |     |   |    |    |
@@ -401,7 +396,7 @@ class MinoLairLv1 extends DngDungeon{
         DngDirection.createDirection(DngDirection.DirE, rooms.get("B1" ), rooms.get("C1"),{tags:['duct']});
         DngDirection.createDirection(DngDirection.DirE, rooms.get("C1" ), rooms.get("D1"),{tags:['duct']});
         //DngDirection.createDirection(DngDirection.DirE, rooms.get("D1" ), rooms.get("E1"));
-        DngDirection.createDirection(DngDirection.DirE, rooms.get("Entrance") , rooms.get("B2"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("A2") , rooms.get("B2"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("B2" ), rooms.get("C2"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("C2" ), rooms.get("D2"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("D2" ), rooms.get("E2"));
@@ -421,11 +416,11 @@ class MinoLairLv1 extends DngDungeon{
         DngDirection.createDirection(DngDirection.DirE, rooms.get("D5" ), rooms.get("E5"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("E5" ), rooms.get("F5"));
         //vertical
-        DngDirection.createDirection(DngDirection.DirS, rooms.get("A1" ), rooms.get("Entrance"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("A1" ), rooms.get("A2"));
         DngDirection.createDirection(DngDirection.DirS, rooms.get("B1" ), rooms.get("B2"),{tags:['duct']});
         DngDirection.createDirection(DngDirection.DirS, rooms.get("D1" ), rooms.get("D2"),{tags:['duct']});
-        DngDirection.createDirection(DngDirection.DirS, rooms.get("Stairs" ), rooms.get("E2"));
-        DngDirection.createDirection(DngDirection.DirS, rooms.get("Entrance" ), rooms.get("A3"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("E1" ), rooms.get("E2"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("A2" ), rooms.get("A3"));
         DngDirection.createDirection(DngDirection.DirS, rooms.get("E2" ), rooms.get("E3"));
         DngDirection.createDirection(DngDirection.DirS, rooms.get("B3" ), rooms.get("B4"));
         DngDirection.createDirection(DngDirection.DirS, rooms.get("C3" ), rooms.get("C4"));
@@ -436,61 +431,224 @@ class MinoLairLv1 extends DngDungeon{
         DngDirection.createDirection(DngDirection.DirS, rooms.get("F3" ), rooms.get("F4"));
         DngDirection.createDirection(DngDirection.DirS, rooms.get("F4" ), rooms.get("F5"));
         for (room of rooms.values( )) {  room.operations = [_evt2];   }
-        room =rooms.get("Entrance"); room.isDungeonEntry = true;
-        room =rooms.get("Stairs"); room.isDungeonExit = true;
+        room =rooms.get("A3"); room.isDungeonEntry = true;
+        room =rooms.get("E1"); room.isDungeonExit = true;
         //room =rooms.get("A4"); room.allowSave=true;
         firstFloor.setRooms(Array.from(rooms.values( )));
         _floors.push(firstFloor);
         this.setFloors(_floors);
+    }
+    addMobs(){
         let mob=window.gm.dngmobs.MinoGuard(); mob.data.homeTile=mob.data.actualTile='E3',mob.data.name='bad bull';
-        this.addMob(mob);
+        this.addMob(mob,"1.Floor");
         mob=window.gm.dngmobs.Turret(); mob.data.homeTile=mob.data.actualTile='C2',mob.data.name='Laser turret';
-        this.addMob(mob);
-        mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='B3',mob.data.name='Hound',mob.data.targets=['C5','B3'];
-        this.addMob(mob);
+        this.addMob(mob,"1.Floor");
+        mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='B3',mob.data.name='Hound',mob.data.targets=[{to:'C5'},{to:'B3'}];
+        this.addMob(mob,"1.Floor");
         mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='F1',mob.data.name='Lurker';
-        this.addMob(mob);
+        this.addMob(mob,"1.Floor");
     }
     exitDungeon() {
         super.exitDungeon();
-        window.story.show("Level2Intro");
+        window.story.show("Intro");
     }
     checkCollisionPlayer(room) {
         //check if there is a mob
         this.tickMobs();
-        for(var i=this.Mobs.length-1-this.data.collIt;i>=0;i--) {
-            this.data.collIt+=1;
-            let mob=this.Mobs[i];
+        for(var i=this.actualRoom.floor.Mobs.length-1;i>=0;i--) {
+            let mob=this.actualRoom.floor.Mobs[i];
             if(mob.data.actualTile!==room.name) continue
-            if(mob.onCollidePlayer()) {
-                /*this.resumeRoom=this.checkCollisionPlayer.bind(this,room);
-                return(true);*/
-            }
+            if(mob.onCollidePlayer()) {     }
         }
-        this.data.collIt=0;//this.resumeRoom=this.resumeRoomMenu; this.resumeRoom();
         return(false);
     }
     extMapInfo(roomInfo) { //show mino on map
-        for(var i=this.Mobs.length-1;i>=0;i-- ){
-            if(roomInfo.name===this.Mobs[i].data.actualTile) roomInfo.boss=this.Mobs[i].data.mark;
+        if(!this.actualRoom) return(roomInfo);
+        for(var i=this.actualRoom.floor.Mobs.length-1;i>=0;i-- ){
+            if(roomInfo.name===this.actualRoom.floor.Mobs[i].data.actualTile) {
+                roomInfo.boss=this.actualRoom.floor.Mobs[i].data.mark;
+            }
         }
         return(roomInfo);
+    }    
+}
+class MinoLairLv2 extends MinoLairLv1 {
+    constructor() {super();}
+    buildFloors() {
+        var _floors= [];
+        var firstFloor//:DngFloor;
+        var stairUp//:DngRoom;
+        var stairDown//:DngRoom;
+        firstFloor = new DngFloor("1.Floor", function() {return("floor#1.")});
+        var room//:DngRoom;
+        var rooms= new Map();
+
+        let _evt2 = new DngOperation("wait");
+        _evt2.canTrigger = function(){return(true);};
+        _evt2.onTrigger = function(){
+            this.tickMobs();this.resumeRoom();
+        };
+        let desc=function(){
+            let msg=this.name+'</br>';
+            msg+=window.story.render("Inv_Hud2");
+            return(msg);
+        };
+        rooms.set("A1",new DngRoom("A1", desc,false));
+        rooms.set("B1", new DngRoom("B1", desc,false));
+        rooms.set("C1", new DngRoom("C1", desc, false));
+        rooms.set("D1", new DngRoom("D1", desc, false));
+        rooms.set("E1",new DngRoom("E1", desc,false));
+        rooms.set("F1", new DngRoom("F1", desc, false));
+        rooms.set("A2", new DngRoom("A2", desc,false));
+        rooms.set("B2", new DngRoom("B2", desc,false));
+        rooms.set("C2", new DngRoom("C2", desc, false));
+        rooms.set("D2", new DngRoom("D2", desc, false));
+        rooms.set("E2",new DngRoom("E2", desc,false));
+        rooms.set("F2", new DngRoom("F2", desc, false));
+        rooms.set("A3",new DngRoom("A3", desc,false));
+        rooms.set("B3", new DngRoom("B3", desc,false));
+        rooms.set("C3", new DngRoom("C3", desc, false));
+        rooms.set("D3", new DngRoom("D3", desc, false));
+        rooms.set("E3",new DngRoom("E3", desc,false));
+        rooms.set("F3", new DngRoom("F3", desc, false));
+        rooms.set("A4",new DngRoom("A4", desc,false));
+        rooms.set("B4", new DngRoom("B4", desc,false));
+        rooms.set("C4", new DngRoom("C4", desc, false));
+        rooms.set("D4", new DngRoom("D4", desc, false));
+        rooms.set("E4",new DngRoom("E4", desc,false));
+        rooms.set("F4", new DngRoom("F4", desc, false));
+        rooms.set("A5",new DngRoom("A5", desc,false));
+        rooms.set("B5", new DngRoom("B5", desc,false));
+        rooms.set("C5", new DngRoom("C5", desc, false));
+        rooms.set("D5", new DngRoom("D5", desc, false));
+        rooms.set("E5",new DngRoom("E5", desc,false));
+        rooms.set("F5", new DngRoom("F5", desc, false));
+        /* first floor
+        *  
+        * A1 - B1 - C1 - D1 - E1 - F1
+        *  |    |        |         |
+        * A2   B2 - C2 - D2   E2 - F2
+        *  |         |        |    |
+        * A3 - B3 - C3 - D3   E3   F3
+        *  |   |     |   |    |    |
+        * A4   B4   C4 - D4 - E4   F4  
+        *  |         |             |
+        * A5 - B5 - C5 - D5 - E5 - F5
+        * */
+        //horizontal
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("A1") , rooms.get("B1"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("B1" ), rooms.get("C1"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("C1" ), rooms.get("D1"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("D1" ), rooms.get("E1"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("E1" ), rooms.get("F1"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("A2") , rooms.get("B2"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("B2" ), rooms.get("C2"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("C2" ), rooms.get("D2"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("D2" ), rooms.get("E2"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("E2" ), rooms.get("F2"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("A3") , rooms.get("B3"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("B3" ), rooms.get("C3"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("C3" ), rooms.get("D3"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("D3" ), rooms.get("E3"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("E3" ), rooms.get("F3"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("A4") , rooms.get("B4"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("B4" ), rooms.get("C4"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("C4" ), rooms.get("D4"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("D4" ), rooms.get("E4"));
+        //DngDirection.createDirection(DngDirection.DirE, rooms.get("E4" ), rooms.get("F4"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("A5" ), rooms.get("B5"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("B5" ), rooms.get("C5"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("C5" ), rooms.get("D5"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("D5" ), rooms.get("E5"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("E5" ), rooms.get("F5"));
+        //vertical
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("A1" ), rooms.get("A2"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("B1" ), rooms.get("B2"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("D1" ), rooms.get("D2"));
+        //DngDirection.createDirection(DngDirection.DirS, rooms.get("E1" ), rooms.get("E2"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("F1" ), rooms.get("F2"))
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("A2" ), rooms.get("A3"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("C2" ), rooms.get("C3"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("E2" ), rooms.get("E3"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("F2" ), rooms.get("F3"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("A3" ), rooms.get("A4"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("B3" ), rooms.get("B4"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("C3" ), rooms.get("C4"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("D3" ), rooms.get("D4"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("E3" ), rooms.get("E4"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("F3" ), rooms.get("F4"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("A4" ), rooms.get("A5"));
+        DngDirection.createDirection(DngDirection.DirS, rooms.get("F4" ), rooms.get("F5"));
+        for (room of rooms.values( )) {  room.operations = [_evt2];   }
+        room =rooms.get("A2"); room.isDungeonEntry = true;
+        room =rooms.get("F5"); room.isDungeonExit = true;
+        //room =rooms.get("A4"); room.allowSave=true;
+        firstFloor.setRooms(Array.from(rooms.values( )));
+        _floors.push(firstFloor);
+        this.setFloors(_floors);
     }
-    /**
-     * 
-     * @param {int} evt: roomNo 
-     */
-    _fight(evt) {
-        this.data.currentRoom = evt;
-        this.data.maxRoom= (this.data.currentRoom>this.data.maxRoom)?this.data.currentRoom:this.data.maxRoom;
-        window.gm.encounters.wolf();
-        window.gm.Encounter.onVictory = (function() { //need to resumeRoom...
-            this.data.currentRoom+=1;
-            return('Victory ! </br>Some '+this.data.rewards[this.data.currentRoom].id+ ' was added to the reward-pile.</br>'+ window.gm.printLink('Next','window.gm.dng.resumeRoom()'));
-        }).bind(this) ;
-        return(true); //return true to indicate a intermittent scene
+    addMobs(){
+        let mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='A1',mob.data.name='Scanner',mob.data.targets=[{to:'F1'},{to:'F5'},{to:'A5'},{to:mob.data.homeTile}];
+        this.addMob(mob,"1.Floor");
+        mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='C4',mob.data.name='Lurker';
+        this.addMob(mob,"1.Floor");
+        let _evt = new DngOperation("Inspect Battery");
+        _evt.canTrigger = function(){return(true);};
+        _evt.onTrigger = function(){
+            this.renderEvent = this.renderTakeEmptyBattery;
+            this.evtData = {};
+            this.renderNext(1);
+        };
+        this.getFloor("1.Floor").getRoom("B4").operations = [_evt];
+        _evt = new DngOperation("Charge Battery");
+        _evt.canTrigger = function(){return(true);};
+        _evt.onTrigger = function(){
+            this.renderEvent = this.renderChargeBattery;
+            this.evtData = {};
+            this.renderNext(1);
+        };
+        this.getFloor("1.Floor").getRoom("E2").operations = [_evt];
     }
-    
+    renderTakeEmptyBattery(evt) {
+        let msg ='';
+        if(evt.id===1) {
+            msg = 'There is a battery. Maybe you can use it elsewhere?</br>';
+            msg+= window.gm.printLink("take battery","window.story.state.Glob.hasEmptyBattery+=1;window.gm.dng.renderNext(2)");
+            msg+= window.gm.printLink("ignore it","window.gm.dng.resumeRoom()");
+        } else if(evt.id===2 ) {
+            msg = 'You grab the battery. Unfortunatly it is empty and would need to be charged first.</br>';
+            msg+= window.gm.printLink("Leave","window.gm.dng.resumeRoom()");
+        } else {
+            msg = 'There is nothing useful.</br>';
+            msg+= window.gm.printLink("Leave","window.gm.dng.resumeRoom()");
+        }
+        return(msg);
+    }
+    renderChargeBattery(evt) {
+        let msg ='';
+        if(evt.id===1) {
+            msg = 'Here is a charging station where you could recharge empty batteries.</br>';
+            msg+= (window.story.state.Glob.hasEmptyBattery>0)? 
+                window.gm.printLink("charge battery","window.story.state.Glob.hasEmptyBattery-=1;window.story.state.Glob.hasFullBattery+=1;window.gm.dng.renderNext(2)"):'You dont have empty batteries.';
+            msg+= window.gm.printLink("ignore it","window.gm.dng.resumeRoom()");
+        } else if(evt.id===2 ) {
+            msg = 'After the charger is done with the battery, you remove it from the socket.</br>';
+            msg+= window.gm.printLink("Leave","window.gm.dng.resumeRoom()");
+        } else {
+            msg = 'There is nothing useful.</br>';
+            msg+= window.gm.printLink("Leave","window.gm.dng.resumeRoom()");
+        }
+        return(msg);
+    }
+}
+class MinoLairLv3 extends MinoLairLv1 {
+    constructor() {super();}
+    addMobs(){
+        let mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='B3',mob.data.name='Scanner',mob.data.targets=[{to:'F3'},{to:mob.data.homeTile,jump:true}];
+        this.addMob(mob,"1.Floor");
+        mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='E3',mob.data.name='Lurker';
+        this.addMob(mob,"1.Floor");
+    }
 }
 
 window.gm.dngs = (function (dngs) {
@@ -498,5 +656,7 @@ window.gm.dngs = (function (dngs) {
     dngs.ShatteredCity = function () { return(new ShatteredCity());};  
     dngs.ArenaTrialsNo1 = function () { return(new ArenaTrialsNo1());};
     dngs.MinoLairLv1 = function () { return(new MinoLairLv1());};
+    dngs.MinoLairLv2 = function () { return(new MinoLairLv2());};
+    dngs.MinoLairLv3 = function () { return(new MinoLairLv3());};
     return dngs; 
 }(window.gm.dngs || {}));
