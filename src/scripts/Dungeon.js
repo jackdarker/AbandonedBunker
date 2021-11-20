@@ -109,14 +109,25 @@ class DngDirection{
         if (this.canExitFct == null) return(!this.oneWay);
         return this.canExitFct(this); 
     }
-    hasTag(tag) {
-        if(tag instanceof Array) {
-            for(var i=0;i<tag.length;i++) {
-                if(this.hasTag(tag[i])) return(true);
+    //array or single tag  todo borrow those functions
+    hasTag(tags) {
+        if(tags instanceof Array) {
+            for(var i=0;i<tags.length;i++) {
+                if(this.hasTag(tags[i])) return(true);
             }
             return(false);
         }
-        return(this.tags.includes(tag));
+        return(this.tags.includes(tags));
+    }
+    removeTags(tags){
+        for(var i= this.tags.length-1;i>=0;i--){
+            if(tags.includes(this.tags[i])) this.tags.splice(i,1);
+        }
+    }
+    addTags(tags){
+        for(var i= tags.length-1;i>=0;i--){
+            if(!this.tags.includes(tags[i])) this.tags.push(tags[i]);
+        }
     }
     //the direction is hidden if one of the connected rooms is hidden
     hidden() {
@@ -147,6 +158,17 @@ class DngRoom {
     }
     getDirections() { return(this.directions);   }
     getDirection(DirEnum) { return (this.directions[DirEnum-1]);    }
+    getDirectionToRoom(other) {
+        let dir=null;
+        for(var i=this.directions.length-1;i>=0;i--) {
+            let dir = this.directions[i];
+            if(dir) {
+                if(dir.roomB.name===other.name) break;
+            }
+            dir=null;
+        }
+        return(dir);
+    }
     //this is called after the direction onEnter-Event was called
     onEnter() { 
         this.isHidden = false;
@@ -164,6 +186,7 @@ class DngRoom {
 
     // Whats that good for: onExit or onEnter might trigger an interaction/combat that we have to finish first befor displaying navigation buttons again.
     // iterator->onExit->startCombat->won->doNext(resume)->iterator
+    // this is currently not used because it wouldnt work if there is a trigger deeper inside a function that would require to leave and return to that function
     moveIterator() {
         var dir;//DngDirection;
         var _it=0;
@@ -190,7 +213,7 @@ class DngRoom {
             if (element1 == null) continue;
             if (_it <= this.it) continue;
             this.it = _it;
-            dir = element1;// as DngDirection;
+            dir = element1;
             if (dir.roomA==this && dir.roomB == this.fromRoom) {
                 if (dir.onEnter()) {
                     return;
@@ -428,8 +451,8 @@ class DngDungeon	{
                 //<a0 onclick=getBanana(this,5)>Get more banana</a>
                 var td=document.createElement('td');
                 tr.appendChild(td);
-                var entry = document.createElement('a');
-                entry.href='javascript:void(0)';
+                var entry = document.createElement('button');
+                entry.style='min-width: 4em';
                 entry.addEventListener("click", 
                     this.buttons[y*5+x].func ? (function(me,bt){ 
                         return(bt.func.bind(me,bt.data));}(this,this.buttons[y*5+x]))
@@ -523,17 +546,21 @@ class DngDungeon	{
     removeMob(mob,floor) {
         this.getFloor(floor).removeMob(mob);
     }
-    tickMobs(it=0) {
-        //a tick could cause a mob to do something that should be noted on the screen
-        //MobA detects MobB-> show notification; MobB finds player -> combat; next 
-        //this.resumeRoom=this.resumeRoomMenu;
-        for(var i=this.actualRoom.floor.Mobs.length-1-it;i>=0;i--) {
-            var mob = this.actualRoom.floor.Mobs[i];
-            it+=1;
-            if (mob.tick()) {
-                //
-                //this.resumeRoom = this.tickMobs.bind(this,it); return;
-            };
+    tickMobs() {
+        let newturn=true,repeat=true;
+        while(repeat===true) {
+            repeat = false;
+            for(var i=this.actualRoom.floor.Mobs.length-1;i>=0;i--) {
+                var mob = this.actualRoom.floor.Mobs[i];
+                mob.tick(newturn);
+                repeat = repeat || (mob.data.remainAP>0);
+            }
+            newturn=false;
+            /*while(this.fctStack.length>0) { if a mob moves 2 tiles and hits a trap on 1.move, we should check if its still alive before doing 2.move
+                todo this doesnt work: a fct is executed but then we will continue here instead waiting for user input and the screen will be overwritten
+                mob.doessomething->renderEvent->wait for userinput->resumeRoom->continue here
+                this.resumeRoom();
+            }*/
         }
         //todo some enemies should be faster then player: each mob has AP; loop again over all mobs that still have AP until they are all 0
     }
@@ -548,7 +575,8 @@ class DngMob {
             idle:'wait',    // wait / hide
             mode:'idle',    // hunt / seek / wait / return / flee
             speed:1,         //1 = moves 1tile per playerturn, 2 moves 2 tiles, 0.33 moves 1 Tile in 3 turns     
-            AP:1        
+            startAP:1 ,
+            remainAP:0       
         }
     }
     //needs to be set with ._parent=window.gm.util.refToParent(this);
@@ -577,11 +605,9 @@ class DngMob {
     onCollideMob(mob) { return(false); }
     //call to calculate
     tick(newturn) {
-        this.data.AP=1;
-        if(!this.enabled) return;
-        /*this.data.AP-=1/this.data.speed;
-        if(this.data.AP<=0) return; //speedcheck
-        this.data.moveTimer += this.data.moveSpeed; // 1 = -0.5 +1.5; next round 1,5= 0 + 1,5*/
+        if(newturn) this.data.remainAP=this.data.startAP;
+        this.data.remainAP-=1;
+        if(!this.enabled||this.data.remainAP<0) return;
         this.decide();
         return(this.do());
     }
@@ -637,7 +663,7 @@ class DngMapper {
             roomInfo = (this.allInfo[m]);
             roomInfo.name = room.name;
             roomInfo.hidden = roomInfo.hidden || room.isHidden;
-            roomInfo.Entry = room.isDungeonEntry || room.isDungeonExit;
+            roomInfo.Entry = /*room.isDungeonEntry ||*/ room.isDungeonExit;
             roomInfo.Save = room.allowSave;
             if(this.CBMoreInfo!==null) roomInfo=this.CBMoreInfo(roomInfo);
             dirs = room.getDirections();
@@ -766,18 +792,20 @@ class DngMapper {
             }
         }
         //print
-        _line = "<pre>"; //pre-formatted or messup allignment of ascii-rows
+        _line = '<pre style="border-style: ridge;padding: 0.2em;">'; //pre-formatted or messup allignment of ascii-rows
         if(minimap) { //only print rooms 1 step around player
             _line += this.floor.name +"</br>";
-            let x,y,n=6;
+            let nop,x,y,n=5; //6 = 3rooms&3 directions around player
             for (j= -1*n; j <= n; j++) {   
+                nop=true;
                 for (i = -1*n; i <= n; i++) {
                     x=i+(playerX- this.minX)*2, y=j+(playerY-this.minY)*2; //coord can be negative ! 
                     if(map.length-1<x || 0>x) continue;   
-                    if(map[x].length-1<y || 0>y) continue;           
+                    if(map[x].length-1<y || 0>y) continue; 
+                    nop=false;          
                     _line += ((i==-3)?"&nbsp;":"")+map[x][y]; //todo hack:if line starts with -, snowman-markdown interprets this as <ul> ?!
                 }
-                _line +="\n";
+                if(!nop) _line +="\n"; //skip empty lines
             }
         } else { //full map of floor
             _line += (this.floor.dungeon.name + " " + this.floor.name +"</br>");

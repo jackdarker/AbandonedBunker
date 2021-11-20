@@ -21,7 +21,7 @@ class Item {
         return([]); //default unuseable in combat
     }
     //tag or [tag]
-    hasTag(tag) {
+    hasTag(tags) {
         if(tag instanceof Array) {
             for(var i=0;i<tag.length;i++) {
                 if(this.hasTag(tag[i])) return(true);
@@ -30,7 +30,7 @@ class Item {
         }
         return(this.__tags.includes(tag));
     }
-    removeTag(tags){
+    removeTags(tags){
         for(var i= this.__tags.length-1;i>=0;i--){
             if(tags.includes(this.__tags[i])) this.__tags.splice(i,1);
         }

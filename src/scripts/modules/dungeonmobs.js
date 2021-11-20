@@ -41,7 +41,7 @@ class dmGuard extends DngMob {
         this.data.moveSpeed=1.5,   
         this.data.enabled=true,
         this.data.health=2;
-        this.data.mark='G';
+        this.data.mark='g';
     }
 
     get enabled() {return(this.data.enabled);}
@@ -115,15 +115,8 @@ class dmGuard extends DngMob {
         if(nextTile!==undefined && nextTile!=='' && nextTile!==this.data.actualTile) {
             this.data.actualTile=nextTile; //move to
         }
-        if(this.data.oldmode!==this.data.mode ){
-            this.data.oldmode=this.data.mode;
-            this.dungeon.pushFct(
-                (function(){
-                    this.dungeon.renderEvent = function(me){return function(id){ return(
-                        me.data.name+" huffs angryly.</br> He is now "+me.data.mode +".</br>"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));}}(this);
-                    this.dungeon.renderNext(1);
-                }).bind(this));
-        } else if (this.dungeon.actualRoom.name===this.data.actualTile) {
+        this.checkModeChange();
+        if (this.dungeon.actualRoom.name===this.data.actualTile) {
             res=this.onCollidePlayer();            
         } else {
             res=this.checkCollisionMob();
@@ -150,6 +143,17 @@ class dmGuard extends DngMob {
     onCollideMob(mob){
         return(false);
     }
+    checkModeChange() {
+        if(this.data.oldmode!==this.data.mode ){
+            this.data.oldmode=this.data.mode;
+            this.dungeon.pushFct(
+                (function(){
+                    this.dungeon.renderEvent = function(me){return function(id){ return(
+                        me.data.name+" huffs angryly.</br> He is now "+me.data.mode +".</br>"+ window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"));}}(this);
+                    this.dungeon.renderNext(1);
+                }).bind(this));
+        } 
+    }
 }
 // walks along a path 
 // set data.targets to at least 2 room names
@@ -161,8 +165,8 @@ class dmPatrol extends dmGuard {
         this.data.targets=[];  // [{to:'A1'},{to:'C4',jump:true}]
         //settings
         this.data.waitAtHome=1;
-        this.data.moveSpeed=1.5;
-        this.data.mark='P';
+        this.data.moveSpeed=1;
+        this.data.mark='p';
     }
     //todo only sees in forward direction?
     decide(){
@@ -183,7 +187,7 @@ class dmPatrol extends dmGuard {
             // after idle at hometile -> patrol to next (set new home)
             let target =this.data.targets.shift();
             this.data.homeTile=target.to,this.data.jump=target.jump||false;
-            this.data.targets.push(this.data.homeTile);
+            this.data.targets.push(target);
             this.data.mode='patrol';this.data.waitAtHome=1;
         } else if(this.data.mode==='patrol'){
             if(this.data.jump) { //teleport
@@ -194,6 +198,7 @@ class dmPatrol extends dmGuard {
         }
         this.navigate(start,end);
     }
+    checkModeChange() {/*NOP */}
 }
 // hunts the player until out of sight, doesnt return to homebase, moves around randomly for some time, then hides
 class dmHunter extends dmGuard {
@@ -201,9 +206,10 @@ class dmHunter extends dmGuard {
         super();
         this.data.lastTile='';
         this.data.seekTimer=0;
+        this.data.mode='hide';
         //settings
         this.data.waitAtHome=6;
-        this.data.mark='H';
+        this.data.mark='h';
         this.data.moveTimer=this.data.moveSpeed=2;
     }
     

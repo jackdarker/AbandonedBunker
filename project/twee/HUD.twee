@@ -17,7 +17,8 @@
 <button type="button" id="achievements" onclick='window.story.show("Achievements");' style="width: 80%">Achievements</button>
 <%if(s._gm.debug& 0x1>0){%>
 <button type="button" id="debug" style="width: 80%">Debug</button>
-<script>document.querySelector('#debug').addEventListener('click', function(){window.story.show('debug');});</script>
+<script>//document.querySelector('#debug').addEventListener('click', function(){window.story.show('debug');});
+</script>
 <%}%>
 </form>
 <script>

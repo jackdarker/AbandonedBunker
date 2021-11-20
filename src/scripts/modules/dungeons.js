@@ -381,7 +381,7 @@ class MinoLairLv1 extends DngDungeon{
         rooms.set("F5", new DngRoom("F5", null, false));
         /* first floor
         *  
-        * A1   B1 - C1 - D1   E1    F1
+        * A1   B1 - C1 - D1   E1   F1
         * |     |        |    |    |
         * A2 - B2 - C2 - D2 - E2 - F2
         * |                   |    |
@@ -402,7 +402,7 @@ class MinoLairLv1 extends DngDungeon{
         DngDirection.createDirection(DngDirection.DirE, rooms.get("D2" ), rooms.get("E2"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("E2" ), rooms.get("F2"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("A3") , rooms.get("B3"));
-        DngDirection.createDirection(DngDirection.DirE, rooms.get("B3" ), rooms.get("C3"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("B3" ), rooms.get("C3"),{tags:['barrier']});
         DngDirection.createDirection(DngDirection.DirE, rooms.get("C3" ), rooms.get("D3"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("D3" ), rooms.get("E3"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("E3" ), rooms.get("F3"));
@@ -537,7 +537,7 @@ class MinoLairLv2 extends MinoLairLv1 {
         * */
         //horizontal
         DngDirection.createDirection(DngDirection.DirE, rooms.get("A1") , rooms.get("B1"));
-        DngDirection.createDirection(DngDirection.DirE, rooms.get("B1" ), rooms.get("C1"));
+        DngDirection.createDirection(DngDirection.DirE, rooms.get("B1" ), rooms.get("C1"),{tags:['barrier']});
         DngDirection.createDirection(DngDirection.DirE, rooms.get("C1" ), rooms.get("D1"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("D1" ), rooms.get("E1"));
         DngDirection.createDirection(DngDirection.DirE, rooms.get("E1" ), rooms.get("F1"));
@@ -588,23 +588,23 @@ class MinoLairLv2 extends MinoLairLv1 {
         this.setFloors(_floors);
     }
     addMobs(){
-        let mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='A1',mob.data.name='Scanner',mob.data.targets=[{to:'F1'},{to:'F5'},{to:'A5'},{to:mob.data.homeTile}];
+        let mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='A1',mob.data.startAP=2,mob.data.name='Scanner1',mob.data.targets=[{to:'F1'},{to:'F5'},{to:'A5'},{to:mob.data.homeTile}];
+        this.addMob(mob,"1.Floor");
+        mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='F5',mob.data.name='Scanner2',mob.data.targets=[{to:'A5'},{to:'A1'},{to:'F1'},{to:mob.data.homeTile}];
         this.addMob(mob,"1.Floor");
         mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='C4',mob.data.name='Lurker';
         this.addMob(mob,"1.Floor");
         let _evt = new DngOperation("Inspect Battery");
         _evt.canTrigger = function(){return(true);};
         _evt.onTrigger = function(){
-            this.renderEvent = this.renderTakeEmptyBattery;
-            this.evtData = {};
+            this.renderEvent = this.renderTakeEmptyBattery;this.evtData = {};
             this.renderNext(1);
         };
         this.getFloor("1.Floor").getRoom("B4").operations = [_evt];
         _evt = new DngOperation("Charge Battery");
         _evt.canTrigger = function(){return(true);};
         _evt.onTrigger = function(){
-            this.renderEvent = this.renderChargeBattery;
-            this.evtData = {};
+            this.renderEvent = this.renderChargeBattery; this.evtData = {};
             this.renderNext(1);
         };
         this.getFloor("1.Floor").getRoom("E2").operations = [_evt];
@@ -642,12 +642,47 @@ class MinoLairLv2 extends MinoLairLv1 {
     }
 }
 class MinoLairLv3 extends MinoLairLv1 {
-    constructor() {super();}
+    constructor() {super();
+        this.data.doorC3=0;
+    }
     addMobs(){
         let mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='B3',mob.data.name='Scanner',mob.data.targets=[{to:'F3'},{to:mob.data.homeTile,jump:true}];
         this.addMob(mob,"1.Floor");
         mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='E3',mob.data.name='Lurker';
         this.addMob(mob,"1.Floor");
+        let _evt = new DngOperation("Inspect Lever");
+        _evt.canTrigger = function(){return(true);};
+        _evt.onTrigger = function(){
+            this.renderEvent = this.renderToggleDoor; this.evtData = {};
+            this.renderNext(1);
+        };
+        this.getFloor("1.Floor").getRoom("A3").operations.push(_evt);
+    }
+    renderToggleDoor(evt) {
+        let msg ='';
+        if(evt.id===1) {
+            msg = 'There is a lever to control the door further down east.</br>';
+            if(this.data.doorC3===0){
+                msg+= 'The door is currently closed. Would you like to toggle the lever?</br>';
+            } else {
+                msg+= 'The door is open.</br>';
+            }
+            msg+=window.gm.printLink("pull lever","window.gm.dng.toggleDoor(),window.gm.dng.resumeRoom()");
+            msg+= window.gm.printLink("ignore it","window.gm.dng.resumeRoom()");
+        } else {
+            msg = 'There is nothing useful.</br>';
+            msg+= window.gm.printLink("Leave","window.gm.dng.resumeRoom()");
+        }
+        return(msg);
+    }
+    toggleDoor() {
+        if(this.data.doorC3===1) {
+            this.data.doorC3=0;
+            this.getFloor("1.Floor").getRoom("B3").getDirection(DngDirection.DirE).addTags(['barrier']);
+        } else {
+            this.data.doorC3=1;
+            this.getFloor("1.Floor").getRoom("B3").getDirection(DngDirection.DirE).removeTags(['barrier']);
+        }
     }
 }
 

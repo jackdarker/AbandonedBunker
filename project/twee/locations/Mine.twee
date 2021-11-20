@@ -377,7 +377,7 @@ TODO BAD END
 </article><article id="LogPanel"></article></section>
 
 
-:: AM_Lv2_H5
+:: AM_Lv2_G5
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."</p>
