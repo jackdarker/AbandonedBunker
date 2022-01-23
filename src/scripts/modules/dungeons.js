@@ -332,9 +332,19 @@ class MinoLairLv1 extends DngDungeon{
     constructor()    {
         super()
         this.Mapper = new DngMapper(this.extMapInfo.bind(this));
+        this.Mapper.printLegend= function(){return(this.__proto__.printLegend()+'<pre>p=Patrol t=Turret</pre>');}
         this.buildFloors();
         this.onEnterRoom = this.checkCollisionPlayer;
         this.addMobs();
+    }
+    printRoomScene(){
+        let panel=$("div#panel2")[0];
+        var entry =document.createElement('p');
+        entry.textContent="You listen for suspicious sounds around but there is just to much noise from running machinery.";
+        panel.appendChild(entry);
+        entry =document.createElement('div');
+        entry.innerHTML=window.story.render("Inv_Hud2");
+        panel.appendChild(entry);
     }
     desc() {return("Escape the Mean Mino");}
     buildFloors() {
@@ -349,40 +359,44 @@ class MinoLairLv1 extends DngDungeon{
         _evt2.onTrigger = function(){
             this.tickMobs();this.resumeRoom();
         };
-        rooms.set("A1",new DngRoom("A1", null,false));
-        rooms.set("B1", new DngRoom("B1", null,false));
-        rooms.set("C1", new DngRoom("C1", null, false));
-        rooms.set("D1", new DngRoom("D1", null, false));
-        rooms.set("E1",new DngRoom("E1", null,false));
-        rooms.set("F1", new DngRoom("F1", null, false));
-        rooms.set("A2", new DngRoom("A2", null,false));
-        rooms.set("B2", new DngRoom("B2", null,false));
-        rooms.set("C2", new DngRoom("C2", null, false));
-        rooms.set("D2", new DngRoom("D2", null, false));
-        rooms.set("E2",new DngRoom("E2", null,false));
-        rooms.set("F2", new DngRoom("F2", null, false));
-        rooms.set("A3",new DngRoom("A3", null,false));
-        rooms.set("B3", new DngRoom("B3", null,false));
-        rooms.set("C3", new DngRoom("C3", null, false));
-        rooms.set("D3", new DngRoom("D3", null, false));
-        rooms.set("E3",new DngRoom("E3", null,false));
-        rooms.set("F3", new DngRoom("F3", null, false));
-        rooms.set("A4",new DngRoom("A4", null,false));
-        rooms.set("B4", new DngRoom("B4", null,false));
-        rooms.set("C4", new DngRoom("C4", null, false));
-        rooms.set("D4", new DngRoom("D4", null, false));
-        rooms.set("E4",new DngRoom("E4", null,false));
-        rooms.set("F4", new DngRoom("F4", null, false));
-        rooms.set("A5",new DngRoom("A5", null,false));
-        rooms.set("B5", new DngRoom("B5", null,false));
-        rooms.set("C5", new DngRoom("C5", null, false));
-        rooms.set("D5", new DngRoom("D5", null, false));
-        rooms.set("E5",new DngRoom("E5", null,false));
-        rooms.set("F5", new DngRoom("F5", null, false));
+        let desc=function(){
+            let msg=this.name+'</br>';
+            return(msg);
+        };
+        rooms.set("A1",new DngRoom("A1", desc,false));
+        rooms.set("B1", new DngRoom("B1", desc,false));
+        rooms.set("C1", new DngRoom("C1", desc, false));
+        rooms.set("D1", new DngRoom("D1", desc, false));
+        rooms.set("E1",new DngRoom("E1", desc,false));
+        rooms.set("F1", new DngRoom("F1", desc, false));
+        rooms.set("A2", new DngRoom("A2", desc,false));
+        rooms.set("B2", new DngRoom("B2", desc,false));
+        rooms.set("C2", new DngRoom("C2", desc, false));
+        rooms.set("D2", new DngRoom("D2", desc, false));
+        rooms.set("E2",new DngRoom("E2", desc,false));
+        rooms.set("F2", new DngRoom("F2", desc, false));
+        rooms.set("A3",new DngRoom("A3", desc,false));
+        rooms.set("B3", new DngRoom("B3", desc,false));
+        rooms.set("C3", new DngRoom("C3", desc, false));
+        rooms.set("D3", new DngRoom("D3", desc, false));
+        rooms.set("E3",new DngRoom("E3", desc,false));
+        rooms.set("F3", new DngRoom("F3", desc, false));
+        rooms.set("A4",new DngRoom("A4", desc,false));
+        rooms.set("B4", new DngRoom("B4", desc,false));
+        rooms.set("C4", new DngRoom("C4", desc, false));
+        rooms.set("D4", new DngRoom("D4", desc, false));
+        rooms.set("E4",new DngRoom("E4", desc,false));
+        rooms.set("F4", new DngRoom("F4", desc, false));
+        rooms.set("A5",new DngRoom("A5", desc,false));
+        rooms.set("B5", new DngRoom("B5", desc,false));
+        rooms.set("C5", new DngRoom("C5", desc, false));
+        rooms.set("D5", new DngRoom("D5", desc, false));
+        rooms.set("E5",new DngRoom("E5", desc,false));
+        rooms.set("F5", new DngRoom("F5", desc, false));
         /* first floor
         *  
-        * A1   B1 - C1 - D1   E1   F1
-        * |     |        |    |    |
+        * A1   B1 o C1 o D1   E1   F1
+        * |     o        o    |    |
         * A2 - B2 - C2 - D2 - E2 - F2
         * |                   |    |
         * A3 - B3 - C3 - D3 - E3 - F3
@@ -490,7 +504,7 @@ class MinoLairLv2 extends MinoLairLv1 {
         };
         let desc=function(){
             let msg=this.name+'</br>';
-            msg+=window.story.render("Inv_Hud2");
+            //msg+=window.story.render("Inv_Hud2");
             return(msg);
         };
         rooms.set("A1",new DngRoom("A1", desc,false));
@@ -685,7 +699,50 @@ class MinoLairLv3 extends MinoLairLv1 {
         }
     }
 }
-
+class CargoBay extends MinoLairLv1 {
+    constructor() {super();
+        this.data.doorC3=0;
+    }
+    addMobs(){
+        let mob=window.gm.dngmobs.Patrol(); mob.data.homeTile=mob.data.actualTile='B3',mob.data.name='Scanner',mob.data.targets=[{to:'F3'},{to:mob.data.homeTile,jump:true}];
+        this.addMob(mob,"1.Floor");
+        mob=window.gm.dngmobs.Hunter(); mob.data.homeTile=mob.data.actualTile='E3',mob.data.name='Lurker';
+        this.addMob(mob,"1.Floor");
+        let _evt = new DngOperation("Inspect Lever");
+        _evt.canTrigger = function(){return(true);};
+        _evt.onTrigger = function(){
+            this.renderEvent = this.renderToggleDoor; this.evtData = {};
+            this.renderNext(1);
+        };
+        this.getFloor("1.Floor").getRoom("A3").operations.push(_evt);
+    }
+    renderToggleDoor(evt) {
+        let msg ='';
+        if(evt.id===1) {
+            msg = 'There is a lever to control the door further down east.</br>';
+            if(this.data.doorC3===0){
+                msg+= 'The door is currently closed. Would you like to toggle the lever?</br>';
+            } else {
+                msg+= 'The door is open.</br>';
+            }
+            msg+=window.gm.printLink("pull lever","window.gm.dng.toggleDoor(),window.gm.dng.resumeRoom()");
+            msg+= window.gm.printLink("ignore it","window.gm.dng.resumeRoom()");
+        } else {
+            msg = 'There is nothing useful.</br>';
+            msg+= window.gm.printLink("Leave","window.gm.dng.resumeRoom()");
+        }
+        return(msg);
+    }
+    toggleDoor() {
+        if(this.data.doorC3===1) {
+            this.data.doorC3=0;
+            this.getFloor("1.Floor").getRoom("B3").getDirection(DngDirection.DirE).addTags(['barrier']);
+        } else {
+            this.data.doorC3=1;
+            this.getFloor("1.Floor").getRoom("B3").getDirection(DngDirection.DirE).removeTags(['barrier']);
+        }
+    }
+}
 window.gm.dngs = (function (dngs) {
     dngs.BeeHive = function () { return(new BeeHive());};  
     dngs.ShatteredCity = function () { return(new ShatteredCity());};  
@@ -693,5 +750,6 @@ window.gm.dngs = (function (dngs) {
     dngs.MinoLairLv1 = function () { return(new MinoLairLv1());};
     dngs.MinoLairLv2 = function () { return(new MinoLairLv2());};
     dngs.MinoLairLv3 = function () { return(new MinoLairLv3());};
+    dngs.CargoBay = function () { return(new CargoBay());};
     return dngs; 
 }(window.gm.dngs || {}));

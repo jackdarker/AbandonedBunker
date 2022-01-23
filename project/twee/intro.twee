@@ -25,14 +25,18 @@ This is just some experiment to see if I can get some kind of dungeon crawler wo
 <p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv1();window.gm.dng.enterDungeon();'>Level1</a></p>
 <p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv2();window.gm.dng.enterDungeon();'>Level2</a></p>
 <p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv3();window.gm.dng.enterDungeon();'>Level3</a></p>
+<p><a0 onclick='window.gm.dng = window.gm.dngs.CargoBay();window.gm.dng.enterDungeon();'>CargoBay</a></p>
 <p class='author'>Loading of savegame is only possible in game.</p>
 </article>
+<script>
+</script>
 
 :: Inv_Hud2
 <hr><%if(window.story.state.Glob){%>
 <p>Inventory:</p>
 <span >Sanity:<%=window.story.state.Glob.qSanity%>%</span>
-<span <%=(window.story.state.Glob.qCoverallHP>0)?'':'hidden=""'%>>Coverall:<%=window.story.state.Glob.qCoverallHP%>%</span></br>
+<span <%=(window.story.state.Glob.qCoverallHP>0)?'':'hidden=""'%>>Coverall:<%=window.story.state.Glob.qCoverallHP%>%</span>
+<span <%=(window.story.state.Glob.qArmorHP>0)?'':'hidden=""'%>>Bodyarmor:<%=window.story.state.Glob.qArmorHP%>%</span></br>
 <span <%=window.story.state.Glob.hasSprayer?'':'hidden=""'%>>Sprayer:<%=window.story.state.Glob.sprayerCharge%> dose</span>
 <span <%=window.story.state.Glob.hasRope?'':'hidden=""'%>>Rope:<%=window.story.state.Glob.hasRope%></span>
 <span <%=(window.story.state.Glob.hasPatchkit>0)?'':'hidden=""'%>>Patchkit:<%=window.story.state.Glob.hasPatchkit%></span>
@@ -41,4 +45,4 @@ This is just some experiment to see if I can get some kind of dungeon crawler wo
 <span <%=window.story.state.Glob.hasLighter?'':'hidden=""'%>>Lighter</span>
 <span <%=window.story.state.Glob.hasCrowbar?'':'hidden=""'%>>Crowbar</span>
 <span <%=window.story.state.Glob.hasCrank?'':'hidden=""'%>>Crank</span>
-<%}%>
+<%}%><hr>

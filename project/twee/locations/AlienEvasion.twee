@@ -1,0 +1,11 @@
+:: AI_Intro [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>
+
+
+:: AI_YourRoom
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+This is your room, a small cubicle with a bunk-bed, a locker to store what little gear you own and a desk with a chair.
+[[You need to get to work]]
+</article><article id="LogPanel"></article></section>

@@ -68,14 +68,14 @@ You can see some hut from here. You just need to follow the trail down the hill.
 <!--dont "show" this! setup the dungeon and call enterDungeon-->
 <!--if not explicitly allowed, save is disabled in dungeon-->
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%= window.gm.dng.name%>-<%= window.gm.dng.actualRoom.floor.name%>-<%= window.gm.dng.actualRoom.name%></br> 
+<%= window.gm.dng.name%>-<%= window.gm.dng.actualRoom.floor.name%>-<%= window.gm.dng.actualRoom.name%></br></br> 
+<%= window.gm.dng.Mapper.printMap(window.gm.dng.actualRoom,true)%></br>
 <%= window.gm.dng.actualRoom.descr()%><%= (window.gm.dng.actualRoom.allowSave?" <b>You can save here !</b>":"")%></br>
-<%= window.gm.dng.Mapper.printMap( window.gm.dng.actualRoom,true)%></br>
-</br> 
+<div id="panel2"></div></br></br>
 <div id="panel"></div></br></br>    <!--display button list-->
 </article><article id="LogPanel"></article></section>
 <script>
-window.gm.dng.printButtons()
+window.gm.dng.printButtons(),window.gm.dng.printRoomScene();
 </script>
 
 

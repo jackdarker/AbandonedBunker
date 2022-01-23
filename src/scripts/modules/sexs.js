@@ -52,8 +52,7 @@ window.gm.sex = window.gm.sex||{};
 window.gm.sex.createButton=function(label,foo) {
     let link;
     link = document.createElement('a');
-    link.href='javascript:void(0)';
-    link.addEventListener("click", function(){foo();});
+    link.href='javascript:void(0)',link.addEventListener("click", function(){foo();});
     link.textContent=label;
     $("div#choice")[0].appendChild(link);
 };
@@ -82,6 +81,97 @@ window.gm.sex.updateScene=function(entry){
     data.foes.sort();
 
 }*/
+window.gm.sex.crawlerOnPlayer=function(data){
+    let foo = window.gm.sex.crawlerOnPlayer; //each button-click will call this sm again and switch state
+    let player = window.gm.player, foe = data.foe;
+    window.gm.sex.beginScene();
+    let entry = document.createElement('p');
+    let createButton=window.gm.sex.createButton;
+    let newdata = {};//need a copy to create different data-values
+    if(data.state<0) { //quit if scene is done
+        if(data.battleResult==='victory') window.gm.postVictory(); //todo flee, submit, defeat
+        else window.gm.postDefeat();
+        return;
+    } else if(data.state===0) { //start-menu
+        entry.textContent ="The "+foe.data.name+" claws at your clothing. ";
+        data.state=1;
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Struggle';
+        createButton(newdata.position,foo.bind(null,newdata));
+    } else if(data.position==='Struggle' && data.state<3) { 
+        entry.textContent ="You struggle to kep your cloths on you. ";
+        data.state+=1;
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Struggle';
+        createButton(newdata.position,foo.bind(null,newdata));
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Give up';
+        createButton(newdata.position,foo.bind(null,newdata));
+    } else if(data.position==='Struggle') { 
+        entry.textContent ="With a lot of effort you are able to shed of your attacker. ";
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Escape';
+        createButton(newdata.position,function(){window.gm.dng.resumeRoom()});
+    } else if(data.position==='Give up' ) { 
+        entry.textContent ="You stop struggling in hope that the assaulter looses interest. ";
+        data.state+=1;
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Defeat';
+        createButton(newdata.position,function(){window.gm.dng.resumeRoom()});
+    }
+    window.gm.sex.updateScene(entry); 
+};
+window.gm.sex.gooOnPlayer=function(data){
+    let foo = window.gm.sex.gooOnPlayer; //each button-click will call this sm again and switch state
+    let player = window.gm.player, foe = data.foe;
+    window.gm.sex.beginScene();
+    let entry = document.createElement('p');
+    let createButton=window.gm.sex.createButton;
+    let newdata = {};//need a copy to create different data-values
+    if(data.state<0) { //quit if scene is done
+        if(data.battleResult==='victory') window.gm.postVictory(); //todo flee, submit, defeat
+        else window.gm.postDefeat();
+        return;
+    } else if(data.state===0) { //start-menu
+        data.state+=1;
+        entry.textContent ="A "+foe.data.name+" slurps at your feet. ";
+        if(window.story.state.Glob.qArmorHP>0) {
+            entry.textContent+= "Somehow the goo seems to be interested in your body-armor. "
+            newdata = {},Object.assign(newdata,data);
+            newdata.position = 'Shake';
+        } else if(window.story.state.Glob.qCoverallHP<=0) {
+            entry.textContent+= "The slimy puddle starts to move up your body. ";
+            newdata = {},Object.assign(newdata,data);
+            newdata.position = 'Struggle';
+        } else {
+            entry.textContent+="The coverall you are wearing somehow repells it.";
+            newdata = {},Object.assign(newdata,data);
+            newdata.position = 'Escape';
+        }
+        createButton(newdata.position,foo.bind(null,newdata));
+    } else if(data.position==='Struggle' && data.state<3) { 
+        entry.textContent ="The slimy puddle starts to move up your body. ";
+        data.state+=1;
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Struggle';
+        createButton(newdata.position,foo.bind(null,newdata));
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Give up';
+        createButton(newdata.position,foo.bind(null,newdata));
+    } else if(data.position==='Struggle') { 
+        entry.textContent ="With a lot of effort you are able to shed of your attacker. ";
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Escape';
+        createButton(newdata.position,function(){window.gm.dng.resumeRoom()});
+    } else if(data.position==='Give up' ) { 
+        entry.textContent ="You stop struggling in hope that the assaulter looses interest. ";
+        data.state+=1;
+        newdata = {},Object.assign(newdata,data);
+        newdata.position = 'Defeat';
+        createButton(newdata.position,function(){window.gm.dng.resumeRoom()});
+    }
+    window.gm.sex.updateScene(entry); 
+};
 window.gm.sex.wolfOnPlayer=function(data) {
     let foo = window.gm.sex.wolfOnPlayer; //each button-click will call this sm again and switch state
     let player = window.gm.player, foe = window.story.state.combat.enemyParty[0]; //todo

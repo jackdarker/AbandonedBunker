@@ -438,7 +438,16 @@ class DngDungeon	{
     addButtonDisabled(bt, name, arg) {
         this.buttons[bt] = {name:"-",disabled:true,func:null,data:arg};
     }
-    //render 5x3 grid of buttons
+    /**
+     * override this to add text to the room-scene. If you add buttons here, make sure to call resumeRoom to continue dungeon.
+     */
+    printRoomScene() {
+        let panel=$("div#panel2")[0];
+        var entry =document.createElement('p');
+        entry.textContent="Nothing here beside us chicks."
+        panel.appendChild(entry);
+    }
+    //render 5x3 grid of buttons; see passage "Dungeon"
     printButtons() {    
         //because click-event mapping this has to manipulate DOM-tree instead of just rendering html-code
         var table =document.createElement('table');
@@ -776,7 +785,7 @@ class DngMapper {
                 }
                 dir = room.getDirection(DngDirection.DirE);
                 if (dir){//(roomInfo.connect & (1 << DngDirection.DirE))) {
-                    _line = dir.tags[0]==='duct'?" o ":" - "; 
+                    _line = dir.tags[0]==='duct'?"ooo":"---"; 
                     map[2 * (roomInfo.X - this.minX) + 1][2 * (roomInfo.Y - this.minY) + 0] = _line;
                 }
                 dir = room.getDirection(DngDirection.DirS);
@@ -786,7 +795,7 @@ class DngMapper {
                 }
                 dir = room.getDirection(DngDirection.DirW);
                 if (dir){//((roomInfo.connect & (1 << DngDirection.DirW))) {
-                    _line = dir.tags[0]==='duct'?" o ":" - "; 
+                    _line = dir.tags[0]==='duct'?"ooo":"---"; 
                     map[2 * (roomInfo.X - this.minX) - 1][2 * (roomInfo.Y - this.minY) - 0] = _line;
                 }
             }
@@ -815,9 +824,10 @@ class DngMapper {
                 }
                 _line += "\n";
             }
-            _line += "<pre>Legend: P=Player, &ang;=Stair, E=Entry/Exit S=Save</pre></br>";
+            _line += this.printLegend();
         }
         _line += "</pre>";
         return _line;
     }
+    printLegend(){ return("<pre>Legend: P=Player, &ang;=Stair, E=Entry/Exit S=Save</pre>");}
 }

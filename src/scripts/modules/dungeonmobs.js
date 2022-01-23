@@ -9,8 +9,13 @@ class dmTurret extends DngMob {
         this.data.enabled=true,
         this.data.mark='T';
     }
-
     get enabled() {return(this.data.enabled);}
+    damage(amount) {
+        this.data.health-=1;
+        if(this.data.health<=0){
+            this.data.enabled=false,this.data.health=0
+        };
+    }
     sensorSee() { return([{x:1,y:0},{x:0,y:1},{x:-1,y:0},{x:0,y:-1}]) };
     sensorHear() { return([]) };
     decide(){  //doesnt move
@@ -21,7 +26,7 @@ class dmTurret extends DngMob {
     onCollideMob(mob) {
         this.dungeon.pushFct(
             (function(other){
-                this.dungeon.renderEvent = function(me,other){return function(id){ other.data.health-=1;
+                this.dungeon.renderEvent = function(me,other){return function(id){ other.damage(1);
                     return(me.data.name+" fires at "+other.data.name+".</br>"+ (other.data.health<=0?"And killed it.":"Its still alive.")+
                     window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"))}}(this,other);
                 this.dungeon.renderNext(1);
@@ -104,22 +109,21 @@ class dmGuard extends DngMob {
         }
         this.navigate(start,end);
     }
-    //return true if scene plays 
     //to return back to dungeon add to scene window.gm.printLink('Next','window.gm.dng.resumeRoom()')
     do() {
         this.data.moveTimer-=1;
         if(this.data.moveTimer>0) return; //speedcheck
         this.data.moveTimer += this.data.moveSpeed; // 1 = -0.5 +1.5; next round 1,5= 0 + 1,5
 
-        let res=false, nextTile=this.data.path.shift();
+        let nextTile=this.data.path.shift();
         if(nextTile!==undefined && nextTile!=='' && nextTile!==this.data.actualTile) {
             this.data.actualTile=nextTile; //move to
         }
         this.checkModeChange();
         if (this.dungeon.actualRoom.name===this.data.actualTile) {
-            res=this.onCollidePlayer();            
+            this.onCollidePlayer();            
         } else {
-            res=this.checkCollisionMob();
+            this.checkCollisionMob();
         }
         return(false);
     }
@@ -261,10 +265,36 @@ class dmHunter extends dmGuard {
         } 
         this.navigate(start,end);
     }
+    onCollidePlayer() {
+        this.dungeon.pushFct(
+        (function(){
+            window.story.state.tmp.args=[(function(){window.gm.sex.crawlerOnPlayer({state:0, battleResult:'defeat',foe:this});}.bind(this))];
+            window.story.show('GenericPassage');
+        }).bind(this));
+        return(false);
+    }
 }
 // flees in any direction but where hunter is
 //dmPrey
 
+// stationary; dissolves armor and aliens
+class dmGooPuddle extends DngMob {
+    constructor() {
+        super();
+        this.data.mark='o';
+    }
+    onCollideMob(mob) {
+        this.dungeon.pushFct(
+            (function(other){
+                this.dungeon.renderEvent = function(me,other){return function(id){ 
+                    other.damage(1);
+                    return(me.data.name+" slurps at "+other.data.name+".</br>"+
+                    window.gm.printLink("Whatever","window.gm.dng.resumeRoom()"))}}(this,other);
+                this.dungeon.renderNext(1);
+            }).bind(this,mob));
+        return(true);
+    }
+}
 window.gm.dngmobs = (function (mobs) {
     mobs.MinoGuard = function () { return(new dmGuard());};  
     mobs.Turret = function () { return(new dmTurret());};

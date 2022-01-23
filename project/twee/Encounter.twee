@@ -25,10 +25,26 @@ Game Over. Better luck next time.</br>
 
 
 :: Mole Submit {"position":"500,175"}
-<section> 
-<aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 The mole took you down into his cave. </br>
 Which was very difficult since you are far to large - you know?</br>
 <a0 onclick='window.gm.postDefeat();'>Black out</a>
-</article><article id="LogPanel"></article>
-</section>
+</article><article id="LogPanel"></article></section>
+
+
+:: PlayerFoundByPatrol
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
+A Crawler found you. After showing your ID you may pass.</br>
+</br>
+<a0 onclick='window.gm.postDefeat();'>Black out</a>
+</article><article id="LogPanel"></article></section>
+
+
+:: GenericPassage [_nosave_]
+<!--call this passage after setting tmp.args !-->
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<div id='panel'></div><!--description is rendered here-->
+<div id='choice'></div> <!--choice is rendered here-->
+</article><article id="LogPanel"></article></section>
+<script>window.story.state.tmp.args[0]();
+</script>
