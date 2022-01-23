@@ -1,0 +1,67 @@
+:: Drone Bay
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+todo
+This room was constructed to house your drones. It has a retracting roof to allow drones them take off and land to do various tasks.
+!Bonuses:
+Materials: 
+Substances:
+Security:
+[[Home]]
+</article><article id="LogPanel"></article></section>
+
+
+:: Panic Room
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+todo
+This is your panic room. You built this as a hedge against <<print $m_PartnerName>> going out of control. Inside are several survival kits and two controls: an Lockdown lever and a Ejection lever. 
+The Lockdown lever will trigger a lab lockdown and alarm, sealing the Panic Room closed. 
+The Ejection lever will eject the Panic Room out of the lab and off of the island, hopefully landing you far away from it. 
+LOCKDOWN STATUS: ENGAGED / DISENGAGED
+Activate Lockdown / Deactivate Lockdown
+Pull the Ejection Lever
+Leave the Panic Room / You cannot leave the room while Lockdown is Engaged
+[[Home]]
+</article><article id="LogPanel"></article></section>
+
+
+:: PanicRoom_Eject
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+!FUCK THIS LAB! 
+You pull the ejection lever, hoping to get as far away from the lab and <<print $m_PartnerName>> as possible.
+/%The panic room in general can trigger several endings or have several scenarios.
+
+1. You just did that for no reason.
+You eject the Panic Room without a good reason. Partner is left alone to thier own devices. 
+
+2. Well, That was a waste...
+You have a flying power of some sort and can actually return to the island, but you wasted the damn panic room. Your parnter doesn't trust you for abandoning them.
+
+3. DODGED A BULLET
+You have a good reason for using the panic room and get away, your partner left to their own devices - this triggers some of the other endings already planned
+
+4. HUH HUH HUH NOT TODAY
+If the partner is powerful enough, they stop the panic room ejection from engaging.
+
+OTHER SCEANARIOS 
+
+5. I NEED TO GET OUT!
+The partner discovers the panic room and uses it themselves. Game over!
+
+6. BYE BYE ! 
+You trick an overpowered partner into the chamber and Eject her. This is a low-priority scenario
+%/
+</article><article id="LogPanel"></article></section>
+
+
+:: Examination Center
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+You enter the testing rooms - otherwise known as the part of the empty junkyard warehouse that you couldn't do much with besides stuffing some random junk into it. This is where you decided to do some testing of some effects your inventions may have on the body. 
+Conducting tests will grant some small amount of research points, as well as discover different hidden qualities.</br>
+<<if $m_MedicalExamRoom is 1>>[[Give Partner a Physical Ability Test|do_PhysicalTest_Partner]]<<endif>>
+<<if $m_MentalRoom is 1>>[[Give Partner a Mental Ability Test|do_MentalTest_Partner]]<<endif>>
+[[Give Partner a Combat Ability Test|do_CombatTest_Partner]]
+<<if $m_MedicalExamRoom is 1>>[[Undergo a Physical Ability Test|do_PhysicalTest_Self]]<<endif>>
+<<if $m_MentalRoom is 1>>[[Undergo a Mental Ability Test|do_MentalTest_Self]]<<endif>>
+<<if $m_CombatTestingArea is 1>>[[Undergo a Combat Ability Test|do_CombatTest_Self]]<<endif>>
+</br>[[Home]]
+</article><article id="LogPanel"></article></section>

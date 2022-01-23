@@ -1,0 +1,168 @@
+:: rand_Event_EndofDay
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+todo
+/%Roll a 100 - Categories:
+Really Bad Event: Game over conditions
+Bad event: Big problem, neg route advancing conditions
+Normal Event: No impact, small changes.
+Good Event: low impact, helpful or nice
+Great event: Really good event, game advancing conditions%/
+<<set $t_rand = random(100)>>
+<<if $t_rand lte 5>>
+	<<display event_PartnerSticksYou>>
+<<elseif $t_rand lte 20>>
+	<<display event_PartnerUsesMachine>>
+<<elseif $t_rand lte 40>>
+	<<display event_EveningRecap>>
+<<elseif $t_rand lte 60>>
+	<<display event_partner_Nothing>>
+<<elseif $t_rand lte 70>>
+	<<display event_BeachWalk>>
+<<elseif $t_rand lte 80>>
+	<<display event_partnerResearch>>
+<<elseif $t_rand lte 95>>
+	<<display event_Self_Dream_Despair>>
+<<elseif $t_rand lte 96>>
+	<<if $event_Meteor_Crash is 0>>
+		<<set $event_Meteor_Crash to 1>>
+		<<display event_Rand_Meteor_1>>
+	<<else>>
+		<<display event_partner_Nothing>>
+	<<endif>>
+<<elseif $t_rand lte 100>>
+	<<display event_Self_Dream_Sexy>>
+<<endif>>
+<<endnobr>>
+</article><article id="LogPanel"></article></section>
+
+
+:: get_rand_HomeActivity
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+todo
+<<set $t_rand = either(1, 2, 3)>>
+<<if $t_rand is 1>> /% By Intelligence %/
+<<if $partner_IQ lte 80>>
+seems to be blankly staring out the window at the beach.
+<<elseif ($partner_IQ gte 81) and ($partner_IQ lte 99)>>
+<<print $m_PartnerName>> seems bored, sitting on the couch, passively watching the TV.
+<<elseif ($partner_IQ gte 100) and ($partner_IQ lte 109)>>
+<<print $m_PartnerName>> is currently reading some things you have laying around.
+<<elseif ($partner_IQ gte 110) and ($partner_IQ lte 119)>>
+<<print $m_PartnerName>> is currently reading a technical manual for a piece of equipment.
+<<elseif ($partner_IQ gte 120) and ($partner_IQ lte 129)>>
+<<print $m_PartnerName>> is tinkering with a piece of lab equipment with a manual open, excitedly taking it apart, cleaning it, and putting it back together.
+<<elseif ($partner_IQ gte 130) and ($partner_IQ lte 159)>>
+<<print $m_PartnerName>> is working through several papers while working with a homebrewed piece of lab equipment.
+<<elseif ($partner_IQ gte 160) and ($partner_IQ lte 199)>>
+<<print $m_PartnerName>> seems deep in meditation, their mind working though what seems like deep problems. Sometimes they write something down in the form of archaic-looking equations.
+<<elseif $partner_IQ gte 300>>
+<<print $m_PartnerName>> is using their superhuman intellect to meditate while doing several things at once.
+<<endif>>
+<<elseif $t_rand is 2>>
+/%By Dominance%/
+<<if ($partner_Dominant gte 0) and ($partner_Dominant lte 29)>>
+
+<<elseif $partner_Dominant lte -90>>
+<<print $m_PartnerName>> follows you around, cleaning, fixing, and organizing things to attend your every need when it arises. They seem happy to do this - a satasfied smile beaming on their face whenever you ask for something and get it.
+<<elseif ($partner_Dominant gte -89) and ($partner_Dominant lte -60)>><<print $m_PartnerName>> is diligently handling households tasks you tend to neglect. They hum to themselves and seem to stare at you longingly whenever you're in the room.
+<<elseif ($partner_Dominant gte -59) and ($partner_Dominant lte -30)>><<print $m_PartnerName>> seems to be working on cleaning and managing the place, going about their day - she smiles whenever your eyes meet. 
+<<elseif ($partner_Dominant gte -29) and ($female_Dominant lte -1)>><<print $m_PartnerName>> seems to be walking around, going about their day - ocassionaly smiling when your eyes meet.
+<<elseif ($partner_Dominant gte 30) and ($partner_Dominant lte 59)>><<print $m_PartnerName>> seems to walk around, observing everything you do and judging how well you seem to be doing or not doing in the moment.
+<<elseif ($partner_Dominant gte 60) and ($partner_Dominant lte 89)>><<print $m_PartnerName>> seems to be lounging around in whatever room you are in, asking for you to fetch things for them.
+<<elseif ($partner_Dominant gte 90)>>
+<<print $m_PartnerName>> has fashioned themselves an extravagant throne to sit upon, their legs crossed while looking down on you. 
+<<endif>>
+<<elseif $t_rand is 3>>
+/%By Strength%/
+RANDOM HOME ACTIVITY
+<<endif>>
+</article><article id="LogPanel"></article></section>
+
+:: get_rand_substance
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<<nobr>>
+<<if $m_ChemTreeLevel is 0>>
+	<<set $t_rand = either(1, 2, 3, 4)>>
+	<<if $t_rand is 1>>You find a RED-class substance!
+		<<set $c_REDSubstance += 1>>
+	<<elseif $t_rand is 2>>You find a BLUE-class substance!
+		<<set $c_BLUESubstance += 1>>
+	<<elseif $t_rand is 3>>You find a GREEN-class substance!		<<set $c_GREENSubstance += 1>>
+	<<elseif $t_rand is 4>>You scrounge up some usable materials!
+		<<display proc_GatherMaterials_Self>>
+	<<endif>>
+<<elseif $m_ChemTreeLevel is 1>>
+	<<set $t_rand = either(1, 2, 3, 4, 5, 6)>>
+	<<if $t_rand is 1>>You find a RED-class substance!
+		<<set $c_REDSubstance += 1>>
+	<<elseif $t_rand is 2>>You find a BLUE-class substance!
+		<<set $c_BLUESubstance += 1>>
+	<<elseif $t_rand is 3>>You find a GREEN-class substance!		<<set $c_GREENSubstance += 1>>
+	<<elseif $t_rand is 4>>You find a INDIGO-class substance
+		<<set $c_INDIGOSubstance += 1>>
+	<<elseif $t_rand is 5>>You find a VIOLET-class substance		<<set $c_VIOLETSubstance += 1>>
+	<<elseif $t_rand is 6>>You scrounge up some usable materials!
+	<<display proc_GatherMaterials_Self>>
+.	<<endif>>
+<<elseif $m_ChemTreeLevel is 2>>
+	<<set $t_rand = either(1, 2, 3, 4, 5, 6)>>
+	<<if $t_rand is 1>>You find a RED-class substance!
+		<<set $c_REDSubstance += 1>>
+	<<elseif $t_rand is 2>>You find a BLUE-class substance!
+		<<set $c_BLUESubstance += 1>>
+	<<elseif $t_rand is 3>>You find a GREEN-class substance!		<<set $c_GREENSubstance += 1>>
+	<<elseif $t_rand is 4>>You find a INDIGO-class substance
+		<<set $c_INDIGOSubstance += 1>>
+	<<elseif $t_rand is 5>>You find a VIOLET-class substance
+		<<set $c_VIOLETSubstance += 1>>
+	<<elseif $t_rand is 6>>You scrounge up some usable materials!
+		<<display proc_GatherMaterials_Self>>
+.	<<endif>>
+<<elseif $m_ChemTreeLevel is 3>>
+	<<set $t_rand = either(1, 2, 3, 4, 5, 6, 7, 8)>>
+	<<if $t_rand is 1>>You find a RED-class substance!
+		<<set $c_REDSubstance += 1>>
+	<<elseif $t_rand is 2>>You find a GREEN-class substance!		<<set $c_GREENSubstance += 1>>
+	<<elseif $t_rand is 3>>You find a BLUE-class substance!			<<set $c_BLUESubstance += 1>>
+	<<elseif $t_rand is 4>>You find a INDIGO-class substance!		<<set $c_INDIGOSubstance += 1>>
+	<<elseif $t_rand is 5>>You find a VIOLET-class substance!		<<set $c_VIOLETSubstance += 1>>
+	<<elseif $t_rand is 6>>You find a WHITE-class substance!		<<set $c_WHITESubstance += 1>>
+	<<elseif $t_rand is 7>>You find a BLACK-class substance!		<<set $c_BLACKSubstance += 1>>
+	<<elseif $t_rand is 8>>You scrounge up some usable materials!
+		<<display proc_GatherMaterials_Self>>
+	<<endif>>
+<<endif>>
+<<set $m_ResearchPoints += 10>>
+<<endnobr>>
+</article><article id="LogPanel"></article></section>
+
+
+:: get_rand_resource
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<<display proc_GatherMaterials_Self>>
+<<set $t_MatGet to (5 + $b_Muscles)>><<set $t_MatGetDrones to (2 * $m_Drones_Gathering)>>
+After some time, you mangage to gather <<print $t_MatGet>> unit(s) of materials.
+<<if $m_Drones_Gathering gte 1>>
+	Your gathering drones help you, netting you <<print $t_MatGetDrone>> additional materials.
+	<<set $m_Materials += (2 * $m_Drones_Gathering)>>
+<<endif>>
+<<endnobr>>
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>

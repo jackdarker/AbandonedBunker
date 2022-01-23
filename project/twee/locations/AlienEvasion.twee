@@ -13,9 +13,7 @@ As well, you could experiment on yourself, but you'll need to trust your new par
 Swallowing the ethical problems you are nearly drowning with, the fateful day has come where you begin your experiments. You have a pile of scrap and material, but now you just need to make the discoveries you need to conduct experiments at your home and Lab FAR, FAR away from everyone else - where no one will catch you.
 You have retreated to this remote island to become the Mad Scientist you decided to be. It's not much but a small studio and a lab, but you're slowly pulling it all together. With your new Partner, it should be a little easier. </br>
 
-[[Continue|Help_How to do Science]]
-<a0 onclick='window.gm.enterVR()'>Do some science</a>
-[[Skip to Home|Day Start]]
+[[Continue|Help_How to do Science]] <a0 onclick='window.gm.enterVR()'>Skip to Home</a>
 </article><article id="LogPanel"></article></section>
 
 :: Help_How to do Science [_nosave_]
@@ -33,17 +31,6 @@ This is all important, because for every action you do, <<print $m_PartnerName>>
 Your ultimate goals are up to you - pursue whatever end you wish, but be careful, since you need <<print $m_PartnerName>>'s help.</br>
 Be careful, though. There are several endings, and some of them are bad endings.</br>
 <a0 onclick='window.gm.enterVR()'>Do some science</a>
-</article><article id="LogPanel"></article></section>
-
-
-:: Day Start
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-You take a look at your Personal Computer and check your Digital Assistant. </br></br>
-Good Morning, Doctor!</br>
-Today is Day X of your adventure.</br>
-The current weather is XXXXX.</br>
-You have X New Messages [[Check Electronic Mail]]</br>
-[[OKAY, GOT IT.|Home]]
 </article><article id="LogPanel"></article></section>
 
 
@@ -91,7 +78,7 @@ Your brain doesn't seem to be working well. You can't really remember or process
 </article><article id="LogPanel"></article></section>
 
 
-:: Collect Materials
+:: Collect Materials [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 You decide to go out and collect anything that seems useful. You exit the lab and spend some time walking around the Junkyard and around the island.</br>
 <<nobr>>
@@ -107,8 +94,9 @@ You head back to the lab after a few hours spent on the search.</br>
 </article><article id="LogPanel"></article></section>
 
 
-:: proc_Action
+:: proc_Action [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.story.state.Glob.m_ActionsToday+=1;%>
 Todo: 
 <<nobr>>
 <<set $m_ActionsToday += 1>>
@@ -118,11 +106,11 @@ Todo:
 	<<display "Partner Action">>
 <<endif>>
 <<endnobr>>
-[[Next|Partner Action]]
+</br>[[Next|Partner Action]]
 </article><article id="LogPanel"></article></section>
 
 
-:: Partner Action
+:: Partner Action [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 Well, that's done. What's <<print $m_PartnerName>> up to?
 <<display AI_Partner_Decide>>
@@ -131,27 +119,24 @@ Well, that's done. What's <<print $m_PartnerName>> up to?
 
 :: Progress Day
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<<if $m_ActionsToday is 1>>The Morning gives way to the Afternoon.
-[[Home]]
-<<elseif $m_ActionsToday is 2>>The Afternoon gives way to the Evening.
-[[Home]]
-<<elseif $m_ActionsToday gte 3>>
-<<set $m_ActionsToday to 0>>The Evening gives way to Night.
-[[Time to call it a day...|Day End]]
-<<endif>>
+<%if(window.story.state.Glob.m_ActionsToday<=1){%>
+    The Morning gives way to the Afternoon.</br>[[Home]]
+<% }else if(window.story.state.Glob.m_ActionsToday<=2){%>
+    The Afternoon gives way to the Evening.</br>[[Home]]
+<% }else if(window.story.state.Glob.m_ActionsToday<=3){%>
+    The Evening gives way to Night.</br>[[Time to call it a day...|Day End]]
+<%}%>
 </article><article id="LogPanel"></article></section>
 
 :: Day End
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-The end of the day has come. 
-It's time to call it a day, eat dinner, and get to bed.
+The end of the day has come. It's time to call it a day, eat dinner, and get to bed.
 <<display rand_Event_EndofDay>>
-<<display do_NextDay>>
-[[Day Start]]
+<%=window.story.render("do_NextDay")%>
+</br>[[Day Start]]
 </article><article id="LogPanel"></article></section>
 
 :: do_NextDay
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 todo
 /%Does all the daily updates and counter controls, as well as managing daily AI stuff%/
 <<display update_CosmicCooldowns>>
@@ -160,5 +145,62 @@ todo
 <<set $m_Day += 1>>
 <<set $m_ActionsToday to 0>>
 
+
+:: Day Start
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.story.state.Glob.m_ActionsToday=0,window.story.state.Glob.m_Day+=1; window.story.show("Home");%>
+todo
+You take a look at your Personal Computer and check your Digital Assistant. </br></br>
+Good Morning, Doctor!</br>
+Today is Day X of your adventure.</br>
+The current weather is XXXXX.</br>
+You have X New Messages [[Check Electronic Mail]]</br>
+[[OKAY, GOT IT.|Home]]
 </article><article id="LogPanel"></article></section>
-<script></script>
+
+
+
+:: Conduct Research
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+You go to the desk, hoping to conduct some research. (Researching is an action.)</br>
+</br>!!CHEMISTRY</br>
+The Chemistry tree opens up devices that make use of chemical compounds and treatments. Provided you can refine things, you may use chemistry to create products to test and discover new types of substances. 
+</br>[[Review Chemistry|Chemistry Screen]]
+
+</br>!!ENERGY AND PARTICLE PHYSICS: </br>
+The Energy Physics tree opens up devices that use energy or particles to impact genetic or chemical structures. It's wild and science-y, since there's so many forms of energy out there.
+</br>[[Review Energy Physics|Particle Physics Screen]]
+
+</br>!!NATURALISTIC SCIENCE:</br>
+This tree opens up access to machines that allow people to improve themselves without freaky science things. Perfect for anyone that is highly motivated and has the stomach to resist a lot of abuse and force.
+</br>[[Review Naturalistic Science|Naturalistic Screen]]
+
+</br>!!OTHER: </br>
+These devices don't have classification.
+<<if $has_DeepBioScanner is 0>>Deep BioScanner - 400RP Deep<<else>>BioScanner<<endif>>
+</br>[[The Lab]]
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>
+
+
+:: ???
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+
+</article><article id="LogPanel"></article></section>

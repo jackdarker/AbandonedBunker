@@ -17,55 +17,56 @@ window.gm.initGame= function(forceReset,NGP=null) {
   s._gm.dbgShowMoreInfo=true;
   if (!s.vars||forceReset) { // storage of variables that doesnt fit player
     s.vars = {
-    inVR: false,
-    spawnAt: 'ForestRespawnPodExit',
-    playerPartyVR:[],
-    playerPartyRL:[]
-    }; 
-    if (!window.gm.achievements||forceReset) {  //outside of window.story !
-      window.gm.achievements= {
-        looseEnd: false //add your flags here
-      };
-      window.storage.loadAchivementsFromBrowser();
+      inVR: false,
+      spawnAt: 'ForestRespawnPodExit',
+      playerPartyVR:[],
+      playerPartyRL:[]
+      }; 
+  }
+  if (!window.gm.achievements||forceReset) {  //outside of window.story !
+    window.gm.achievements= {
+      looseEnd: false //add your flags here
+    };
+    window.storage.loadAchivementsFromBrowser();
+  }
+  if (!s.Jenny||forceReset){
+    let ch = new Character();
+    ch.id="Jenny";
+    ch.name="Jenny";
+    ch.faction="Player";
+    ch.Outfit.addItem(new BaseHumanoid());
+    ch.Outfit.addItem(new SkinHuman());
+    ch.Outfit.addItem(new FaceHuman());
+    ch.Outfit.addItem(HandsHuman.factory('human'));
+    ch.Outfit.addItem(BreastHuman.factory('human'));
+    ch.Outfit.addItem(VulvaHuman.factory('human'));
+    ch.Outfit.addItem(new BikiniBottomLeather());
+    ch.Outfit.addItem(new BikiniTopLeather());
+    s.Jenny=ch;
+  }
+  if (!s.PlayerVR||forceReset) {  
+    let ch = new Character();
+    ch.id="PlayerVR";
+    ch.name="Alex";
+    ch.faction="Player";
+    //body
+    ch.Outfit.addItem(new BaseHumanoid());
+    ch.Outfit.addItem(new SkinHuman());
+    ch.Outfit.addItem(new FaceHuman());
+    ch.Outfit.addItem(HandsHuman.factory('human'));
+    //todo ch.Outfit.addItem(AnusHuman.factory('human'));
+    //ch.Outfit.addItem(PenisHuman.factory('human'));
+    if(s._gm.debug) {
+      ch.Skills.addItem(new SkillInspect());
+      ch.Skills.addItem(new SkillUltraKill());
     }
-    if (!s.Jenny||forceReset){
-      let ch = new Character();
-      ch.id="Jenny";
-      ch.name="Jenny";
-      ch.faction="Player";
-      ch.Outfit.addItem(new BaseHumanoid());
-      ch.Outfit.addItem(new SkinHuman());
-      ch.Outfit.addItem(new FaceHuman());
-      ch.Outfit.addItem(HandsHuman.factory('human'));
-      ch.Outfit.addItem(BreastHuman.factory('human'));
-      ch.Outfit.addItem(VulvaHuman.factory('human'));
-      ch.Outfit.addItem(new BikiniBottomLeather());
-      ch.Outfit.addItem(new BikiniTopLeather());
-      s.Jenny=ch;
-    }
-    if (!s.PlayerVR||forceReset) {  
-      let ch = new Character();
-      ch.id="PlayerVR";
-      ch.name="Alex";
-      ch.faction="Player";
-      //body
-      ch.Outfit.addItem(new BaseHumanoid());
-      ch.Outfit.addItem(new SkinHuman());
-      ch.Outfit.addItem(new FaceHuman());
-      ch.Outfit.addItem(HandsHuman.factory('human'));
-      //todo ch.Outfit.addItem(AnusHuman.factory('human'));
-      //ch.Outfit.addItem(PenisHuman.factory('human'));
-      if(s._gm.debug) {
-        ch.Skills.addItem(new SkillInspect());
-        ch.Skills.addItem(new SkillUltraKill());
-      }
-      s.PlayerVR=ch;
-    }
-    window.gm.initGameFlags(forceReset,NGP);
-    window.gm.switchPlayer("PlayerVR");
-    //take over flags for newgameplus
-    if(NGP) { /*window.story.state.vars.crowBarLeft = NGP.crowBarLeft;*/ }
-    NGP=null; //release memory
+    s.PlayerVR=ch;
+  }
+  window.gm.initGameFlags(forceReset,NGP);
+  window.gm.switchPlayer("PlayerVR");
+  //take over flags for newgameplus
+  if(NGP) { /*window.story.state.vars.crowBarLeft = NGP.crowBarLeft;*/ }
+  NGP=null; //release memory
 }
 window.gm.initGameFlags = function(forceReset,NGP=null) {
   let s= window.story.state;
@@ -86,7 +87,8 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
     qArmorHP:0,
     hasEmptyBattery: 0,
     hasFullBattery:0,
-    m_ActionsToday:0
+    m_ActionsToday:0,
+    m_Day:0
   }
   let DngLv1 = {
     visitedTiles: [],
@@ -212,7 +214,7 @@ window.gm.respawn=function(conf={keepInventory:false}) {
   } else if([100,200,300].includes(window.gm.quests.getMilestoneState("qBondageKink").id)){
       window.story.show('YouDiedWithCursedGear');
   } else {*/
-    let robes = new window.storage.constructors['RobesZealot']();
+    /*let robes = new window.storage.constructors['RobesZealot']();
     window.gm.makeCursedItem(robes,{minItems:2,convert:'HarnessRubber'});
     window.gm.player.Wardrobe.addItem(robes);
     window.gm.player.Outfit.addItem(robes);
@@ -221,7 +223,7 @@ window.gm.respawn=function(conf={keepInventory:false}) {
     window.gm.player.Outfit.addItem(robes);
     let staff = new window.storage.constructors['StaffWodden']();
     window.gm.player.Inv.addItem(staff);
-    window.gm.player.Outfit.addItem(staff);
+    window.gm.player.Outfit.addItem(staff);*/
     window.story.show(window.story.state.vars.spawnAt);
   //}
 };
