@@ -19,13 +19,10 @@ This game is powered by twine/tweego and snowman.</br>
 
 
 :: Intro
-<article><%window.gm.initGame();window.gm.player.location=window.passage.name;%>
-This is just some experiment to see if I can get some kind of dungeon crawler working in twine.
-</br> Enter the dungeon and search for the stairs. Avoid those inhabiting this scary space. </br>
-<p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv1();window.gm.dng.enterDungeon();'>Level1</a></p>
-<p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv2();window.gm.dng.enterDungeon();'>Level2</a></p>
-<p><a0 onclick='window.gm.dng = window.gm.dngs.MinoLairLv3();window.gm.dng.enterDungeon();'>Level3</a></p>
-<p><a0 onclick='window.gm.dng = window.gm.dngs.CargoBay();window.gm.dng.enterDungeon();'>CargoBay</a></p>
+<article><%window.gm.initGame();window.story.state.vars.spawnAt='Day Start';window.gm.player.location=window.passage.name;%>
+This is LewdScience converted to snowman. Lets see if I can learn something from this. </br>
+<p><a0 onclick='window.story.show("AI_Intro");'>Do some science</a></p>
+
 <p class='author'>Loading of savegame is only possible in game.</p>
 </article>
 <script>

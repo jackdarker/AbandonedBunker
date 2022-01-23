@@ -487,7 +487,6 @@ class Carlia extends Mob {
       this.Outfit.addItem(HandsHuman.factory('cat'));
       this.Outfit.addItem(FaceWolf.factory('cat'));
       this.Outfit.addItem(BreastHuman.factory('human'));
-      CSS
       this.Outfit.addItem(VulvaHuman.factory('human'));
       this.Outfit.addItem(new BikiniBottomLeather());
       this.Outfit.addItem(new BikiniTopLeather());

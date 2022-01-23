@@ -20,31 +20,33 @@ window.gm.initGame= function(forceReset,NGP=null) {
     inVR: false,
     spawnAt: 'ForestRespawnPodExit',
     playerPartyVR:[],
-    playerPartyRL:[],
+    playerPartyRL:[]
     }; 
-    s.vars.mine= {
-      mapReveal:0,
-      qFoundPlantPod:0,
-      qDoorH2:0,
-      qDoorF2:0,
-      qDoorH5:0,
-      qFoeG2:100,//Worms
-      qFoeI2:100,//Tentacle
-      qFoeH3:100,//Pod
-      qFoeH4:100 //Boss
-      };
-    }
     if (!window.gm.achievements||forceReset) {  //outside of window.story !
       window.gm.achievements= {
         looseEnd: false //add your flags here
-      }
+      };
       window.storage.loadAchivementsFromBrowser();
     }
-    
+    if (!s.Jenny||forceReset){
+      let ch = new Character();
+      ch.id="Jenny";
+      ch.name="Jenny";
+      ch.faction="Player";
+      ch.Outfit.addItem(new BaseHumanoid());
+      ch.Outfit.addItem(new SkinHuman());
+      ch.Outfit.addItem(new FaceHuman());
+      ch.Outfit.addItem(HandsHuman.factory('human'));
+      ch.Outfit.addItem(BreastHuman.factory('human'));
+      ch.Outfit.addItem(VulvaHuman.factory('human'));
+      ch.Outfit.addItem(new BikiniBottomLeather());
+      ch.Outfit.addItem(new BikiniTopLeather());
+      s.Jenny=ch;
+    }
     if (!s.PlayerVR||forceReset) {  
       let ch = new Character();
       ch.id="PlayerVR";
-      ch.name="Zeph";
+      ch.name="Alex";
       ch.faction="Player";
       //body
       ch.Outfit.addItem(new BaseHumanoid());
@@ -56,12 +58,9 @@ window.gm.initGame= function(forceReset,NGP=null) {
       if(s._gm.debug) {
         ch.Skills.addItem(new SkillInspect());
         ch.Skills.addItem(new SkillUltraKill());
-        ch.Skills.addItem(SkillCallHelp.factory('Wolf'));
-        ch.Skills.addItem(SkillDetermined.factory());
       }
       s.PlayerVR=ch;
     }
-        
     window.gm.initGameFlags(forceReset,NGP);
     window.gm.switchPlayer("PlayerVR");
     //take over flags for newgameplus
@@ -86,7 +85,8 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
     qCoverallHP:100,
     qArmorHP:0,
     hasEmptyBattery: 0,
-    hasFullBattery:0
+    hasFullBattery:0,
+    m_ActionsToday:0
   }
   let DngLv1 = {
     visitedTiles: [],

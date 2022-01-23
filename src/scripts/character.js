@@ -1,4 +1,4 @@
-"use strict";
+"use strict;";
 /**
 * a class to provide methods to work with PC & NPC
 */
@@ -99,7 +99,6 @@ class Character {
         let next = Character.calcXPToLevel(this._data.XP,this._data.level)
         return(next!==this._data.level);
     }
-    get level(){return(this._data.level);}
     addXP(XP) { this._data.XP+=XP; }
     /*
      * upgrade level by 1;this will increase level even if not enough XP !

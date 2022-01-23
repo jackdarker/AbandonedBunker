@@ -1,11 +1,164 @@
 :: AI_Intro [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+You've made a huge discovery and accomplishment - you've successfully created a human being with the genetic platform necessary to create and test serious genetic changes and accelerated growth formulas.</br>
+What is your name?</br><<textbox "$m_PlayerName" "Player">>
 
+The problem is that - despite your visionary and daring genius - you haven't developed any applications for the platform, and you can't apply these new products.</br>
+To do this, you've had to cheat in one regard - you had to play God and create a human being with this genetic platform.</br> 
+
+What's her name?</br><<textbox "$m_PartnerName" "Jenny">>
+She is a violation of several international conventions and will probably get you banned everywhere, but you did it. A female with the genetic alterations necessary to test your methods and products. She's accelerated in age to adulthood and has been educated as best as your science and technology can provide. </br>
+Of course, nothing is perfect. She's not very smart, but you treat her well and she gets along with you. You've actually grown quite fond of her. She's agreed to the experiments after you've explained what it is you want to accomplish and that the goal is to make her and others better or stronger.</br>
+As well, you could experiment on yourself, but you'll need to trust your new partner to do what's right for you, and do it correctly.</br>
+Swallowing the ethical problems you are nearly drowning with, the fateful day has come where you begin your experiments. You have a pile of scrap and material, but now you just need to make the discoveries you need to conduct experiments at your home and Lab FAR, FAR away from everyone else - where no one will catch you.
+You have retreated to this remote island to become the Mad Scientist you decided to be. It's not much but a small studio and a lab, but you're slowly pulling it all together. With your new Partner, it should be a little easier. </br>
+
+[[Continue|Help_How to do Science]]
+<a0 onclick='window.gm.enterVR()'>Do some science</a>
+[[Skip to Home|Day Start]]
+</article><article id="LogPanel"></article></section>
+
+:: Help_How to do Science [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%></br>
+!How to SCIENCE!!!
+Okay, <<print $m_PlayerName>>, every day, you get 3 actions.</br>
+Gathering, refining, and using a machine are all an Action.</br>
+Doing an activity with <<print $m_PartnerName>> is also an action.</br>
+Anything else is assumed a Free Action, since they are usually a trivial in their amount of time needed.</br>
+Pursuing Science on this island will require you be prepared and resourceful. You'll need to both collect, build, and maintain your lab and base. You will need Resources and Research.</br>
+Ideally, you want to earn Research Points by transforming <<print $m_PartnerName>> and yourself. You may also gain points in other ways, but the best way is transforming.</br>
+Transforming yourself requires <<print $m_PartnerName>>'s help to work the machine and collect data in your stead.</br>
+<<print $m_PartnerName>> trusts you to conduct experiments that help her. Some things you choose to do may lower her trust of you. That would be bad. Some experiments may change her personality or be displeasing to her, which may also change her personality.</br>
+This is all important, because for every action you do, <<print $m_PartnerName>> gets to do an action, too! </br>
+Your ultimate goals are up to you - pursue whatever end you wish, but be careful, since you need <<print $m_PartnerName>>'s help.</br>
+Be careful, though. There are several endings, and some of them are bad endings.</br>
+<a0 onclick='window.gm.enterVR()'>Do some science</a>
 </article><article id="LogPanel"></article></section>
 
 
-:: AI_YourRoom
+:: Day Start
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-This is your room, a small cubicle with a bunk-bed, a locker to store what little gear you own and a desk with a chair.
-[[You need to get to work]]
+You take a look at your Personal Computer and check your Digital Assistant. </br></br>
+Good Morning, Doctor!</br>
+Today is Day X of your adventure.</br>
+The current weather is XXXXX.</br>
+You have X New Messages [[Check Electronic Mail]]</br>
+[[OKAY, GOT IT.|Home]]
 </article><article id="LogPanel"></article></section>
+
+
+:: Home
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+This is your home. It's next to the lab.</br>
+Despite being located next to a bright and beautiful beach. It's pretty lonely here, but you have a space for both yourself and <<print $m_PartnerName>>.</br>
+You've used <%=window.story.state.Glob.m_ActionsToday%> actions today so far.</br>
+You can proceed to your lab or relax with <<print $m_PartnerName>>. </br>
+<<display get_rand_HomeActivity>>
+
+[[Look at Your Partner|Look at Partner]]</br>
+[[Check on Yourself|Look at Yourself]]</br>
+[[Talk to Your Partner|Talk with Partner]]</br> 
+
+[[Look at Your Computer|Your Computer]]</br> 
+[[To The lab|The Lab]]</br>
+<<display desc_Partner_Lab_Progress>>
+
+<<if $m_DroneCenter is 1>>[[Go to the Drone Center|Drone Bay]]<<endif>></br>
+<<if $m_ExaminationRoom is 1>>[[Go to Exam Room|Examination Center]]<<endif>></br>
+<<if $m_PanicRoom is 1>>[[Go to the Panic Room|Panic Room]]<<endif>></br>
+[[Do Nothing|proc_Action]]
+[[Debug Tool]]
+</article><article id="LogPanel"></article></section>
+
+
+:: The Lab
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+Your lab is a hidden building in an isolated place next to a tremendous abandoned junkyard. You've managed to clean it up and are hidden far from the prying eyes and meddling hands of civilization.
+</br>
+<<if $b_IQ gte 90>>!DO WORK:</br>
+[[Use a Transformation Machine|Use an Enhancing Machine]]</br>
+[[Check your inventory|Inventory]]</br>
+[[Collect useful things|Collect Materials]]</br>
+[[Refine substances|Use a Refining Machine]]</br>
+[[Build a Machine]]</br>
+
+</br>!MAKE IMPROVEMENTS:</br>
+[[Conduct Research]]</br>
+[[Build Expansions]]</br>
+<<else>>
+Your brain doesn't seem to be working well. You can't really remember or process what you can or should be doing, here...Maybe you should let <<print $m_PartnerName>> [[handle things for you|check_Lab_PartnerTake]]?<<endif>></br>
+[[Home]]
+</article><article id="LogPanel"></article></section>
+
+
+:: Collect Materials
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+You decide to go out and collect anything that seems useful. You exit the lab and spend some time walking around the Junkyard and around the island.</br>
+<<nobr>>
+<<set $t_rand = either(1, 2)>>
+<<if $t_rand is 1>>
+	<<display get_rand_substance>>
+<<elseif $t_rand is 2>>
+	<<display get_rand_resource>>
+<<endif>><<endnobr>>
+
+You head back to the lab after a few hours spent on the search.</br>
+[[Continue|proc_Action]]
+</article><article id="LogPanel"></article></section>
+
+
+:: proc_Action
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+Todo: 
+<<nobr>>
+<<set $m_ActionsToday += 1>>
+<<if $partner_Lust gte 100>>
+	<<display proc_PartnerAction_Mast>>
+<<else>>
+	<<display "Partner Action">>
+<<endif>>
+<<endnobr>>
+[[Next|Partner Action]]
+</article><article id="LogPanel"></article></section>
+
+
+:: Partner Action
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+Well, that's done. What's <<print $m_PartnerName>> up to?
+<<display AI_Partner_Decide>>
+[[Progress Day]]
+</article><article id="LogPanel"></article></section>
+
+:: Progress Day
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<<if $m_ActionsToday is 1>>The Morning gives way to the Afternoon.
+[[Home]]
+<<elseif $m_ActionsToday is 2>>The Afternoon gives way to the Evening.
+[[Home]]
+<<elseif $m_ActionsToday gte 3>>
+<<set $m_ActionsToday to 0>>The Evening gives way to Night.
+[[Time to call it a day...|Day End]]
+<<endif>>
+</article><article id="LogPanel"></article></section>
+
+:: Day End
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+The end of the day has come. 
+It's time to call it a day, eat dinner, and get to bed.
+<<display rand_Event_EndofDay>>
+<<display do_NextDay>>
+[[Day Start]]
+</article><article id="LogPanel"></article></section>
+
+:: do_NextDay
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+todo
+/%Does all the daily updates and counter controls, as well as managing daily AI stuff%/
+<<display update_CosmicCooldowns>>
+<<display proc_NGrowth_Partner>>
+<<display proc_NGrowth_Player>>
+<<set $m_Day += 1>>
+<<set $m_ActionsToday to 0>>
+
+</article><article id="LogPanel"></article></section>
+<script></script>
