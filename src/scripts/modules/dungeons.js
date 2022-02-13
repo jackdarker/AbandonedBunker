@@ -331,7 +331,7 @@ class MinoLairLv1 extends DngDungeon{
     }
     constructor()    {
         super()
-        this.Mapper = new DngMapper(this.extMapInfo.bind(this));
+        this.Mapper = new DngMapperSVG(this.extMapInfo.bind(this));
         this.Mapper.printLegend= function(){return(this.__proto__.printLegend()+'<pre>p=Patrol t=Turret</pre>');}
         this.buildFloors();
         this.onEnterRoom = this.checkCollisionPlayer;
@@ -360,7 +360,7 @@ class MinoLairLv1 extends DngDungeon{
             this.tickMobs();this.resumeRoom();
         };
         let desc=function(){
-            let msg=this.name+'</br>';
+            let msg='';//this.name+'</br>';
             return(msg);
         };
         rooms.set("A1",new DngRoom("A1", desc,false));
