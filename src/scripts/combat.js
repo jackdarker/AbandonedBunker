@@ -6,6 +6,7 @@ window.gm.combat = window.gm.combat || {};
 
 class Encounter {
   constructor() {
+    this.enableFlee=true;
     this.EnemyFirst=false;
     this.EnemyFunc = null;  //a ctor of Mob
     this.Location = ''  //your actual location-name
@@ -13,12 +14,12 @@ class Encounter {
     //the following function should get reassigned;they should return a message what will happen next and provide a link to passage to follow f.e. return to window.gm.player.location
     this.onStart = (function(){return('A '+window.story.state.combat.enemyParty[0].name+' appears !'+ window.gm.printPassageLink('Engage','EncounterStartTurn'));});
     //...endCombat is called after this and if you need to check on effects, you have to do this here !
-    this.onDefeat = (function(){return('You are defeated.</br>'+ window.gm.printLink('Next','window.gm.postDefeat()'));});
-    this.onSubmit = (function(){return('You submit to the foe.</br>'+ window.gm.printLink('Next','window.gm.postDefeat()'));});
-    this.onFlee = (function(){return('You retreat hastily.</br>'+ window.gm.printLink('Next','window.gm.postVictory()'));});
+    this.onDefeat = (function(){return('</br></br>You are defeated.</br>'+ window.gm.printLink('Next','window.gm.postDefeat()'));});
+    this.onSubmit = (function(){return('</br></br>You submit to the foe.</br>'+ window.gm.printLink('Next','window.gm.postDefeat()'));});
+    this.onFlee = (function(){return('</br></br>You retreat hastily.</br>'+ window.gm.printLink('Next','window.gm.postVictory({flee:true})'));});
 
     //...dont forget to fetchLoot on victory
-    this.onVictory = (function(){return('You defeated the foe.</br> '+this.fetchLoot()+'</br>'+ window.gm.printLink('Next','window.gm.postVictory()'));});
+    this.onVictory = (function(){return('</br></br>You defeated the foe.</br> '+this.fetchLoot()+'</br>'+ window.gm.printLink('Next','window.gm.postVictory({flee:false})'));});
 
     //if you override onMoveSelect (like the others), you can jump out of battle, show some scene and return to battle
     //- do not modify window.gm.player.location
@@ -62,13 +63,13 @@ initCombat() {
 spawnChar(item,party){
   let s=window.story.state;
   let mob = window.gm.Mobs[item]();
+  mob.scaleLevel(window.gm.player.level);//todo level equal to spawner?
   mob.faction = party,mob.despawn=true;
   let list = s.combat.enemyParty.concat(s.combat.playerParty);
   let uid=1;//need to build unique id
   for(el of list) {
     if(mob.__proto__.isPrototypeOf(el)) {
       //expecting Mole#2
-
       uid = Math.max(uid,parseInt(el.name.split('#')[1],10)+1);
     };
   }
@@ -86,39 +87,57 @@ hideCombatOption() {
 }
 //renders background & combatants to #canvas
 renderCombatScene() {
-  let _pos =[[0.25,0.60,0.10],[0.75,0.60,0.10],[0.50,0.40,0.80]];//sprite position & scale in % x,y,z
   let width=600,height=300;
-  let draw = document.querySelector("#canvas svg");
-  if(!draw) draw = SVG().addTo('#canvas').size(width, height);
-  else draw = SVG(draw);//recover svg document instead appending new one
-  //todo images flash when redrawing page; blitting bakbuffer doesnt help: var draw2 = SVG(); -> draw2.addTo(draw);
-  draw.rect(width, height).attr({ fill: '#303030'});
-  draw.image(window.story.state.combat.scenePic);
-  let el,subnodes,i,list = window.story.state.combat.enemyParty;
+  let holder,draw = document.querySelector("#canvas svg");
+  if(!draw) {
+    draw = SVG().addTo('#canvas').size(width, height);
+    draw.rect(width, height).attr({ fill: '#303030'});
+    draw.image(window.story.state.combat.scenePic);
+  }
+  else {
+    draw = SVG(draw);//recover svg document instead appending new one
+    holder = draw.findOne('#holder');
+    holder.remove(); //remove all because they could be dead  todo only redraw if necessary
+  }
+  holder=SVG().group({id:'holder'}).addTo(draw);
+  //todo images flash when redrawing page; blitting backbuffer doesnt help: var draw2 = SVG(); -> draw2.addTo(draw);
+  let el,subnodes,i,list=[],list2 = window.story.state.combat.enemyParty;
+  for(i=list2.length-1;i>=0;i--) {
+    if(!list2[i].isKnockedOut()) { //todo show deathsprite
+      list.push(list2[i]);
+    }
+  }
+  let _pos =[[0.25,0.60,1],[0.75,0.50,1],[0.50,0.40,1]];//sprite position & scale in % x,y,z
+  if(list.length<=1) { //1 large centered sprite
+    _pos =[[0.50,0.50,1]];
+  } 
   for(i=list.length-1;i>=0;i--) {
     if(!list[i].isKnockedOut()) { //todo show deathsprite
       var pos = _pos.pop();
       var _pic = window.gm.images[list[i].pic]();
       var node = SVG(_pic);
-      var scaleW = node.width()/width, scaleH=node.height()/height;
-      //todo sprites should be scattered evenly and scaled down to fit into scene 
+      //sprites should be scattered evenly and scaled down to fit into scene (with respect of offset in scene)
+      var scaleW2,scaleH2,scaleW = node.width()/(width*(1-Math.abs(0.5-pos[0])*2)), scaleH=node.height()/(height*(1-Math.abs(0.5-pos[1])*2));
       if(scaleW>0.9 || scaleH>0.9 ) {
-        if(scaleW>scaleH) node.width(node.width()/(1.2*scaleW*pos[2]));
-        else node.height(node.height()/(1.2*scaleH*pos[2]));
+        if(scaleW>scaleH) node.width(node.width()/(1.2*scaleW));
+        else node.height(node.height()/(1.2*scaleH));
       }
       node.center(pos[0]*width,pos[1]*height);//reposit. AFTER scaling !
-      //hide parts of sprite
-      subnodes= node.find('[data-male]');
-      for(el of subnodes) {
-        if(list[i].getPenis()===null) el.hide();
+      if(window.story.state.Settings.showNSFWPictures){
+        //hide parts of sprite
+        var penis=(list[i].getPenis()!==null),vagina=(list[i].getVagina()!==null),arousal=list[i].arousal().value;
+        subnodes= node.find('[data-male]');
+        for(el of subnodes) {penis?el.show():el.hide(); }
+        subnodes= node.find('[data-female]');
+        for(el of subnodes) {vagina?el.show:el.hide(); }
+        subnodes= node.find('[data-arousal]');
+        for(el of subnodes) {
+          var y = el.attr('data-arousal').split(',');
+          var x1= parseInt(y[0],10),x2= parseInt(y[1],10);
+          if(arousal<x1 ||arousal>x2 ) el.hide(); else el.show();
+        }
       }
-      subnodes= node.find('[data-arousal]');
-      for(el of subnodes) {
-        var y = el.attr('data-arousal').split(',');
-        var x1= parseInt(y[0],10),x2= parseInt(y[1],10);
-        if(list[i].arousal().value<x1 ||list[i].arousal().value>x2 ) el.hide();
-      }
-      node.addTo(draw);
+      node.addTo(holder);
     }
     if(_pos.length<=0) break;
   }
@@ -191,32 +210,31 @@ printStats() {
 }
 //creates buttons for skills of current actor
 printSkillList() {
-  var s = window.story.state;
+  var res,item,entry,s = window.story.state;
   var canAct = s.combat.actor._canAct();
+  entry = document.createElement('button');
+  entry.addEventListener('click',(function(me){return(window.gm.Encounter._postSkillAbort.bind(me));}(this)));
+  entry.textContent="Do nothing";
+  $("div#choice")[0].appendChild(entry);
   if(canAct.OK===true) {
     var skillIds = s.combat.actor.Skills.getAllIds();
-    //todo how to sort the list in a useful manner?
+    skillIds.sort(function (a, b) { if (a < b) { return -1;} if (a > b) { return 1; } return 0;});//todo how to sort the list in a useful manner?
     for(var i=0; i<skillIds.length;i++) {
-      var entry = document.createElement('button');
-      var res;
+      entry = document.createElement('button');
+      item=s.combat.actor.Skills.getItem(skillIds[i]);
       //entry.href='javascript:void(0)';
       entry.addEventListener("click",(function(me,target){ 
         return(window.gm.Encounter._postSkillSelect.bind(me,target));}(this,skillIds[i])));
-      entry.textContent=s.combat.actor.Skills.getItem(skillIds[i]).name;
-      res = s.combat.actor.Skills.getItem(skillIds[i]).isEnabled();
+      entry.textContent=item.name;
+      res = item.isEnabled();
       entry.disabled=!res.OK; entry.title=res.msg;  //Todo use pointevent+toasty?
       $("div#choice")[0].appendChild(entry);      // <- requires this node in html
     }
   } else {  //cannot do a thing
-    var entry = document.createElement('p');
+    entry = document.createElement('p');
     entry.textContent=canAct.msg;
     $("div#choice")[0].appendChild(entry);
   }
-  var entry = document.createElement('button');
-  //entry.href='javascript:void(0)';
-  entry.addEventListener('click',(function(me){return(window.gm.Encounter._postSkillAbort.bind(me));}(this)));
-  entry.textContent="Do nothing";
-  $("div#choice")[0].appendChild(entry);
 }
 _postSkillAbort(){
   window.story.state.combat.action=null;
@@ -251,7 +269,6 @@ printTargetList() {
       return(window.gm.Encounter._postTargetSelect.bind(me,target));}(this,targets[i])));
     //if single-target, use name from mob, for multitarget we expect a name attribute to the list
     entry.textContent=(targets[i].length>1)?targets[i].name:targets[i][0].name;
-    //entry.disabled=this.buttons[y*5+x].disabled;
     $("div#choice")[0].appendChild(entry);      // <- requires this node in html
   }
   var entry = document.createElement('a');
@@ -317,15 +334,6 @@ printNextLink(nextState,label="Next") {
   entry.textContent=label;
   $("div#choice2")[0].appendChild(entry);
 }
-//executes a combat-cmd for player/enemy
-execCombatCmd(move) { 
-  var s = window.story.state;
-  var result = move(s.combat.actor,s.combat.target);
-  /*s.combat.enemyTurn =!s.combat.enemyTurn;  //toggle whos turn
-  if(!(s.combat.enemyTurn ^ s.combat.enemyFirst)) s.combat.newTurn = false;
-  */
-  return(result);
-}
 endCombat(){
   var s = window.story.state;
   s.combat.inCombat=false;
@@ -351,6 +359,8 @@ fetchLoot(){ //if you are victorious: grant XP & transfer Loot to player
   for (el of s.combat.playerParty) {
     maxLevel = Math.max(maxLevel,el.level);
   }
+  let _x = window.gm.player.Stats.get('luck').value;
+  _rnd = _rnd- Math.max(-25,Math.min(25,_x)); //player luck capped
   for(el of s.combat.enemyParty) {
     for(var i = el.loot.length-1;i>=0;i--) {
       if(_rnd<=el.loot[i].chance) {
@@ -386,15 +396,25 @@ calcTurnOrder(){
 /////////////////////  State Machine /////////////////////
 //
 battleInit() {
-  let result = {OK:false, msg:''}, s = window.story.state;
+  let list,result = {OK:false, msg:''}, s = window.story.state;
   result.OK=true,result.msg = this.onStart();
-  let list = s.combat.enemyParty.concat(s.combat.playerParty);
-  //update combateffects
+  list=s.combat.enemyParty;
   for(let k=list.length-1; k>=0;k--){
     if(list[k].isKnockedOut()) {
       if(list[k].despawn===true) list.splice(k,1); //remove spawned chars - you will not get loot for them !
       continue;
     }
+  }
+  list=s.combat.playerParty;
+  for(let k=list.length-1; k>=0;k--){
+    if(list[k].isKnockedOut()) {
+      if(list[k].despawn===true) list.splice(k,1); //remove spawned chars - you will not get loot for them !
+      continue;
+    }
+  }
+  list = s.combat.enemyParty.concat(s.combat.playerParty);
+  //update combateffects
+  for(let k=list.length-1; k>=0;k--){
     let effects = list[k].Effects.getAllIds();
     for(let i=0; i<effects.length; i++) {
       let effect = list[k].Effects.get(effects[i]);
@@ -415,15 +435,25 @@ battleInit() {
 }
 preTurn() {
   let result = {OK:false, msg:''};
-  let s = window.story.state;
+  let s = window.story.state,list;
   s.combat.turnCount+=1;
-  let list = s.combat.enemyParty.concat(s.combat.playerParty);
-  //update combateffects
+  list=s.combat.enemyParty;
   for(let k=list.length-1; k>=0;k--){
     if(list[k].isKnockedOut()) {
       if(list[k].despawn===true) list.splice(k,1); //remove spawned chars - you will not get loot for them !
       continue;
     }
+  }
+  list=s.combat.playerParty;
+  for(let k=list.length-1; k>=0;k--){
+    if(list[k].isKnockedOut()) {
+      if(list[k].despawn===true) list.splice(k,1); //remove spawned chars - you will not get loot for them !
+      continue;
+    }
+  }
+  list = s.combat.enemyParty.concat(s.combat.playerParty);
+  //update combateffects
+  for(let k=list.length-1; k>=0;k--){
     let effects = list[k].Effects.getAllIds();
     for(let i=0; i<effects.length; i++) {
       let effect = list[k].Effects.get(effects[i]);
@@ -575,7 +605,7 @@ battle() {
     result =this.next();
     this.msg+=result.msg;
     window.gm.printOutput(this.msg);
-    window.gm.Encounter.renderCombatScene();
+    window.story.state.Settings.showCombatPictures?window.gm.Encounter.renderCombatScene():0;
     renderToSelector("#panel", "statspanel");
     //if(result.OK) {   result.msg = this.msg+result.msg;    return(result);  }
   }
@@ -607,10 +637,18 @@ window.gm.combat.calcEvasion=function(attacker,target, attack) {
   var result = {OK:true,msg:''}
   var rnd = _.random(0,100);
 
-  if(target.Effects.findItemSlot(effStunned.name)>=0) { //todo chance to miss 
+  if(target.Effects.findItemSlot(effStunned.name)>=0 && rnd>50) { //todo chance to miss 
+    //a stunned target cannot dodge
     result.OK = true; 
     result.msg = target.name+' is stunned and cannot evade. '
     attack.crit = true; //when stunned always critical hit
+    return(result);
+  }
+  if(attacker.Effects.findItemSlot(effFlying.name)<0 && target.Effects.findItemSlot(effFlying.name)>=0 && rnd>50) { //todo chance to miss 
+    //non-heay flying target can dodge out of range 
+    //todo evade by flying only for close combat attacks   
+    result.OK = false; 
+    result.msg = target.name+' dodges the attack with a flight maneuver. '
     return(result);
   }
   var lvlDiffBonus = window.gm.combat.lvlDiffBonus(attacker,target);
@@ -701,7 +739,7 @@ window.gm.combat.TypesDamage = [
 
 //object to store attack-data
 window.gm.combat.defaultAttackData = function() {
-  return({value:0,total:0,crit:false,effects:[]}); 
+  return({msg:'',value:0,total:0,crit:false,effects:[]}); 
 }
 // calculates the damage of an physical attack
 window.gm.combat.calcAttack=function(attacker,defender,attack) {
@@ -733,7 +771,7 @@ window.gm.combat.scaleEffect = function(attack) {
     for(var i=0; i<op.length;i++){
       target = op[i].target;
       for(el of op[i].eff) {
-        if(el.name===effDamage.name) {  //dmg = (attack-armor)*(100%-resistance) but min. 1pt
+        if(el.id==="effDamage") {  //dmg = (attack-armor)*(100%-resistance) but min. 1pt
           arm = target.Stats.getItem('arm_'+el.type).value;
           rst = target.Stats.getItem('rst_'+el.type).value;
           dmg = Math.max(1,(el.amount-arm)*(100-rst)/100);
@@ -742,7 +780,7 @@ window.gm.combat.scaleEffect = function(attack) {
             op[i].eff.push(effTeaseDamage.factory(dmg,'slut',{slut:1})); //todo lewd-calc
           }
         }
-        if(el.name===effTeaseDamage.name) {
+        if(el.id==="effTeaseDamage") {
           //todo no dmg if blinded, stunned,
           //todo vulnerable if inHeat, like/dislike attacker
           //bondage-fetish -> bonus for bond-gear

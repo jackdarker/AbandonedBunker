@@ -39,19 +39,20 @@ class Character {
         this.Skills._parent = window.gm.util.refToParent(this);
         //create basic stats
         stHealth.setup(this.Stats,10,10),stEnergy.setup(this.Stats,30,30),stWill.setup(this.Stats,0,0);
+        stHunger.setup(this.Stats,30,100);
         for(let el of window.gm.combat.TypesDamage) {
             stResistance.setup(this.Stats,0,el.id);
             stArmor.setup(this.Stats,0,el.id); 
         }
         stAgility.setup(this.Stats,10,100),stIntelligence.setup(this.Stats,10,100),stLuck.setup(this.Stats,10,100);
         stCharisma.setup(this.Stats,10,100),stPerception.setup(this.Stats,10,100),stStrength.setup(this.Stats,10,100),stEndurance.setup(this.Stats,10,100);
-        stCorruption.setup(this.Stats,0,100),stArousal.setup(this.Stats,0,100);
+        stSavageness.setup(this.Stats,0,10),stCorruption.setup(this.Stats,0,100),stArousal.setup(this.Stats,0,50);
         for(let name of stFetish.listFetish()) {
             stFetish.setup(this.Stats,0,10,name);
         }         
-        this.Skills.addItem(new SkillUseItem());this.Skills.addItem(new SkillStruggle());this.Skills.addItem(new SkillAttack());
-        this.Skills.addItem(new SkillStun());this.Skills.addItem(new SkillHeal());this.Skills.addItem(new SkillTease());
-        this.Skills.addItem(new SkillFlee()),this.Skills.addItem(new SkillSubmit());    
+        this.Skills.addItem(new SkillAttack());this.Skills.addItem(new SkillUseItem());this.Skills.addItem(new SkillStruggle());
+        this.Skills.addItem(new SkillFlee());    
+        this.Effects.addItem(new effHunger());this.Effects.addItem(new effSanity());this.Effects.addItem(new effLibido());
         this.Effects.addItem(new effCombatRecovery());
         this.Effects.addItem(new effSpermDecay());
         window.storage.registerConstructor(Character);
@@ -59,16 +60,19 @@ class Character {
     toJSON() {return window.storage.Generic_toJSON("Character", this); }
     static fromJSON(value) { 
         var _x = window.storage.Generic_fromJSON(Character, value.data);
-        //need to recreate parent links
-        _x.Effects._relinkItems();
-        _x.Stats._relinkItems();
-        _x.Inv._relinkItems();
-        _x.Outfit._relinkItems();
-        _x.Wardrobe._relinkItems();
-        _x.Rel._relinkItems();
-        _x.Skills._relinkItems();
+        _x.rebuildAfterLoad();
         return(_x);
     };
+    rebuildAfterLoad(){
+        //need to recreate parent links
+        this.Effects._relinkItems();
+        this.Stats._relinkItems();
+        this.Inv._relinkItems();
+        this.Outfit._relinkItems();
+        this.Wardrobe._relinkItems();
+        this.Rel._relinkItems();
+        this.Skills._relinkItems();
+    }
     /**
     * calculates how many levels you can upgrade
     * @param {int} XP available
@@ -179,7 +183,7 @@ class Character {
             this.Effects.addItem(new effNotTired());
         } 
     }
-    addEffect(effect,id) {
+    addEffect(effect,id,who) {
         this.Effects.addItem(effect,id);
     }
     //helper function to change Relation 

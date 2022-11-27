@@ -44,7 +44,7 @@ function clearview(){
 }
 </script>
 
-:: SaveDialog
+:: SaveDialog [_noshortkey_]
 <dialog role="dialog" id='dialog_save' aria-labelledby="dialog-heading">
     <button id="close-dialog">Back</button> <div><%=(window.story.state._gm.nosave?"save disabled in this scene":"")%></div>
     <form>
@@ -115,7 +115,7 @@ function readFile(input) {
 </script>
 
 
-:: Inventory [_back_]
+:: Inventory [_back_ _nodeffered_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 [[Back|_back_]]</br>
 <%=window.gm.player.name%> inventory: </br></br>
@@ -125,14 +125,16 @@ var inv = window.gm.player.Inv;
 var maxSlots = inv.count(); 
 for(var i=0;i<maxSlots;i++){
   id=inv.getItemId(i);
-  %><%=window.gm.printItem(id,inv.countItem(id).toString()+'x '+inv.getItem(id).desc+' '+inv.getItem(id).usable(inv).msg,window.gm.player)%><%
+  %><%=window.gm.printItem(id,inv.countItem(id).toString()+'x '+inv.getItem(id).desc+' '
+    //+inv.getItem(id).usable(inv).msg
+    ,window.gm.player)%><%
 } 
 %>
 <div id='output'></div></br>
 </article><article id="LogPanel"></article></section>
 
 
-:: Relations [_back_]
+:: Relations [_back_ _nodeffered_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 [[Back|_back_]]</br>
 <%=window.gm.player.name%> relations: </br></br>
@@ -140,7 +142,7 @@ for(var i=0;i<maxSlots;i++){
 </article><article id="LogPanel"></article></section>
 
 
-:: Achievements [_back_]
+:: Achievements [_back_] 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 [[Back|_back_]]</br>
 <%=window.gm.printAchievements()%>
@@ -167,35 +169,38 @@ Your party consist of <%=(function(){var msg=[];for(el of window.story.state._gm
 
 :: Mirror [_back_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
-Checking out <%=window.gm.player.name%>:   [[Back|_back_]]</br>
-<div id='output'><%=window.gm.printBodyDescription(window.gm.player)%><div>
+[[Back|_back_]]</br> Checking out <%=window.gm.player.name%>:</br>
+<div id='output'><%=window.gm.printBodyDescription(window.gm.player,true)%><div>
+[[Back|_back_]]</br>
 <!--todo: set height depending on browsersize-->
 <!--<div id='Canvas' style='height: 30em;background: url("assets/doll/doll_small_xcf-Skirt.png") no-repeat center,url("assets/doll/doll_small_xcf-Body.png") no-repeat center, url(<%=window.gm.getScenePic(window.gm.player.location)%>)no-repeat center;color:black;'></div>-->
 </article><article id="LogPanel"></article></section>
 
 
-:: Wardrobe [_back_]
+:: Wardrobe [_back_ _nodeffered_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
-[[Back|_back_]] (Tools and weapons can be changed via Inventory.)</br>
-<%=window.gm.player.name%> has equipped: <%=window.gm.printEquipmentSummary()%></br>
-<div id="choice"></div>
+<p>[[Back|_back_]] [[Mirror]]</p> (Tools and weapons can be changed via Inventory.)</br>
+<%=window.gm.player.name%> has equipped: <%=window.gm.printEquipmentSummary()%></br></br>
+<div id="output"></div><div id="choice"></div>
 </article><article id="LogPanel"></article></section>
 <script>
 var x = 0, id=''; 
-var whom = window.gm.player;
-var _ids = whom.Wardrobe.getAllIds(); 
+var whom = window.gm.player,_ids2 = whom.Outfit.getAllIds();;
+var _ids = whom.Wardrobe.getAllIds().filter(x=>{return(_ids2.indexOf(x)<0)}); //filter away already equipped ids 
 for(var i=0;i<_ids.length;i++){window.gm.printEquipment(whom,whom.Wardrobe.getItem(_ids[i]));}
-_ids = whom.Outfit.getAllIds(); 
-for(var i=0;i<_ids.length;i++){window.gm.printEquipment(whom,whom.Outfit.getItem(_ids[i]));}
+for(var i=0;i<_ids2.length;i++){window.gm.printEquipment(whom,whom.Outfit.getItem(_ids2[i]));}
 </script>
 
-:: Settings [_back_]
+:: Settings [_back_ _noshortkey_]
 <section> <!--<aside id="sidebar"></aside>--><article><%=window.story.render("CenterDialogs") %>
 [[Back|_back_]]</br>
 <p class="author">settings are stored in save-game until I find a way to store them in cookies.</p>
 Theme:
-<a href="javascript:window.styleSwitcher.setStyle('default');window.gm.refreshAllPanel();">default</a>
+<a href="javascript:window.styleSwitcher.setStyle('light');window.gm.refreshAllPanel();">light</a>
 <a href="javascript:window.styleSwitcher.setStyle('dark');window.gm.refreshAllPanel();">dark</a></br>
+show Lewd pictures: <input type="checkbox" id='showNSFWPictures' onclick='toggleSetting(this);' name="showNSFWPictures" value="x"> (If false, lewd graphics are not shown/replaced with SFW.)</br>
+show dungeon map: <input type="checkbox" id='showDungeonMap' onclick='toggleSetting(this);' name="showDungeonMap" value="x"> (If false, the dungeon map is not rendered.)</br>
+show Combat-pictures: <input type="checkbox" id='showCombatPictures' onclick='toggleSetting(this);' name="showCombatPictures" value="x"> (Some graphics are large and take time to render, thus slowing down combat.)</br>
 <!--TODO what settings ?
 *  Disable over-penetration </br>
 A lot of female are not happy about the fact that many erotic fiction or imagery picture the penetration of cervix because its pretty painful. You might disable this here therefore. </br>
@@ -206,7 +211,13 @@ On the other hand a lot of males have some kind of fetish for this. </br>
 If you enable this your route to bad end by sex-related action is much shorter. This should enforce a more chaste play.</br>
 -->
 </article><article id="LogPanel"></article></section>
-
+<script>
+function toggleSetting(elmt) {
+  let toggle=window.story.state.Settings[elmt.id]=!window.story.state.Settings[elmt.id];
+  elmt.checked=toggle;
+}
+['showNSFWPictures','showDungeonMap','showCombatPictures'].forEach(x=>(document.querySelector("#"+x).checked=window.story.state.Settings[x]));
+</script>
 
 :: Settings2 [_back_]
 <!--just test-->
@@ -244,7 +255,7 @@ window.gm.printOutput(window.gm.printEffectSummary(window.gm.player.id,true,fals
 </script>
 
 
-:: Levelup [_back_ _nosave_]
+:: Levelup [_back_ _nosave_ _noshortkey_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 [[Back|_back_]]</br>
 <% let char=window.gm.player;if(char.canLevelUp){%>

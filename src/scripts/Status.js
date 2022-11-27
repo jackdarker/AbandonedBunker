@@ -20,13 +20,23 @@
         let _x = window.storage.Generic_fromJSON(StatsDictionary, value.data);
         return(_x);
     }
-    //
+    /**
+     *
+     *
+     * @param {*} id
+     * @return {*} 
+     * @memberof StatsDictionary
+     */
     get(id) {return(this.getItem(id));}
     modifyHidden(id,hidden) {
         let _data = this.get(id).data;
         _data.hidden=hidden;
     }
-    // adds a modifier to a Stat or replaces it
+    /**
+     *
+     * adds a modifier to a Stat or replaces it
+     * @memberof StatsDictionary
+     */
     addModifier(toId, modData) {
         let _stat = this.get(toId);
         let _oldMods = _stat.data.modifier;
@@ -68,15 +78,21 @@
         this.list.splice(_i,1);
         _stat.calc();   //trigger update of dependent stat
     }
+    /**
+     *
+     *
+     * @param {*} id
+     * @param {*} value
+     * @memberof StatsDictionary
+     */
     increment( id, value) {
         let attr = this.get(id);
         attr.data.base += value;
         window.gm.pushLog(attr.Calc(this,id).msg); // todo show only for player
     }
 }
-//class for an Attribute
 /**
- * 
+ * class for an Attribute
  *
  * @class Stat
  */
@@ -91,8 +107,7 @@ class Stat {
     constructor() {
         this.data = Stat.dataPrototype();
     }
-    // Attention !!
-    //_parent will be added dynamical
+    // Attention !!_parent will be added dynamical
     get parent() {return this._parent?this._parent():null;}
     _relinkItems(parent){this._parent=window.gm.util.refToParent(parent);}
     get name() {return(this.data.id);}
@@ -148,7 +163,7 @@ class Stat {
  * @class Effects
  * @extends {Inventory}
  */
-class Effects extends Inventory {  //Todo ?
+class Effects extends Inventory {
     constructor(externlist) {
         super(externlist);
         window.storage.registerConstructor(Effects);
@@ -234,14 +249,11 @@ class Effects extends Inventory {  //Todo ?
     //override
     postItemChange(id,operation,msg) {
         window.gm.pushLog('Effects: '+operation+' '+id+' '+msg,
-            window.story.state._gm.debug || (window.gm.player && (window.gm.player.id === this.parent.parent.id)));
+            window.story.state._gm.debug || (window.gm.player && (window.gm.player.id === this.parent.id)));
     }
 }
-
 /////////////////////////////////////////////////////////////////////////
 /**
- *
- *
  * @class Effect
  */
 class Effect {  
@@ -348,7 +360,7 @@ class CombatEffect extends Effect {
     /**
      * 
      */
-    onCombatStart(){}
+    onCombatStart(){return({OK:false,msg:''});}
     /**
      * called before targets turn
      *

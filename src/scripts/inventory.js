@@ -2,7 +2,8 @@
 class Item {
     constructor(name) {
         this.id = this.name = name;  //id is unique in database(no whitespace !); name is for display
-        this.__tags = [];
+        this.tags = [];
+        this.bonus =[]; //Curse or Bonus assigned to item   //todo can ITEMS be cursed too?
         this.price=this.basePrice=10; //how much worth it is
     }
     get parent() {return this._parent?this._parent():null;}
@@ -21,23 +22,23 @@ class Item {
         return([]); //default unuseable in combat
     }
     //tag or [tag]
-    hasTag(tag) {
-        if(tag instanceof Array) {
-            for(var i=0;i<tag.length;i++) {
-                if(this.hasTag(tag[i])) return(true);
+    hasTag(tags) {
+        if(tags instanceof Array) {
+            for(var i=0;i<tags.length;i++) {
+                if(this.hasTag(tags[i])) return(true);
             }
             return(false);
         }
-        return(this.__tags.includes(tag));
+        return(this.tags.includes(tags));
     }
-    removeTag(tags){
-        for(var i= this.__tags.length-1;i>=0;i--){
-            if(tags.includes(this.__tags[i])) this.__tags.splice(i,1);
+    removeTags(tags){
+        for(var i= this.tags.length-1;i>=0;i--){
+            if(tags.includes(this.tags[i])) this.tags.splice(i,1);
         }
     }
     addTags(tags){
         for(var i= tags.length-1;i>=0;i--){
-            if(!this.__tags.includes(tags[i])) this.__tags.push(tags[i]);
+            if(!this.tags.includes(tags[i])) this.tags.push(tags[i]);
         }
     }
     //implement this for description
@@ -45,7 +46,7 @@ class Item {
     //implement this for description
     get descShort() { return(this.name);}
     //context is the owner of item (parent of inventory), on is target (character)
-    usable(context,on=null) {return({OK:false, msg:'Cannot use.'});}
+    usable(context,on=null) {return({OK:false, msg:'Cannot use.'});}  //todo add 2.useslot?
     use(context,on=null) {return({OK:false, msg:'Cannot use.'});}
     onTimeChange(now) {};
 }
@@ -61,7 +62,7 @@ class Inventory {
         var _x = window.storage.Generic_fromJSON(Inventory, value.data);
         return(_x);
     }
-    _relinkItems() {  //call this after loading save data the reparent
+    _relinkItems() {  //call this after loading save data to reparent; if you get an error that the function is missing, you might have forgotten to window.storage.registerConstructor
         for(var i=0; i<this.list.length; i++) {
             if(this.list[i].item) this.list[i].item._relinkItems(this);
         }
@@ -104,8 +105,8 @@ class Inventory {
     }
     addItem(item,count=1) {
         var _i = this.findItemSlot(item.id);
+        item._parent=window.gm.util.refToParent(this);
         if(_i<0) {
-            item._parent=window.gm.util.refToParent(this)
             this.list.push({id: item.id,count: count, item:item});
         }
         else this.list[_i].count+=count;

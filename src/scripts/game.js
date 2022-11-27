@@ -29,6 +29,115 @@ window.gm.util.PubSub = function(){
     }
   }); 
 };
+// can be used to create deep clones of class-obj; 
+// requires that the class has registered its constructor to window.storage 
+// and class implements _relinkItems() to restore parent-ship of sub-objects
+window.gm.util.deepClone=function(obj){
+  let clone=JSON.parse(JSON.stringify(obj), window.storage.Reviver);
+  clone._relinkItems();
+  return(clone);
+};
+// Adds key shortcut indicators to links in passage if there are less than 11 links in the passsage. see addShortKeyHandler.
+// Enables keyboard shortcuts if passage do not have the "_noshortkey_" tag and links dont have attribute "data-nokey"; 
+window.gm.util.updateLinks=function(Container){
+  let tags=window.story.passage(window.passage.name).tags;
+	if (!tags.includes("_noshortkey_")) {
+		var Links, i;
+		if (typeof Container === "undefined") {
+			Container = document;
+			Links = document.querySelector('tw-passage').querySelectorAll('a,button'); //all links within page    todo how about buttons
+		} else {
+			Links = Container.querySelectorAll('a,button');
+		}
+		if (Links.length > 0) {
+			for (i = 0; i < Links.length; i++) {
+				if ((Links[i].getAttribute("data-nokey") == "true") || (Links[i].parentElement.getAttribute("data-nokey") == "true")) {
+					Links.deleteAt(i);
+					i--;
+				}
+			}
+		}
+    if (Links.length >= 1 ){//&& Links.length <= 10) {
+			var n = 1;
+			for (i = 0; i < Links.length; i++) {
+				if (Links[i].id==="" && !Links[i].disabled){//!Links[i].id.includes("Link")) {
+					while (document.querySelector("#Link" + n)){//$(Container).find("#Link" + n).length) { //check for existing links
+						++n;
+						if (n > 10) {	break;	}
+					}
+          if (n < 10) { Links[i].innerHTML+="<sup>[" + n + "]</sup>";
+						//$("<sup>[" + n + "]</sup>").appendTo(Links[i]);
+						Links[i].id = "Link" + n;
+					} else if (n === 10) {
+						Links[i].innerHTML+="<sup>[" + 0 + "]</sup>";
+						Links[i].id = "Link0";
+						break;
+					} else {
+						break;
+					}
+				}
+			}
+		}
+	}
+};
+// registers keyup event handler for shortkey-mechanic; requires that updateLinks has assigned special id to buttons & href 
+// (this means it doesnt work for those that already have a different id assigned)
+// only call this one time or multiple events cause weird behaviour
+window.gm.util.addShortKeyHandler=function(){
+  document.addEventListener("keyup", function (e) {
+    if(window.story.state._gm && window.story.state._gm.nokeys===true) return; //if in dialog overlay, the shortkeys would still work for the panel; this flag surpresses it
+    var tags=window.story.passage(window.passage.name).tags;
+    
+    if (!tags.includes("_noshortkey_")) {
+      var el;
+      /*different way to dispatch events const event = new MouseEvent('click', {
+        view: window, bubbles: true, cancelable: true
+      });
+      //el.dispatchEvent(event);*/ 
+      
+      // Trigger link click on keys "0" through "9"
+      if ((e.keyCode > 47) && (e.keyCode < 58)) {
+        el=document.querySelector("#Link" + (e.keyCode - 48));
+        if(el) {
+          e.preventDefault();
+          //$("#Link" + (e.keyCode - 48)).trigger("click"); dont use jquery - click is not working if bound by addEventListener
+          el.click();
+        }
+      }
+      // Trigger link click on numpad keys "0" through "9"
+      if ((e.keyCode > 95) && (e.keyCode < 106)) {
+        el=document.querySelector("#Link" + (e.keyCode - 96));
+        if (el) {
+          e.preventDefault();
+          el.click();
+        }
+      }
+      if (["d","i","s","o","q"].indexOf(e.key)>=0) { //some special keys of hud
+        el=document.querySelector("#Link" + e.key.toUpperCase());
+        if (el) {
+          e.preventDefault();
+          el.click();
+        }
+      }
+      // Trigger random click on "." key
+      /*if (e.key == ".") {
+        e.preventDefault();
+        var Links = $("#passages a"), n, UsableLinks = [];
+        if (Links.length > 0) {
+          for (n = 0; n < Links.length; n++) {
+            if (!$(Links[n]).data("nokey")) {
+              UsableLinks.push(n);
+            }
+          }
+          if (UsableLinks.length > 0) {
+            n = random(UsableLinks.length - 1);
+            Links[UsableLinks[n]].click();
+          }
+        }
+      }*/
+    }
+  });
+};
 //create pretty name for passage; requires a tag (replace space with _ !) [name:"My_Room"]
 window.gm.util.printLocationName=function(passage) {
   let tags = window.story.passage(passage).tags;
@@ -39,14 +148,19 @@ window.gm.util.printLocationName=function(passage) {
     }
   }
   return(passage);
-}
+};
 //prints a div with text "value/max" and bargraph-background
 window.gm.util.bargraph=function(value,max,color,text="") {
   let msg ='';
   let rel = value/max*100;
-  msg ='<div class="progressbar"><div style="background-color:'+color+'; width: '+rel.toString()+'%;"><div style="width: max-content;">'+text+value.toString()+'/'+max.toString()+'</div></div></div>';
+  msg ='<div class="progressbar"><div style="background-color:'+color+'; width: '+rel.toString()+'%;"><div style="width: max-content;">'+text+window.gm.util.formatNumber(value,1)+'/'+max.toString()+'</div></div></div>';
   return(msg); //todo bargraph css-animation doesnt work because the whole page is reloaded instead of just width change
-}
+};
+window.gm.util.statsbar=function(what, color){
+  var x=window.gm.player.Stats.get(what),y=window.gm.player.Stats.get(what+"Max");
+  if(x.hidden>=4) return("");
+  return(window.gm.util.bargraph(x.value,y.value,color,what+": "));
+};
 /* Uploads SVG files from local file system, based on file selected in input; https://github.com/fizzstudio/svg-load-save */
 window.gm.util.loadLocalSVG=function(event) {
     let file = event.target.files[0]; // FileList object
@@ -61,7 +175,7 @@ window.gm.util.loadLocalSVG=function(event) {
       }
     }
 };
-  /* Inserts SVG files into HTML document */
+/* Inserts SVG files into HTML document */
 window.gm.util.insertSvg=function(file_content) {
     // insert SVG file into HTML page
     const svg_container = document.getElementById("svg_container");
@@ -72,18 +186,52 @@ window.gm.util.insertSvg=function(file_content) {
       svg_container.firstChild.addEventListener("click", this.event_handler, false)
     }
 };
+/*
+* use this to merge multiple objects into one. If used with class-objects their methods will go missing!
+* this will properly deep-merge nested objects (not like Object.assign)
+*/
+window.gm.util.mergePlainObject=function(...arg) {
+  let target = {};
+  // deep merge the object into the target object
+    const merger = (obj) => {
+        for (let prop in obj) {
+            if (obj.hasOwnProperty(prop)) {
+                if (Object.prototype.toString.call(obj[prop]) === '[object Object]') {
+                    // if the property is a nested object
+                    target[prop] = window.gm.util.mergePlainObject(target[prop], obj[prop]);
+                } else {
+                    // for regular property
+                    target[prop] = obj[prop];
+                }
+            }
+        }
+    };
+    // iterate through all objects and deep merge them with target
+    for (let i = 0; i < arg.length; i++) {
+        merger(arg[i]);
+    }
+    return target;
+};
 //-------------------------------------------------
 // reimplement to setup the game !
+// debug notice: if you get "Cannot read properties of undefined" check the constructor dictionary if something is missing. This indicates an compiling error in those items (check in the sorting order of the script-files) 
 window.gm.initGame= function(forceReset,NGP=null) {
-  window.gm.toasty= new Toasty();
+  var s = window.story.state; //s in template is window.story.state from snowman!
+    if(!s._gm){
+      window.gm.toasty= new Toasty();
+      window.gm.util.addShortKeyHandler();
+    }
     $(window).on('sm.passage.showing', function(event, eventObject) {
         // Current Passage object
         $("tw-passage").fadeIn(500);  //fade in if was previously faded out
       //console.log('showing '+eventObject.passage.name);
     });
     // Render the passage named HUD into the element todo replace with <%=%>??
-    $(document).on('sm.passage.shown', function (ev,eventObject) { window.gm.refreshSidePanel();});
-    var s = window.story.state; //s in template is window.story.state from snowman!
+    $(document).on('sm.passage.shown', function (ev,eventObject) { 
+      window.gm.refreshSidePanel();
+      window.gm.restorePage();
+    });
+    
     if (!window.gm.timeEvent||forceReset) {
       window.gm.timeEvent = window.gm.util.PubSub();  //subscribe to "change" event to receive time updates
       // !! make sure to reregister after load !
@@ -106,6 +254,7 @@ window.gm.initGame= function(forceReset,NGP=null) {
         day : 1,  //daycount
         activePlayer : '', //id of the character that the player controls currently
         nosave : false,
+        nokeys : false,
         playerParty: [],  //names of NPC in playerParty 
         debug : false,    //globally enables debug
         dbgShowCombatRoll : false,  //log combat calculation details
@@ -123,8 +272,28 @@ window.gm.initGame= function(forceReset,NGP=null) {
     if (!s.tmp||forceReset) { 
       // storage of temporary variables; dont use them in stacking passages or deffered events      
       s.tmp = {
+        flags: [], //can store flags for showing/hidding page-elements 
         args: [],  // can be used to set arguments before another passage is called (passage-arguments) 
         msg: ''   // memorizes a message to display when returning from _back-passage; please clear it when leaving the passage
+      }
+    }
+    if (!s.GlobalChest||forceReset) {  
+      let ch = new Character();
+      ch.id="GlobalChest";
+      ch.name="GlobalChest";
+      ch.faction="Player";
+      s.GlobalChest=ch;
+    }
+    if (!s.combat||forceReset) { //see encounter & combat.js
+      s.combat = {
+        enemyParty : [],  //collection of enemy-chars involved 
+        enemyIdx : 0,  //index of actual enemy 
+        playerParty : [],
+        playerIdx : 0,
+        enemyFirst : false, //if true, enemy moves first
+        inCombat: false,  //for query window.gm.combat.inCombat
+        turnCount: 0,
+        scenePic : 'assets/bg_park.png'
       }
     }
   }
@@ -139,6 +308,7 @@ window.gm.newGamePlus = function() {
 //reimplement this to handle version upgrades on load !
 window.gm.rebuildObjects= function(){ 
   var s = window.story.state;
+  s._gm.nokeys=false;
   window.styleSwitcher.loadStyle(); //since style is loaded from savegame
   window.gm.quests.setQuestData(s.quests); //necessary for load support
   window.gm.switchPlayer(s._gm.activePlayer);
@@ -149,7 +319,7 @@ window.gm.getTime= function() {
   return(window.story.state._gm.time+2400*window.story.state._gm.day);
 }
 /*
-* calculates timedifference a-b for hhmm time format
+* calculates timedifference a-b for hhmm time format; retuns minutes ! 
 */
 window.gm.getDeltaTime = function(a,b){
   var m=a%100;         
@@ -172,8 +342,12 @@ window.gm.addTime= function(min) {
     window.story.state._gm.day += 1;
   }
   window.gm.timeEvent.publish("change",min);
-  window.gm.player.Effects.updateTime(); //todo not happy with that; see PubSub-comment
-  window.gm.player.Outfit.updateTime();
+  if(window.gm.player){
+    if(window.gm.player.Effects) window.gm.player.Effects.updateTime();  
+    if(window.gm.player.Outfit) window.gm.player.Outfit.updateTime();
+  }
+  //todo not happy with that; see PubSub-comment
+  
   // updating all existing chars might not be wise (some could be dead)
   // but what if I have to update other chars too?
   //
@@ -309,18 +483,20 @@ window.gm.pushBackPassage=function(id) {
   if(window.story.state._gm.passageStack.length>0 && window.story.state._gm.passageStack[window.story.state._gm.passageStack.length-1]===id){
     //already pushed
   } else {
-    window.story.state._gm.passageStack.push(id);
+    window.story.state._gm.passageStack.push({id:id, flags:window.story.state.tmp.flags});
   }
 };
 //call on [_back_]-passages to get the previous passage
 window.gm.popBackPassage=function() {
     let pass = window.story.state._gm.passageStack.pop();
     if(!pass) throw new Error('nothing to pop from stack');
-    return(pass);
+    window.story.state.tmp.flags = pass.flags;
+    return(pass.id);
 };
+//push passage on hold before playing deffered passage
 window.gm.pushOnHold=function(id) {
   if(!window.story.state.hasOwnProperty("_gm")) return;  //exist only after initGame
-  if(window.story.state._gm.onholdStack.length>0){// && window.story.state._gm.defferedStack[window.story.state._gm.defferedStack.length-1].id===id){
+  if(window.story.state._gm.onholdStack.length>0){
     throw new Error('passage allready onHold: '+id); //already some pushed
   } else {
     window.story.state._gm.onholdStack.push({id:id, args:window.story.state.tmp.args});
@@ -335,12 +511,15 @@ window.gm.popOnHold=function() {
 };
 //overriding show:
 //- to enable back-link
-//- todo to intercept with deffered events
+//- to intercept with deffered events
+//- add shortcut keys
+let KBIntervalID=0;
 let _origStoryShow = window.story.__proto__.show;
 window.story.__proto__.show = function(idOrName, noHistory = false) {
   let next = idOrName;
   let inGame = window.story.state.hasOwnProperty("_gm"); //the logic doesnt work if initGame not already done
   let tagsnext,namenext,nextp,namenow;
+  clearInterval(KBIntervalID);
   if(idOrName==='') tagsnext=[];
   else tagsnext = window.story.passage(idOrName).tags;
   if(inGame && window.story.state._gm.defferedStack.length>0 && //deffered event if allowed and requested
@@ -358,7 +537,7 @@ window.story.__proto__.show = function(idOrName, noHistory = false) {
     }
     next = window.gm.popDeferredEvent();
     nextp = window.story.passage(next);
-    tagsnext =  nextp.tags;
+    tagsnext =  nextp.tags; window.story.state.tmp.flags={};
   } else if(inGame && idOrName==='' && window.story.state._gm.onholdStack.length>0) { //continue event onhold
     next =window.gm.popOnHold()
     if(next === '_back_') { //going back
@@ -376,8 +555,10 @@ window.story.__proto__.show = function(idOrName, noHistory = false) {
     if(tagsnext.indexOf('_back_')>=0 ) { //push on stack but only if not re-showing itself
       namenow = window.passage.name;
       if(namenext!=namenow) window.gm.pushBackPassage(namenow); 
+      window.story.state.tmp.flags={};
     } else if(inGame) { //if not in _back_-passage, drop the _back_-stack
       window.story.state._gm.passageStack.splice(0,window.story.state._gm.passageStack.length);
+      window.story.state.tmp.flags={};
     }
     //todo not sure about this: a deffered event should not link to normal passages because this would disentangle the original story-chain
     //this I think could cause issues and should be detected and throw an error
@@ -389,7 +570,27 @@ window.story.__proto__.show = function(idOrName, noHistory = false) {
   }
   noHistory = true; //the engines object causes problems with history, namely refToParent
   _origStoryShow.call(window.story,next, noHistory);
+  
+  window.gm.util.updateLinks();
+	// Search passages for links every x ms, just in case they get updated, and marks them for key clicks
+	//KBIntervalID = setInterval(window.gm.util.updateLinks,1000);  todo do we need this?
 };
+/* when returning from back-passage, restore view by hiding/unhiding programatical modified elements, see printTalkLink
+*/
+window.gm.restorePage=function() {
+  if(window.story.state.tmp) {
+    let elmts =Object.keys(window.story.state.tmp.flags);
+    for(var i=0;i<elmts.length;i++) {
+      if(!$(elmts[i])[0]) continue; //there might be snowman-logic in the page that swaps out parts of the text!
+      if(window.story.state.tmp.flags[elmts[i]]==='hidden') {
+        $(elmts[i])[0].setAttribute("hidden","");
+      } else if(window.story.state.tmp.flags[elmts[i]]==='unhide') {
+        $(elmts[i])[0].removeAttribute("hidden");
+        $(elmts[i])[0].scrollIntoView();
+      }
+    }
+  }
+}
 //-----------------------------------------------------------------------------
 //changes the active player and will add him to party!
 window.gm.switchPlayer = function(playername) {
@@ -428,9 +629,10 @@ window.gm.refreshSidePanel = function(){
 ///////////////////////////////////////////////////////////////////////
 window.gm.pushLog=function(msg,Cond=true) {
   if(!Cond || msg==='') return;
+  const logsize=20;
   var log = window.story.state._gm.log;
   log.unshift(msg+'</br>');
-  if(log.length>10) {
+  if(log.length>logsize) {
       log.splice(log.length-1,1);
   }
 };
@@ -489,19 +691,21 @@ window.gm.onSelect = function(elmnt,ex_choice,ex_info) {
 //call this onclick to make the connected element vanish and to unhide another one (if the passage is revisited the initial state will be restored)
 //unhidethis needs to be jquery-path to a div,span,.. that is initially set to hidden
 //cb can be a function(elmt) that gets called
+//todo: if navigating to a back-page and return, the initial page will be reset to default; how to memorize and restore the hidden-flags
 window.gm.printTalkLink =function(elmt,unhideThis,cb=null) {
-  elmt.toggleAttribute("hidden");
-  if(cb!==null) cb(elmt);
-  $(unhideThis)[0].toggleAttribute("hidden");
+  $(elmt)[0].setAttribute("hidden","");
+  if(cb!==null) cb($(elmt)[0]);
+  $(unhideThis)[0].removeAttribute("hidden");
   $(unhideThis)[0].scrollIntoView({behavior: "smooth"});
+  window.story.state.tmp.flags[elmt]='hidden',window.story.state.tmp.flags[unhideThis]='unhide';
 }
 //prints the same kind of link like [[Next]] but can be called from code
 window.gm.printPassageLink= function(label,target) {
-  return("<a href=\"javascript:void(0)\" data-passage=\""+target+"\">"+label+"</a></br>");
+  return("<a href=\"javascript:void(0)\" data-passage=\""+target+"\">"+label+"</a>");
 };
-//prints a link where target is a expression called onClick
+//prints a link where target is a expression called onClick. Use \" instead of " or ' !
 window.gm.printLink= function(label,target) {
-  return("<a href=\"javascript:void(0)\" onclick=\""+target+"\">"+label+"</a></br>");
+  return('<a href=\'javascript:void(0)\' onclick=\''+target+'\'>'+label+'</a>');
 };
 
 //prints a link that when clicked picksup an item and places it in the inventory, if itemleft is <0, no link appears
@@ -523,16 +727,16 @@ window.gm.pickupAndClear=function(itemid, desc,itemleft,cbAfterPickup=null) {
 window.gm.printItem= function( id,descr,carrier,useOn=null ) {
   var elmt='';
   var s= window.story.state;
-  var _inv = window.gm.player.Inv;
-  var _count =_inv.countItem(id);
+  var _inv = window.gm.player.Inv; //todo only players? useOn isnt used!
+  var _item=_inv.getItem(id),_count =_inv.countItem(id);
   if(useOn===null) useOn=carrier;
-  elmt +=`<a0 id='${id}' onclick='(function($event){document.querySelector(\"div#${id}\").toggleAttribute(\"hidden\");})(this);'>${id} (x${_count})</a>`;
+  elmt +=`<a0 id='${id}' onclick='(function($event){document.querySelector(\"div#${id}\").toggleAttribute(\"hidden\");})(this);'>${_item.name} (x${_count})</a>`;
   var useable = _inv.usable(id);
   if(_count>0 && useable.OK) {
       elmt +=`<a0 id='${id}' onclick='(function($event){var _res=window.gm.player.Inv.use(\"${id}\"); window.gm.refreshAllPanel();window.gm.printOutput(_res.msg);}(this))'>${useable.msg}</a>`;
   }
   elmt +=`</br><div hidden id='${id}'>${descr}</div>`;
-  if(window.story.passage(id))  elmt +=''.concat("    [[Info|"+id+"]]");  //Todo add comands: drink,eat, use
+  if(window.story.passage(id))  elmt +=''.concat("    [[Info|"+id+"]]");  //adds a link to descriptive passage if there is one
       elmt +=''.concat("</br>");
       return(elmt);
 };
@@ -555,13 +759,13 @@ window.gm.printItemTransfer = function(from,to,wardrobe) {
   listFrom = Array.from(allIds.keys());listFrom.sort();
   function give(id,amount,charA,charB) {
     let item,count = charA.Inv.countItem(id);
-    if(count===0) {
+    if(count===0) { //wardrobe or item
       count=charA.Wardrobe.countItem(id);
       item = charA.Wardrobe.getItem(id);
     } else item = charA.Inv.getItem(id);
     count=Math.min(count,amount);
     charA.changeInventory(item,-1*count);
-    item = window.gm.ItemsLib[id]();
+    item = window.gm.util.deepClone(item);//item = window.gm.ItemsLib[id](); doesnt work for dynamic created items
     charB.changeInventory(item,count);
     window.gm.refreshAllPanel();
   }
@@ -607,14 +811,14 @@ window.gm.printEquipment= function( whom,item) {
     g.textContent='';//cannot un-/equip tattoos & piercing 
   } else if(whom.Outfit.countItem(item.id)<=0) {
     g.textContent='Equip';
-    g.addEventListener("click",(function(whom,item){
-      return(function(){whom.Outfit.addItem(item);window.gm.refreshAllPanel();});})(whom,item));
+    g.addEventListener("click",(function(whom,item){  //todo should we display its own page instead oneliner?
+      return(function(){var _x=whom.Outfit.addItem(item).msg;window.gm.refreshAllPanel();window.gm.printOutput(_x)});})(whom,item)); //redraw page to update buttons, then print output
   } else {
     res = whom.Outfit.canUnequipItem(item.id,false);
     if(res.OK) {
       g.textContent='Unequip';
       g.addEventListener("click",(function(whom,item){
-        return(function(){whom.Outfit.removeItem(item.id);window.gm.refreshAllPanel();});})(whom,item));
+        return(function(){var _x=whom.Outfit.removeItem(item.id).msg;window.gm.refreshAllPanel();window.gm.printOutput(_x)});})(whom,item));
     } else {
       g.disabled =true; g.textContent=res.msg;
     }
@@ -667,9 +871,7 @@ window.gm.printAchievements= function() {
   var ids = Object.keys(window.gm.achievements);
   ids.sort();
   for(var k=0;k<ids.length;k++){
-      if(ids[k].split("_").length===1) {   //ignore _min/_max
           result+='<tr><td>'+ids[k]+':</td><td>'+window.gm.achievements[ids[k]]+'</td></tr>';
-      }
   }   //todo print mom : 10 of 20
   result+='</table>';
   return(result);
@@ -707,7 +909,9 @@ window.gm.printEffectSummary= function(who='player',showstats=true,showfetish=fa
   ids.sort(); //Todo better sort
   for(var i=0;i<ids.length;i++){
       var data = window.story.state[who].Effects.get(ids[i]);
-      result+='<tr><td>'+data.id+':</td><td>'+data.desc+'</td></tr>';
+      if(data.hidden!==4) {
+      result+='<tr><td>'+((data.hidden & 0x1)?'???':data.name)+':</td><td>'+((data.hidden & 0x1)?'???':data.desc)+'</td><td>'+((data.hidden & 0x2)?'???':data.data.duration)+'h left</td></tr>';
+      }
   }
   result+='</table>';
   return(result);
@@ -720,6 +924,7 @@ window.gm.toggleDialog= function(id){
       pagebackground = document.querySelector('body');
   var div;
   if (!dialog.hasAttribute('open')) {
+      if(window.story.state._gm) window.story.state._gm.nokeys=true;
       // show the dialog 
       div = document.createElement('div');
       div.id = 'backdrop';
@@ -733,6 +938,7 @@ window.gm.toggleDialog= function(id){
       dialog.removeAttribute('open');  
       div = document.querySelector('#backdrop');
       div.parentNode.removeChild(div);
+      if(window.story.state._gm) window.story.state._gm.nokeys=false;
       //??lastFocus.focus();
   }
 };

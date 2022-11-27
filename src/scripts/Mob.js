@@ -9,12 +9,16 @@ class Mob extends Character {
         this.levelUp(1);
         this.autoLeveling();
         this.despawn=false;
+        this.fconv = null; //lazy init because descfixer depends on gm.player
     }
+    toJSON() {return window.storage.Generic_toJSON("Mob", this); }
+    static fromJSON(value) {return(window.storage.Generic_fromJSON(Mob, value.data));}
+    rebuildAfterLoad() {super.rebuildAfterLoad();}
     //override to return the next move to execute
     //OK = false if no action, else true
     //msg should contain a message formatted for view (move description )g 
     //this function should decide what actions the mob takes; 
-    //query _canAct to check if stunned or otherwise incapaciated, then run execCombatCmd(moveNOP) 
+    //query _canAct to check if stunned or otherwise incapaciated
     calcCombatMove(enemys,friends){
         let rnd = _.random(1,100);
         let result = {OK:true,msg:''};
@@ -27,7 +31,7 @@ class Mob extends Character {
         } else {
             if(this.Skills.countItem('Guard')>0) {
                 result.action = "Guard";
-                result.target = this;
+                result.target = [this];
             }
             result.msg =this.name+" takes a defensive stance.</br>"+result.msg;
         }
@@ -40,7 +44,7 @@ class Mob extends Character {
         let x = Math.max(this.level_min,_.random(lvl-3,lvl+3));
         x=x-this.level;   
         if(x>0) {
-            this.levelUp(1);
+            this.levelUp(x);
             this.autoLeveling();
         }
         //refill gained stats 

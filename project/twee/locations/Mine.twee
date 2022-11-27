@@ -2,7 +2,7 @@
 
 :: AM_Lv2_MAP [_back_]
 <hr><p>Map:</p><div id='canvas'></div></br>
-<script> window.gm.printMap("VRMap2",window.gm.player.location,window.story.state.vars.mine.mapReveal);
+<script> window.gm.printMap("AM_Lv2",window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
 </script>
 
 :: Inv_Hud
@@ -13,9 +13,12 @@
 <span <%=window.story.state.vars.mine.qHasSprayer?'':'hidden=""'%>>Sprayer:<%=window.story.state.vars.mine.qSprayerCharge%> dose</span>
 <span <%=window.story.state.vars.mine.qHasRope?'':'hidden=""'%>>Rope:<%=window.story.state.vars.mine.qHasRope%></span>
 <span <%=(window.story.state.vars.mine.qHasPatchkit>0)?'':'hidden=""'%>>Patchkit:<%=window.story.state.vars.mine.qHasPatchkit%></span></br>
+<span <%=false?'':'hidden=""'%>>rations</span><span <%=false?'':'hidden=""'%>>happy pills</span>
 <span <%=window.story.state.vars.mine.qHasLighter?'':'hidden=""'%>>Lighter</span>
 <span <%=window.story.state.vars.mine.qHasCrowbar?'':'hidden=""'%>>Crowbar</span>
 <span <%=window.story.state.vars.mine.qHasCrank?'':'hidden=""'%>>Crank</span>
+<span <%=false?'':'hidden=""'%>>big Wrench</span></br>
+<span <%=false?'':'hidden=""'%>>empty can</span><span <%=false?'':'hidden=""'%>>can (fuel)</span><span <%=false?'':'hidden=""'%>>can (water)</span></br>
 <%}%>
 <script>
 function damageTerm(HP) { 
@@ -29,7 +32,8 @@ function damageTerm(HP) {
 You are at the entry of this underground lair. 
 Unfortunatly the door that is blocking the exit can only be opened with a keycard and a code.</br>
 Either someone is coming for your rescue or you have to find a way out of here by yourself.</br>
-<p>[[Go East|AM_Lv2_E1]] [[AM_Lv2_H5_Valves]]</p>
+There is a control terminal next to the door. All lights are of except the <tgl id='lamp' value='blue' onclick='var x=this.attributes["value"].nodeValue;switch(x){case "blue":x="red";break;default:x="blue"}this.attributes["value"].nodeValue=this.style.color=this.textContent=x;'>blue</tgl> one.
+<p><%=window.gm.printGoto('AM_Lv2_E1',0,0,'Go East')%></p>
 <%=window.story.render("Inv_Hud")%><%=window.story.render("AM_Lv2_MAP")%>
 </article><article id="LogPanel"></article></section>
 
@@ -188,7 +192,7 @@ Inside the Elevator....
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p>This room seems a lot safer then the others and might be a good choice for [[resting|AM_Lv2_Rest]] or [[fixing|AM_Lv2_Patch]] your gear.</p>
-<p>Taking a breather regenerates some od your sanity, but also some of the critters might use the time to regrow.</p>
+<p>Taking a breather regenerates some of your sanity, but also some of the critters might use the time to regrow.</p>
 <p>
 [[Go West|AM_Lv2_F3]][[Go East|AM_Lv2_H3]]
 </p>
@@ -377,7 +381,7 @@ TODO BAD END
 </article><article id="LogPanel"></article></section>
 
 
-:: AM_Lv2_H5
+:: AM_Lv2_H5_OBSOLETE
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p class="tNPC1">"Contamination detected. Please remove all clothing before before start of decontamination process."</p>

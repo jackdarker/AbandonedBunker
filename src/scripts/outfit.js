@@ -63,7 +63,7 @@ window.gm.OutfitSlotLib = {
     Wrists  :   "Wrists",
     LHand   :   "LHand",
     RHand   :   "RHand",
-    //U  = under wear    P = piercing  T = tattoo  A = Above
+    //U  = under wear    P = piercing  T = tattoo 
     uFeet    : "uFeet",   //socks,stockings
     uAnkles  : "uAnkles",    //stockings, cuffs
     uLegs    : "uLegs",     //stockings
@@ -87,14 +87,16 @@ window.gm.OutfitSlotLib = {
     uChest   :  "uChest",   //bra
     uShoulders :"uShoulders",
     uWings   :  "uWings",
-    uNeck    :  "uNeck",
+    uNeck    :  "uNeck",    //necklace
     uHead    :  "uHead",    //
     uHeadHair:  "uHeadHair",
     uFace    :  "uFace",
     uMouth   :  "uMouth",
     pNose    :  "pNose",
     pEyes    :  "pEyes",
-    pEars    :  "pEars",
+    pEars    :  "pEars",    //earring
+    pTongue    :  "pTongue",
+    pNavel    :  "pNavel",
     uArms    :  "uArms",
     uWrists  :  "uWrists",
     uLHand   :  "uLHand",
@@ -107,7 +109,6 @@ class Equipment extends Item {
         super(name);
         this.slotUse = []; //which slot is used by the equip
         this.slotCover = []; //which other slots are invisible by this "uses Breast, covers bBreast,bNipples"
-        this.bonus =[]; //Curse or Bonus assigned to item
         this.lewd ={slut:0, bondage:0, sm:0}; //slutiness-rating 
     }
     _relinkItems(parent) {  //call this after loading save data to reparent
@@ -136,7 +137,7 @@ class Equipment extends Item {
     bonusDesc() {
         let msg='';
         for(el of this.bonus) {
-            msg+="</br>"+el.desc;
+            msg+="\n"+el.desc; //</br> todo 
         }
         return(msg);
     }
@@ -154,18 +155,22 @@ class Equipment extends Item {
     }
     //call Outfit.addItem instead !
     onEquip(context) {
+        let res={OK:true, msg:this.name+' equipped'};
         for (el of this.bonus) {
             el.onEquip();
         }
-        return({OK:true, msg:'equipped'});
+        if(this.equipText) res.msg=this.equipText(context);
+        return(res)
     }
     onUnequip() {
-        let res = {OK:true, msg:'unequipped'};
+        let res = {OK:true, msg:this.name+' unequipped'};
         for (el of this.bonus) {
             el.onUnequip();
         }
+        if(this.unequipText) res.msg=this.unequipText(context);
         return(res);
     }
+    //implement unequipText()/equipText() to return a msg for display
     onTimeChange(now) {
         for (el of this.bonus) {
             el.onTimeChange(now);
@@ -292,13 +297,12 @@ class Outfit { //extends Inventory{
     }
     //this will equip item if possible
     addItem(item, force) {
-        let _idx = this.findItemSlot(item.id);
-        if(_idx.length>0) return; //already equipped
+        let result = {OK: true, msg:''},_idx = this.findItemSlot(item.id);
+        if(_idx.length>0) return(result); //already equipped
         let _item = item;
         _idx = _item.slotUse;
         let _oldIDs = [];
         let _oldSlots = [];
-        let result = {OK: true, msg:''};
         //check if equipment is equipable
         result = item.canEquip(this);
         if(result.OK) {
@@ -317,7 +321,7 @@ class Outfit { //extends Inventory{
         }
         if(!result.OK) {
             this.postItemChange(_item.name,"equip_fail:",result.msg);
-            return;
+            return(result);
         }
         for(let m=0;m<_oldIDs.length;m++){
             this.getItem(_oldIDs[m]).onUnequip(this);
@@ -350,12 +354,12 @@ class Outfit { //extends Inventory{
         }
     }
     removeItem(id, force) {
-        let _idx = this.findItemSlot(id);
-        if(_idx.length===0) return; //already unequipped
-        let result =(force)?{OK:true,msg:''}:this.canUnequipItem(id);
+        let result ={OK:true,msg:''},_idx = this.findItemSlot(id);
+        if(_idx.length===0) return(result); //already unequipped
+        result =(force)?result:this.canUnequipItem(id);
         if(!result.OK) {
             this.postItemChange(id,"unequip_fail",result.msg);
-            return;
+            return(result);
         }
         let _item = this.getItem(id);
         result=_item.onUnequip(this);

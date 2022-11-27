@@ -44,7 +44,6 @@ class SkillCost{
         Char.Stats.increment('energy',this.energy*-1);
     }
 }
-
 class SkillMod {
     constructor() {
         this.hitChance =100;
@@ -55,13 +54,13 @@ class SkillMod {
         this.onMiss = [];
     }
 }
-
+//skills are collected in separate inventory
 class Skill {
 constructor(id) {
     this.id=this.name = id;
     this.cost = new SkillCost();
     this.level=1;
-    this.startDelay=0,this.coolDown=0,this.defCoolDown=0; //how many turns disabled after use
+    this.sealed=0,this.startDelay=0,this.coolDown=0,this.defCoolDown=0; //how many turns disabled after use
 }
 //_parent will be added dynamical
 get parent() {return this._parent?this._parent():null;}
@@ -82,11 +81,21 @@ isValidPhase() {
  */
 isEnabled() {
     let res={OK:true,msg:''};
+    if(this.isSealed().OK) res={OK:false,msg:'skill sealed'}; 
     if(this.coolDown>0) res={OK:false,msg:this.coolDown+' turns cooldown'}; 
     if(!res.OK) return(res);
     res=this.getCost().canPay(this.parent.parent);
     return (res);
 }
+/**
+ * returns if the skill is already acitvated, e.g. energy-shield
+ *
+ * @return {*} 
+ * @memberof Skill
+ */
+isActive() {return ({OK:false,msg:''});}
+isSealed() {return ({OK:(this.sealed>0),msg:''});}
+seal(seal) {this.sealed=seal;}
 /**
  *
  *
@@ -126,9 +135,9 @@ getName(){
     //returns name of the skill for listboxes/labels"""
     return this.name;
 }
-getCastDescription(result) {
+getCastDescription(castPreview) {
     //update msg after sucessful cast
-    return(this.caster.name +" uses "+ this.name +" on " + result.targets[0].name+".");
+    return(this.caster.name +" uses "+ this.name +" on " + castPreview.targets[0].name+".");
 }
 previewCast(target){
     var result = new SkillResult();
@@ -143,7 +152,7 @@ cast(target){
         result.msg = "";
         for(var X of result.effects) {// for each target
             for(var Y of X.eff) {//...multiple effects
-                    X.target.addEffect(Y,Y.id);
+                    X.target.addEffect(Y,Y.id,this.caster);
                     result.msg+=Y.castDesc();
             }
         }
@@ -166,7 +175,7 @@ targetFilterSelf(targets){
         }
         return possibleTarget;
 }
-targetFilterAlly(targets){
+targetFilterAlly(targets){ //includes self
         var possibleTarget = [];
         for(var target of targets){
             var valid = true;
