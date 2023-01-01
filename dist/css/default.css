@@ -1,6 +1,6 @@
 
 body {
-  background-image:url('assets/bg_hex.jpg');
+  background-image:url('../assets/bg_hex.jpg');
   color:black;
   padding:0;
   margin:0;
@@ -36,6 +36,7 @@ a:hover {
     text-decoration-color: #008929;
 }
 #sidebar {
+  background-color: #ffede099;
   margin: 0.25em 0.25em;
   padding: 0.25em;
   min-width: 10em;
@@ -63,7 +64,7 @@ tw-story {
   /*width:95vW;*/
   max-width: 60em;
   margin: 0 0/*auto*/; 
-  line-height: 100%;
+  line-height: 120%;
   display: block;
 }
 tgl {
@@ -104,6 +105,7 @@ dialog::backdrop, #backdrop {
   left: -6px;
   top: 6px;
 }
+.done  {text-decoration: line-through;}
 .popup {
   position: relative;
   display: inline-block;

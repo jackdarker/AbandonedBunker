@@ -33,7 +33,7 @@ You are at the entry of this underground lair.
 Unfortunatly the door that is blocking the exit can only be opened with a keycard and a code.</br>
 Either someone is coming for your rescue or you have to find a way out of here by yourself.</br>
 There is a control terminal next to the door. All lights are of except the <tgl id='lamp' value='blue' onclick='var x=this.attributes["value"].nodeValue;switch(x){case "blue":x="red";break;default:x="blue"}this.attributes["value"].nodeValue=this.style.color=this.textContent=x;'>blue</tgl> one.
-<p><%=window.gm.printGoto('AM_Lv2_E1',0,0,'Go East')%></p>
+<p><%=window.gm.printGoto('AM_Lv2_E1',{},'Go East')%></p>
 <%=window.story.render("Inv_Hud")%><%=window.story.render("AM_Lv2_MAP")%>
 </article><article id="LogPanel"></article></section>
 

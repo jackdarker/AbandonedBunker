@@ -1,0 +1,209 @@
+:: LT_Start {"position":"700,425"}
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+Waking up standing in some tube made of semi-transparent glass.
+Where are you and where is everyone else?
+
+Eine unverständliche Computerstimme sagt etwas and the tube starts filling slowly with some kind of liquid. You arent going to drown here?
+Be patient |
+Du versuchst ruhigen Kopf zu bewahren und schaust dich um. The tube hat keine Naht aber einen Boden und Deckel aus anderem Material.
+Einige Knopfartige Dinge sind im oberen Deckel erkennbar.
+[[TubePuzzle]] 
+
+ call for help |
+"Help please! Is there someone please help !" using your fist to hammer against the confinement.
+But the glass is though obviously.
+Panic. BadEnd: You drown.
+
+
+There is a control terminal next to the door. All lights are of except the <tgl id='lamp' value='blue' onclick='var x=this.attributes["value"].nodeValue;switch(x){case "blue":x="red";break;default:x="blue"}this.attributes["value"].nodeValue=this.style.color=this.textContent=x;'>blue</tgl> one.
+<p><%=window.gm.printGoto('LT_HibRoom',{},'Go East')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+:: LT_HibRoom {"position":"700,600"}
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Exit cryopod.
+wearing fullbody coverall.
+
+<p><%=window.gm.printGoto('LT_Corridor',{},'Go East')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Corridor 
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Firedoor to S is closed.
+
+<p><%=window.gm.printGoto('LT_Navigation',{},'Go N')%></p>
+<p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%></p>
+<p><%=window.gm.printGoto('LT_Medic',{},'Go E')%></p>
+<p><%=window.gm.printGoto('LT_Corridor2',{},'Go S')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+:: LT_Corridor2
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+<p><%=window.gm.printGoto('LT_Corridor',{},'Go N')%></p>
+<p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%></p>
+<p><%=window.gm.printGoto('LT_Crewdeck',{},'Down')%></p>
+<p><%=window.gm.printGoto('LT_Workshop',{},'Go S')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Navigation
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Navigation or cockpit of the ship.
+Check outside with Cam. Shuttle is landed on large structure.
+Unlock firedoor.
+
+<p><%=window.gm.printGoto('LT_Corridor',{},'Corridor')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Medic
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+
+<p><%=window.gm.printGoto('LT_Corridor',{},'Corridor')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Workshop
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+The reactor and Antrieb is further down at the other end of ship. Can only be reached from outside.
+
+<p><%=window.gm.printGoto('LT_Corridor2',{},'Corridor')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Crewdeck
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Mensa
+
+<p><%=window.gm.printGoto('LT_Corridor2',{},'Upstairs')%></p>
+<p><%=window.gm.printGoto('LT_Corridor3',{},'Corridor')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Corridor3
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+<p><%=window.gm.printGoto('LT_Crewdeck',{},'Go N')%></p>
+<p><%=window.gm.printGoto('LT_Crew1',{},'Go E')%></p>
+<p><%=window.gm.printGoto('LT_Kitchen',{},'Go W')%></p>
+<p><%=window.gm.printGoto('LT_Corridor4',{},'Go S')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Corridor4
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+<p><%=window.gm.printGoto('LT_Corridor3',{},'Go N')%></p>
+<p><%=window.gm.printGoto('LT_Crew2',{},'Go E')%></p>
+<p><%=window.gm.printGoto('LT_Shower',{},'Go W')%></p>
+<p><%=window.gm.printGoto('LT_Corridor5',{},'Go S')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Corridor5
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+<p><%=window.gm.printGoto('LT_Corridor4',{},'Go N')%></p>
+<p><%=window.gm.printGoto('LT_Armory',{},'Go E')%></p>
+<p><%=window.gm.printGoto('LT_Storage',{},'Go W')%></p>
+<p><%=window.gm.printGoto('LT_Airlock',{},'Go S')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Armory
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+<p><%=window.gm.printGoto('LT_Corridor5',{},'Corridor')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Storage
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+<p><%=window.gm.printGoto('LT_Corridor5',{},'Corridor')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Airlock
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+
+
+<p><%=window.gm.printGoto('LT_Corridor5',{},'Corridor')%></p>
+<p><%=window.gm.printGoto('LT_AirlockExtern',{},'Leave ship')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_AirlockExtern
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Stepping out onto foreign object. Artifical, possibly metal.
+Shuttle is anchored to hull with some grippers.
+Some light up ahead on walkway.
+
+<p><%=window.gm.printGoto('LT_Airlock',{},'Back to shuttle')%></p>
+<p><%=window.gm.printGoto('LT_Hull1',{},'Go E')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+
+:: LT_Hull1
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Found flashlight.
+There is a open hatch. Possibly airlock to hull?
+
+<p><%=window.gm.printGoto('LT_AirlockExtern',{},'Back to shuttle')%></p>
+<p><%=window.gm.printGoto('LT_Airlock2',{},'Use Cavity')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_Airlock2
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+
+Now Inside Hull.
+
+<p><%=window.gm.printGoto('LT_Hull1',{},'Leave')%></p>
+<%=window.story.render("Inv_Hud")%>
+</article><article id="LogPanel"></article></section>
