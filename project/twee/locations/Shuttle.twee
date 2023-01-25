@@ -1,3 +1,9 @@
+:: AM_Lv3_MAP [_back_]
+<hr><p>Map:</p><div id='canvas'></div></br>
+<script> window.gm.printMap("AM_Lv3",window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
+</script>
+
+
 :: LT_Start {"position":"700,425"}
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
@@ -27,9 +33,13 @@ There is a control terminal next to the door. All lights are of except the <tgl 
 
 Exit cryopod.
 wearing fullbody coverall.
+<div id='select10' <%=((s.vars.qBabble<=0)?"":"hidden")%>>
+<a0 onclick='window.story.state.vars.qBabble=1;window.gm.printTalkLink("div#select10","div#choice10a");'>pick up datapad</a>
+</div><div id='choice10a' hidden>Aquired a datapad that speaks.
+</div>
 
 <p><%=window.gm.printGoto('LT_Corridor',{},'Go East')%></p>
-<%=window.story.render("Inv_Hud")%>
+<%=window.story.render("Inv_Hud")%><%=window.story.render("AM_Lv3_MAP")%>
 </article><article id="LogPanel"></article></section>
 
 
@@ -40,10 +50,9 @@ wearing fullbody coverall.
 Firedoor to S is closed.
 
 <p><%=window.gm.printGoto('LT_Navigation',{},'Go N')%></p>
-<p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%></p>
-<p><%=window.gm.printGoto('LT_Medic',{},'Go E')%></p>
+<p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%>   <%=window.gm.printGoto('LT_Medic',{},'Go E')%></p>
 <p><%=window.gm.printGoto('LT_Corridor2',{},'Go S')%></p>
-<%=window.story.render("Inv_Hud")%>
+<%=window.story.render("Inv_Hud")%><%=window.story.render("AM_Lv3_MAP")%>
 </article><article id="LogPanel"></article></section>
 
 :: LT_Corridor2
@@ -51,8 +60,7 @@ Firedoor to S is closed.
 <%window.gm.player.location=window.passage.name;%>
 
 <p><%=window.gm.printGoto('LT_Corridor',{},'Go N')%></p>
-<p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%></p>
-<p><%=window.gm.printGoto('LT_Crewdeck',{},'Down')%></p>
+<p>                <%=window.gm.printGoto('LT_Crewdeck',{},'Down')%></p>
 <p><%=window.gm.printGoto('LT_Workshop',{},'Go S')%></p>
 <%=window.story.render("Inv_Hud")%>
 </article><article id="LogPanel"></article></section>

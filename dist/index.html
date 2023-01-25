@@ -39,7 +39,7 @@ var SVG=function(){"use strict";const t={},e=[];function n(e,i){if(Array.isArray
 </head>
 	<body>
 		<tw-story tags></tw-story>
-		<!-- UUID://6396C055-7E04-4B93-A56D-3AE6375E6E56// --><tw-storydata name="Abandoned Bunker" startnode="36" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="6396C055-7E04-4B93-A56D-3AE6375E6E56" zoom="1" format="snowman" format-version="2.0.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">html{this:that;font-weight:700}carrots{color:red}</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "user.min.js" */
+		<!-- UUID://6396C055-7E04-4B93-A56D-3AE6375E6E56// --><tw-storydata name="Abandoned Bunker" startnode="40" creator="Tweego" creator-version="2.1.1+81d1d71" ifid="6396C055-7E04-4B93-A56D-3AE6375E6E56" zoom="1" format="snowman" format-version="2.0.3" options="" hidden><style role="stylesheet" id="twine-user-stylesheet" type="text/twine-css">html{this:that;font-weight:700}carrots{color:red}</style><script role="script" id="twine-user-script" type="text/twine-javascript">/* twine-user-script #1: "user.min.js" */
 "use strict";function _defineProperty(obj,key,value){if(key in obj){Object.defineProperty(obj,key,{value:value,enumerable:true,configurable:true,writable:true});}else{obj[key]=value;}return obj;}function _get(target,property,receiver){if(typeof Reflect!=="undefined"&&Reflect.get){_get=Reflect.get;}else{_get=function _get(target,property,receiver){var base=_superPropBase(target,property);if(!base)return;var desc=Object.getOwnPropertyDescriptor(base,property);if(desc.get){return desc.get.call(receiver);}return desc.value;};}return _get(target,property,receiver||target);}function _superPropBase(object,property){while(!Object.prototype.hasOwnProperty.call(object,property)){object=_getPrototypeOf(object);if(object===null)break;}return object;}function _wrapNativeSuper(Class){var _cache=typeof Map==="function"?new Map():undefined;_wrapNativeSuper=function _wrapNativeSuper(Class){if(Class===null||!_isNativeFunction(Class))return Class;if(typeof Class!=="function"){throw new TypeError("Super expression must either be null or a function");}if(typeof _cache!=="undefined"){if(_cache.has(Class))return _cache.get(Class);_cache.set(Class,Wrapper);}function Wrapper(){return _construct(Class,arguments,_getPrototypeOf(this).constructor);}Wrapper.prototype=Object.create(Class.prototype,{constructor:{value:Wrapper,enumerable:false,writable:true,configurable:true}});return _setPrototypeOf(Wrapper,Class);};return _wrapNativeSuper(Class);}function _construct(Parent,args,Class){if(_isNativeReflectConstruct()){_construct=Reflect.construct;}else{_construct=function _construct(Parent,args,Class){var a=[null];a.push.apply(a,args);var Constructor=Function.bind.apply(Parent,a);var instance=new Constructor();if(Class)_setPrototypeOf(instance,Class.prototype);return instance;};}return _construct.apply(null,arguments);}function _isNativeFunction(fn){return Function.toString.call(fn).indexOf("[native code]")!==-1;}function _inherits(subClass,superClass){if(typeof superClass!=="function"&&superClass!==null){throw new TypeError("Super expression must either be null or a function");}subClass.prototype=Object.create(superClass&&superClass.prototype,{constructor:{value:subClass,writable:true,configurable:true}});if(superClass)_setPrototypeOf(subClass,superClass);}function _setPrototypeOf(o,p){_setPrototypeOf=Object.setPrototypeOf||function _setPrototypeOf(o,p){o.__proto__=p;return o;};return _setPrototypeOf(o,p);}function _createSuper(Derived){var hasNativeReflectConstruct=_isNativeReflectConstruct();return function _createSuperInternal(){var Super=_getPrototypeOf(Derived),result;if(hasNativeReflectConstruct){var NewTarget=_getPrototypeOf(this).constructor;result=Reflect.construct(Super,arguments,NewTarget);}else{result=Super.apply(this,arguments);}return _possibleConstructorReturn(this,result);};}function _possibleConstructorReturn(self,call){if(call&&(_typeof(call)==="object"||typeof call==="function")){return call;}return _assertThisInitialized(self);}function _assertThisInitialized(self){if(self===void 0){throw new ReferenceError("this hasn't been initialised - super() hasn't been called");}return self;}function _isNativeReflectConstruct(){if(typeof Reflect==="undefined"||!Reflect.construct)return false;if(Reflect.construct.sham)return false;if(typeof Proxy==="function")return true;try{Date.prototype.toString.call(Reflect.construct(Date,[],function(){}));return true;}catch(e){return false;}}function _getPrototypeOf(o){_getPrototypeOf=Object.setPrototypeOf?Object.getPrototypeOf:function _getPrototypeOf(o){return o.__proto__||Object.getPrototypeOf(o);};return _getPrototypeOf(o);}function _createForOfIteratorHelper(o,allowArrayLike){var it;if(typeof Symbol==="undefined"||o[Symbol.iterator]==null){if(Array.isArray(o)||(it=_unsupportedIterableToArray(o))||allowArrayLike&&o&&typeof o.length==="number"){if(it)o=it;var i=0;var F=function F(){};return{s:F,n:function n(){if(i>=o.length)return{done:true};return{done:false,value:o[i++]};},e:function e(_e){throw _e;},f:F};}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");}var normalCompletion=true,didErr=false,err;return{s:function s(){it=o[Symbol.iterator]();},n:function n(){var step=it.next();normalCompletion=step.done;return step;},e:function e(_e2){didErr=true;err=_e2;},f:function f(){try{if(!normalCompletion&&it.return!=null)it.return();}finally{if(didErr)throw err;}}};}function _unsupportedIterableToArray(o,minLen){if(!o)return;if(typeof o==="string")return _arrayLikeToArray(o,minLen);var n=Object.prototype.toString.call(o).slice(8,-1);if(n==="Object"&&o.constructor)n=o.constructor.name;if(n==="Map"||n==="Set")return Array.from(o);if(n==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))return _arrayLikeToArray(o,minLen);}function _arrayLikeToArray(arr,len){if(len==null||len>arr.length)len=arr.length;for(var i=0,arr2=new Array(len);i<len;i++){arr2[i]=arr[i];}return arr2;}function _classCallCheck(instance,Constructor){if(!(instance instanceof Constructor)){throw new TypeError("Cannot call a class as a function");}}function _defineProperties(target,props){for(var i=0;i<props.length;i++){var descriptor=props[i];descriptor.enumerable=descriptor.enumerable||false;descriptor.configurable=true;if("value"in descriptor)descriptor.writable=true;Object.defineProperty(target,descriptor.key,descriptor);}}function _createClass(Constructor,protoProps,staticProps){if(protoProps)_defineProperties(Constructor.prototype,protoProps);if(staticProps)_defineProperties(Constructor,staticProps);return Constructor;}function _typeof(obj){"@babel/helpers - typeof";if(typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"){_typeof=function _typeof(obj){return typeof obj;};}else{_typeof=function _typeof(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};}return _typeof(obj);}// javascript-astar 0.4.1
 // http://github.com/bgrins/javascript-astar
 // Freely distributable under the MIT License.
@@ -2539,26 +2539,15 @@ bringIron:{tick:'',done:0,cnt:0,min:1},bringSilver:{tick:'',done:0,cnt:0,min:3},
 //prints link to other passage
 window.gm.printGoto=function(location,cost,alias){var msg='',res={OK:true,msg:''};msg=window.gm.printDo("window.story.show(\""+location+"\");",cost,alias);return msg;};//prints link that executes doThat f.e. "window.story.show(\"NewGame\")";
 window.gm.printDo=function(doThat,cost,alias){var k='',msg='',res={OK:true,msg:''};var _cost=cost||{};//cost={time:30,energy:-10,will:-10,difficult:hard}  easy, average, hard
-_cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energy:0,_cost.will=cost&&cost.will?cost.will:0;_cost.difficult=cost&&cost.difficult?cost.difficult:'';k=(_cost.time>0?' '+_cost.time+'min':'')+(_cost.energy!==0?' '+_cost.energy+'E':'')+(_cost.will!==0?' '+_cost.will+'W':'')+(_cost.difficult?' <b>'+_cost.difficult+'</b>':'');if(k!=='')k=" ("+k+")";msg=window.gm.printLink((alias===''?location:alias)+k,"(function(){let v=window.story.state.vars.mine;if(!(("+_cost.energy+"<0 && v.qBattery<"+-1*_cost.energy+")||("+_cost.will+"<0 && v.qSanity<"+-1*_cost.will+"))){"+"v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+"}else{alert(\"Cant do it!\")}}())",{class:!(_cost.energy<0&&window.story.state.vars.mine.qBattery<-1*_cost.energy||_cost.will<0&&window.story.state.vars.mine.qSanity<-1*_cost.will)?"":"done"});//TODO replace alert with ??
+_cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energy:0,_cost.will=cost&&cost.will?cost.will:0;_cost.difficult=cost&&cost.difficult?cost.difficult:'';k=(_cost.time>0?' '+_cost.time+'min':'')+(_cost.energy!==0?' '+_cost.energy+'E':'')+(_cost.will!==0?' '+_cost.will+'W':'')+(_cost.difficult?' <b>'+_cost.difficult+'</b>':'');if(k!=='')k=" ("+k+")";msg=window.gm.printLink((alias===''?location:alias)+k,"(function(){let v=window.story.state.vars;if(!(("+_cost.energy+"<0 && v.qBattery<"+-1*_cost.energy+")||("+_cost.will+"<0 && v.qSanity<"+-1*_cost.will+"))){"+"v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+"}else{alert(\"Cant do it!\")}}())",{class:!(_cost.energy<0&&window.story.state.vars.qBattery<-1*_cost.energy||_cost.will<0&&window.story.state.vars.qSanity<-1*_cost.will)?"":"done"});//TODO replace alert with ??
 return msg;};var Player=//fake class
 function Player(){_classCallCheck(this,Player);this.location='';};/* bundles some utility operations*/window.gm.getSaveVersion=function(){return[0,1,0];};// reimplement to setup the game
 //_origInitGame = window.gm.initGame;
 window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);var s=window.story.state;s._gm.timeRL=s._gm.timeVR=s._gm.time;s._gm.dayRL=s._gm.dayVR=s._gm.day;//TODO set debug to 0 for distribution !
-s._gm.debug=1,s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.vars||forceReset){// storage of variables that doesnt fit player
-s.vars={activePlayer:'Lisa'//id of the character that the player controls currently
-};s.vars.mine={mapReveal:0,visited:[],qFoundPlantPod:0,qHasSprayer:0,qSprayerCharge:0,qHasCrowbar:0,qHasCrank:0,qHasExtinguisher:0,qHasLighter:0,qHasPatchkit:0,qHasRope:0,qSanity:100,qCoverallHP:100,qBattery:100,qLingeryHP:100,qDoorH2:0,qDoorF2:0,qDoorH5:0,qFoeG2:100,//Worms
-qFoeI2:100,//Tentacle
-qFoeH3:100,//Pod
-qFoeH4:100//Boss
-};}if(!s.player||forceReset){s.player=window.gm.player=new Player();}if(!window.gm.achievements||forceReset){//outside of window.story !
-window.gm.achievements={moleKillerGoldMedal:false//add your flags here
-};window.storage.loadAchivementsFromBrowser();}window.gm.initGameFlags(forceReset,NGP);//take over flags for newgameplus
-if(NGP){//window.story.state.vars.crowBarLeft = NGP.crowBarLeft; 
-}NGP=null;//release memory
-};//stuff for ForbiddenIsle
+s._gm.debug=1,s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.player||forceReset){s.player=window.gm.player=new Player();}window.gm.initGameFlags(forceReset,NGP);};//stuff for AB
 window.gm.initGameFlags=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;var s=window.story.state;function dataPrototype(){return{visitedTiles:[],mapReveal:[],tmp:{},version:0};}if(forceReset){s.NGP=s.Settings=s.DngSY=null;s.Lab=s.Known=null;}var Settings={autoSave:true,showCombatPictures:true,showNSFWPictures:true,showDungeonMap:true};if(!s.vars||forceReset){// storage of variables that doesnt fit player
-s.vars={activePlayer:'Lisa'//id of the character that the player controls currently
-};s.vars.mine={mapReveal:0,visited:[],qFoundPlantPod:0,qHasSprayer:0,qSprayerCharge:0,qHasCrowbar:0,qHasCrank:0,qHasExtinguisher:0,qHasLighter:0,qHasPatchkit:0,qHasRope:0,qSanity:100,qCoverallHP:100,qLingeryHP:100,qDoorH2:0,qDoorF2:0,qDoorH5:0,qFoeG2:100,//Worms
+s.vars={activePlayer:'Lisa',//id of the character that the player controls currently
+qSanity:100,qCoverallHP:100,qLingeryHP:100,qBattery:50,qBabble:0};s.vars.mine={mapReveal:0,visited:[],qFoundPlantPod:0,qHasSprayer:0,qSprayerCharge:0,qHasCrowbar:0,qHasCrank:0,qHasExtinguisher:0,qHasLighter:0,qHasPatchkit:0,qHasRope:0,qDoorH2:0,qDoorF2:0,qDoorH5:0,qFoeG2:100,//Worms
 qFoeI2:100,//Tentacle
 qFoeH3:100,//Pod
 qFoeH4:100//Boss
@@ -2571,7 +2560,7 @@ NGP={token:0,tokenUsed:0};}else{//grant NGP-options; window.gm.player is not val
 }if(!window.gm.achievements){//||forceReset) { 
 window.gm.resetAchievements();}window.storage.loadAchivementsFromBrowser();//see comment in rebuildFromSave why this is done
 s.Settings=window.gm.util.mergePlainObject(Settings,s.Settings);s.NGP=window.gm.util.mergePlainObject(NGP,s.NGP);s.DngSY=window.gm.util.mergePlainObject(DngSY,s.DngSY);//todo cleanout obsolete data ( filtering those not defined in template) 
-};window.gm.resetAchievements=function(){//declare achievements here
+};window.gm.printBodyDescription=function(){var msg="";msg="You have short brwon hair.</br>";switch(window.story.state.vars.qBabble){case 1:msg+="A datapad is in your possession.";break;case 2:msg+="The babble companion is talking by an in-ear speaker to you.";default:}return msg+"</br>";};window.gm.resetAchievements=function(){//declare achievements here
 window.gm.achievements={looseEnd:0//
 ,swamToFar:0,starveBreakfast:0,survive7days:0,insaneTFHuman:0};window.gm.achievementsInfo={//this is kept separate to not bloat savegame
 //hidden bitmask: 0= all visisble, 1= Name ???, 2= Todo ???
@@ -2594,7 +2583,7 @@ msg='The hull of the pod is completely deflated. Should be no thread anymore.</b
 }msg+='<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMinePodCombat(\"'+FoeId+'\",\"Stone\")\'>throw a Stone</a></br>';msg+='<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMinePodCombat(\"'+FoeId+'\",\"Flee\")\'>Run away</a></br>';}return msg;};window.gm.printMinePodCombat=function(FoeId,Weapon){var msg='',s=window.story.state.vars.mine;var rnd=_.random(0,100);if(Weapon==='Flee'){msg+='You fled from the fight.</br>';msg+=window.gm.printLink('Next','window.story.show(window.story.state.tmp.args[2])');window.gm.printCombatSceneNext(msg);return;}else if(Weapon==='Crowbar'){//
 msg='Your crowbar deals some damage to the pods hull.';s[FoeId]+=-45;}else if(Weapon==='Stone'){msg='Grabing a stone from the ground, you throw it full force against the pod.</br>';if(rnd<30){msg+='You hit the pod but only deal little damage.</br>';s[FoeId]+=-25;}else{msg+='Your throw missed its target.</br>';}}else if(Weapon==='Sprayer'){s.qSprayerCharge-=1;window.story.state.tmp.args[1].blast+=1;msg='The color of the pod changes and it expands as well.';s[FoeId]+=-60;}if(s[FoeId]<=0){s[FoeId]=0;if(window.story.state.tmp.args[1].blast>1){msg+='</br>The pod explodes in a fiery mess, scatering its remains around.</br>'+window.gm.printMinePodDamage();}else{msg+='</br>The pod shakes violently but its content just squirts out from a wound at its side. The once proud bulb quickly deflates in a pitiable sag.</br>';}}else{msg+='As the bulb releases some of its content into the air you try to gain some distance.</br>';if(rnd<30){msg+='But unfortunatly you got a good dose of it.</br>'+window.gm.printMinePodDamage();}else{}}//back to combat passage
 msg+="</br>"+window.gm.printLink('Next','window.story.show(window.gm.player.location)');window.gm.printCombatSceneNext(msg);};window.gm.printMinePodDamage=function(){//pod blast or spray attack
-var msg='',s=window.story.state.vars.mine;if(s.qCoverallHP>0){s.qCoverallHP=Math.max(0,s.qCoverallHP-10);msg+='You got hit too and whatever was inside the pod, is now eating away your cloths!</br><statdown>clothing damage</statdown></br>';if(s.qCoverallHP<=0)msg+='All of your overgarment is now falling apart. You use some of the shreds to wipe off the fluids from your skin.</br>';}else{msg+='You got hit too and and you feel the goo stinging your skin. You should find something to wash it off !</br><statdown>sanity damage</statdown></br>';s.qSanity=Math.max(0,s.qSanity-5);}return msg;};window.gm.printMineTentacleCombatMenu=function(FoeId){var msg='',s=window.story.state.vars.mine;window.story.state.tmp.args[1]=window.story.state.tmp.args[1]||{bound:0,enraged:0};//buffers data between calls
+var msg='',s=window.story.state.vars;if(s.qCoverallHP>0){s.qCoverallHP=Math.max(0,s.qCoverallHP-10);msg+='You got hit too and whatever was inside the pod, is now eating away your cloths!</br><statdown>clothing damage</statdown></br>';if(s.qCoverallHP<=0)msg+='All of your overgarment is now falling apart. You use some of the shreds to wipe off the fluids from your skin.</br>';}else{msg+='You got hit too and and you feel the goo stinging your skin. You should find something to wash it off !</br><statdown>sanity damage</statdown></br>';s.qSanity=Math.max(0,s.qSanity-5);}return msg;};window.gm.printMineTentacleCombatMenu=function(FoeId){var msg='',s=window.story.state.vars;window.story.state.tmp.args[1]=window.story.state.tmp.args[1]||{bound:0,enraged:0};//buffers data between calls
 if(s[FoeId]<=0){var tmp=window.story.state.tmp.args[2];s[FoeId]=0;msg+='</br>Finally you dealt enough damage to break free from the grip of the tentacle. It quickly retreats in the safety of its encasing and you crawl away quickly to get a safe distance as well.';msg+='<a href=\'javascript:void(0)\' onclick=\'window.story.show(\"'+tmp+'\")\'>Next</a></br>';}else if(window.story.state.tmp.args[1].bound===4){//BAD END
 msg+='</br></br>The vile creature finally proved to strong (or your tactic to bad). As it now entwines your lower body with multiple of its strong appendages and can easily move you insides its own homestead.';msg+='</br>TODO BAD END';}else{if(s[FoeId]<50){msg='The tentacle is twitching around.</br>';}else{msg='The tentacle has a strong grip on you.</br>';}if(s.qSprayerCharge>0){msg+='<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMineTentacleCombat(\"'+FoeId+'\",\"Sprayer\")\'>use Sprayer</a></br>';}else{msg+='Your sprayer is empty.</br>';}if(s.qHasCrowbar>0){msg+='<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMineTentacleCombat(\"'+FoeId+'\",\"Crowbar\")\'>use Crowbar</a></br>';}msg+='<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMineTentacleCombat(\"'+FoeId+'\",\"Struggle\")\'>Struggle</a></br>';}return msg;};window.gm.printMineTentacleCombat=function(FoeId,Weapon){var msg='',s=window.story.state.vars.mine,t=window.story.state.tmp.args[1];var rnd=_.random(0,100);if(Weapon==='Crowbar'){//
 msg='You hit the tentacle and it seemed to release its grip somewhat, even if just for a moment. Maybe with some more hits you can break free.';s[FoeId]+=-20;}else if(Weapon==='Sprayer'){s.qSprayerCharge-=1;if(t.enraged===0){msg+='The tentacles starts sweeling and its color get more lifely, the grip on you tightens even more.';s[FoeId]+=-35;t.enraged+=1;}else{msg+='The sprayer doesnt seem to affect the creature any further. Maybe it needs a higher dose?';}}else if(Weapon==='Struggle'){t.bound=Math.max(0,t.bound-2);msg+='You trash around to get away from the slimy appendage. '+(t.bound===0)?'The thing still has a hold on you. You need to deal soe damage to break free.':'';}if(t.enraged>=1){t.bound+=1;if(t.bound>=3){msg+='</br>You have to struggle free or you will be entwined by the creature completely !';}else{msg+='</br>The angry tentacle pulls you in closer !';}}if(t.bound>1){}//back to combat passage
@@ -3599,12 +3588,234 @@ The mole took you down into his cave. &lt;/br&gt;
 Which was very difficult since you are far to large - you know?&lt;/br&gt;
 &lt;a0 onclick=&#39;window.gm.postDefeat();&#39;&gt;Black out&lt;/a&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;
-&lt;/section&gt;</tw-passagedata><tw-passagedata pid="7" name="sidebar" tags="" position="375,500" size="100,100">&lt;h3&gt;&lt;%=window.story.name%&gt; V&lt;%=window.gm.getSaveVersion().toString().replaceAll(&quot;,&quot;,&quot;.&quot;)%&gt;&lt;/h3&gt;
+&lt;/section&gt;</tw-passagedata><tw-passagedata pid="7" name="FI_InspectSelf" tags="_back_" position="850,100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+[[Back|_back_]]&lt;/br&gt;
+&lt;div id=&#39;output&#39;&gt;&lt;%=window.gm.printBodyDescription(window.gm.player,true)%&gt;&lt;div&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="8" name="FI_NeedsPlayer" tags="" position="975,100" size="100,100">&lt;div id=&quot;needs&quot;&gt;&lt;/div&gt;
+&lt;script&gt;function needs(){
+    let msg=&quot;&quot;,x=100,a=0;
+    if(x&gt;70){
+        msg=&quot;You are not thirsty/hungry. &quot;;
+    } else if(x&gt;40) {
+        msg=&quot;You are getting thirsty/hungry. &quot;;
+    } else if(x&gt;25) {
+        msg=&quot;You are really thirsty/hungry&quot;;
+    } else if(x&gt;10) {
+        msg=&quot;&lt;b&gt;You are starving. Did you look around if there is something edidable?&lt;/b&gt; &quot;;
+    } else {
+        msg=&quot;&lt;b&gt;You are starving and would eat anything. Check your inventory for something to eat.&lt;/b&gt; &quot;;
+    }
+    if(a&gt;80) {
+        msg+=&quot;&lt;b&gt;You couldnt resist a good fuck right now.&lt;/b&gt;&quot;;
+    } else if(a&gt;40) {
+        msg+=&quot;&lt;b&gt;You are flush with arousal.&lt;/b&gt; &quot;;
+        msg+=(window.gm.player.Stats.get(&quot;arousalRegen&quot;).value&gt;0)?&quot;And it might get worse.&quot;:&quot;&quot;;
+    } else if(a&gt;25) {
+        msg=&quot;&lt;b&gt;You are horny.&lt;/b&gt; &quot;;
+    }
+    return(msg);
+}
+window.gm.printOutput(needs(),&#39;#needs&#39;);
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="9" name="FI_ChooseActivity" tags="" position="1100,100" size="100,100">&lt;%if(window.passage.name===&quot;FI_BeachForest&quot;){%&gt;
+    &lt;%=window.gm.printGoto(&#39;FI_ForestWalk&#39;,{time:60,energy:-5},&#39;Explore the closer area.&#39;)%&gt;&lt;/br&gt;
+    &lt;%=(s.DngSY.exploreForest&gt;=2)?window.gm.printGoto(&#39;FI_ScavengeFruit&#39;,{time:30*(1+2*s.NGP.xForestFood),energy:-5*(1+2*s.NGP.xForestFood)},&#39;Pick some fruits that are in your hands reach.&#39;):&#39;&#39;%&gt;&lt;/br&gt;
+    &lt;%=(s.DngSY.exploreForest&gt;=1)?window.gm.printGoto(&#39;FI_ScavengeWood&#39;,{time:30,energy:-10},&#39;Look around for some firewood&#39;):&#39;&#39;%&gt;&lt;/br&gt;
+    &lt;%=(s.DngSY.exploreForest&gt;=4)?window.gm.printGoto(&#39;FI_ShakeTree&#39;,{time:30,energy:-20},&#39;Shake a tree&#39;):&#39;&#39;%&gt;&lt;/br&gt;
+    [[explore western direction (toward beach)]]&lt;/br&gt;
+    [[explore northern direction (dense forest and mountains)]]&lt;/br&gt;
+&lt;%}%&gt;
+&lt;%if([&quot;FI_BeachForest&quot;,&quot;FI_BeachNorth&quot;].includes(window.passage.name) &amp;&amp; window.gm.player.Stats.get(&quot;arousal&quot;).value&gt;30){%&gt;
+    &lt;%=window.gm.printGoto(&#39;FI_BeachMasturbate&#39;,{time:30,energy:-10},&#39;Masturbation&#39;)%&gt;&lt;/br&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="10" name="FI_NGPShop" tags="" position="1225,100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;&lt;/br&gt;&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;h2&gt;New game plus&lt;/h2&gt;
+This is the New-Game-Plus Screen where you can configure your next play through.&lt;/br&gt;
+&lt;a0 onclick=&#39;(function($event){document.querySelector(&quot;#&quot;+id+&quot;~p&quot;).toggleAttribute(&quot;hidden&quot;);})(this);&#39;&gt;Hint&lt;/a&gt;
+&lt;p hidden&gt;- Some game-events (BadEnds, maxing out Stats, some missions) may grant you either a NGP-token or reduce the cost of a NGP option.
+&lt;/br&gt;- spend those tokens here to make your life easier (or harder)
+&lt;/br&gt;- if you get a ingame notification that a option can be enabled for free, you can also activate them ingame. All other options need to be configured before game start.
+&lt;/br&gt;- Options with negative cost will give you credit that can be spent for other options. 
+&lt;/br&gt;- Earned tokens you dont spent get carried over in the new game but not (!) tokens you get credited for taking options with negative cost. 
+&lt;/p&gt;
+
+&lt;form&gt;
+&lt;label&gt;Category:
+	&lt;select id=&quot;category&quot;&gt;
+	&lt;option value=&quot;0&quot;&gt;select something&lt;/option&gt;
+	&lt;/select&gt;
+&lt;/label&gt;&lt;/br&gt;
+&lt;label&gt;Item:
+	&lt;select id=&quot;item&quot;&gt;
+	&lt;option value=&quot;0&quot;&gt;select category then item&lt;/option&gt;
+	&lt;/select&gt;
+&lt;/label&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;buy()&quot;&gt;activate&lt;/button&gt; &lt;div id=&quot;tokens&quot;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;button type=&quot;button&quot; onclick=&quot;resetAll()&quot;&gt;reset all&lt;/button&gt;
+&lt;/form&gt;
+&lt;/br&gt;After selecting the options press here to &lt;a0 onclick=&quot;start()&quot;&gt; start the game&lt;/a&gt; !&lt;/br&gt;
+&lt;div id=&quot;output2&quot;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;p hidden&gt;TransformResistance
+- Boost10Days: resistance to transformation is increased for a limited time
+- TransformOnlyWeakend: Transforms occur only if you are in weak state
+- SanityLossEasing (human): reduces sanity damage for transformation that only shift human appearance
+- Selective: you may decide to reject a transformation 
+
+Specialised TransformParameters
+- FLatChested: Your tits tend to shrink
+- Bulky: easier to keep a muscular build
+- VagPrefered: More likely to gain a Vag then a cock
+
+StartItems
+- Compass: makes pathfinding easier in hard to navigate areas; Reliability dimish in some enviroments-
+- Crowbar: important tool to open locked boxes and doors
+- Lighter (full): 
+- big pack of ProteinBars
+- immun boosters: gives you transformation resistance for some time
+
+StartCharacter
+- decent swimmer: you didnt drown in swin training
+- Twink: 
+- Girl: you start as a girl
+- less hetero: little closer to bi
+- bi: swinging both ways
+- deep breath: can hold your breath longer; might be useful for diving
+- subby: having to submit to someone doesnt damage your dignity so much
+- dominant: You are in control. But if you arent, dignity is damaged.
+
+
+ItemMods
+- replace american pisswater with strong bavarian bear:
+- decreased clothing durability (also increases item escape chance)
+- increased clothing durability
+
+
+EventMods
+- increased forest food-drop x3 (just less clicking)
+- reduce care package chance
+- disable TribeCapture Badend (unless provoked): 
+- higher chance to find fetish item removal options&lt;/p&gt;
+
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;
+function NOP(){return({OK:true,msg:&quot;&quot;});}
+function exclude(itmIdList){ 
+    let res={OK:true,msg:&quot;&quot;};
+    for(var i=itmIdList.length-1;i&gt;=0;i--){
+        if(NGP.hasOwnProperty(itmIdList[i])){
+            res.OK=false,res.msg+=&quot;Cannot be used with &quot;+itmIdList[i]+&quot;.&quot;;
+        }
+    }
+    return(res);
+}
+function include(itmIdList){ 
+    let res={OK:true,msg:&quot;&quot;};
+    for(var i=itmIdList.length-1;i&gt;=0;i--){
+        if(!NGP.hasOwnProperty(itmIdList[i])){
+            res.OK=false,res.msg+=&quot;requires also &quot;+itmIdList[i]+&quot;.&quot;;
+        }
+    }
+    return(res);
+}
+var NGP,ctrlCat,ctrlItem;
+var catalog = [
+    {catId:&quot;startgear&quot;,desc:&quot;Starting Gear&quot;,
+    items:[
+        {itmId:&quot;Compass&quot;,name:&quot;Compass&quot;,cost:{token:1},disabled:false,req:NOP,desc:&quot;a compass that makes it easier to navigate in some areas&quot;},
+        {itmId:&quot;ProteinBars&quot;,name:&quot;a dozen proteinbars&quot;,cost:{token:1},disabled:false,req:NOP,desc:&quot;a package of powerbars so you dont need something you dont want&quot;}
+    ]},
+    {catId:&quot;resistance&quot;,desc:&quot;transformation resistance&quot;,
+    items:[
+        {itmId:&quot;noSatiationWillKill&quot;,name:&quot;survive if will&amp;satiation is low&quot;,cost:{token:1},disabled:false,req:NOP,desc:&quot;Bypass bad end if you are starving and have no will left.&quot;},
+        {itmId:&quot;increasedSatiation&quot;,name:&quot;Satiation increased&quot;,cost:{token:1},disabled:false,req:NOP,desc:&quot;Improved satiation when consuming food.&quot;},
+        {itmId:&quot;willOnSatiated&quot;,name:&quot;Happy when well-fed&quot;,cost:{token:1},disabled:false,req:NOP,desc:&quot;Eating while beeing mostly satiated gives you a little bit willpower. But you loose will if you are hungry.&quot;},
+        //{itmId:&quot;&quot;,name:&quot;will gain when satiated&quot;,cost:{token:1},req:NOP,desc:&quot;Eating while beeing mostly satiated gives you a little bit willpower.&quot;},
+        {itmId:&quot;transformWeakOnly&quot;,name:&quot;transformWeakOnly&quot;,cost:{token:2},disabled:false,req:NOP,desc:&quot;Transformations only take place in a weakend state.&quot;}
+    ]},
+    {catId:&quot;itemMods&quot;,desc:&quot;Item Mods&quot;,
+    items:[
+        {itmId:&quot;decreasedClothDurability&quot;,name:&quot;decreased clothing durability&quot;,cost:{token:1},disabled:false,req:exclude.bind(null,[&quot;increasedClothDurability&quot;]),desc:&quot;Clothes tend to break faster. Might help to get rid of some undesired things faster.&quot;},
+        {itmId:&quot;increasedClothDurability&quot;,name:&quot;increased clothing durability&quot;,cost:{token:1},disabled:false,req:exclude.bind(null,[&quot;decreasedClothDurability&quot;]),desc:&quot;Clothes are much more durable, especially specific one.&quot;}
+    ]},
+    {catId:&quot;eventMods&quot;,desc:&quot;Event Mods&quot;,
+    items:[
+        {itmId:&quot;xForestFood&quot;,name:&quot;increased food-drop in forest&quot;,cost:{token:0},req:NOP,desc:&quot;Gather more food at once from forest (just to reduce clicking).&quot;}
+    ]}
+];
+function resetAll(){
+    let tk=0,x=window.gm.achievements;
+    if(x.swamToFar&gt;=1)tk++; //convert achievements to token here or unhide options
+    if(x.starveBreakfast&gt;=1)tk++;
+    else findItem(&quot;noSatiationWillKill&quot;).disabled=true;
+    NGP = {token:tk,tokenUsed:0};
+    ctrlCat.value=&quot;&quot;;
+    window.gm.printOutput(&quot;&quot;,&quot;#output2&quot;);
+}
+function updateText(event) {
+    let msg=(!!ctrlItem.selectedObject?ctrlItem.selectedObject.desc:&quot;&quot;);
+    window.gm.printOutput(msg,&quot;#output&quot;);
+    window.gm.printOutput(&quot;Tokens left:&quot;+(NGP.token-NGP.tokenUsed),&quot;#tokens&quot;);
+}
+function buy(){
+    let res,itm=ctrlItem.selectedObject, freeToken=NGP.token-NGP.tokenUsed;
+    if(itm &amp;&amp; !NGP[itm.itmId]) {
+        res=itm.req();
+        if(!res.OK){
+            window.gm.printOutput(res.msg,&quot;#output&quot;);
+        }else if(itm.cost.token&gt;freeToken){
+            window.gm.printOutput(&quot;not enough token&quot;,&quot;#output&quot;);
+        }else{
+            NGP[itm.itmId]=1;   //s.NGP.ProteinBars
+            NGP.tokenUsed+=itm.cost.token;
+        }
+    }
+    window.gm.printOutput(&quot;Tokens left:&quot;+(NGP.token-NGP.tokenUsed),&quot;#tokens&quot;);
+    window.gm.printOutput(JSON.stringify(NGP),&quot;#output2&quot;);
+}
+function findItem(itmId){
+    let itm=null;
+    for(var cat of catalog){
+        for(var it of cat.items){
+            if(it.itmId===itmId) return(it);
+        }
+    }
+    if(itm===null) throw new Error(&quot;unknown item &quot; + itmId);
+    return(itm);
+}
+function start() {
+    window.gm.initGame(true,NGP);
+    window.story.state.vars.spawnAt=&quot;FI_Entry&quot;; //
+    window.gm.enterVR();
+    window.gm.forwardTime(1200);
+    window.gm.player.levelUp(5);window.gm.player.autoLeveling();
+}
+function init(){
+    var selCat = document.getElementById(&quot;category&quot;),selItem = document.getElementById(&quot;item&quot;);
+    ctrlCat = new window.gm.util.SelectionController(selCat), ctrlItem = new window.gm.util.SelectionController(selItem,ctrlCat);
+    ctrlCat.getValueList=function(cat,sel) {
+        return cat.map(item =&gt; ({value: item.catId,text: item.desc,disabled:false}));
+    }
+    ctrlCat.getValue=function(cat, sel) {
+        return cat.find(item =&gt; item.catId == sel);
+    }
+    ctrlItem.getValueList=function(cat,sel) {
+        return cat.items.map(item =&gt; ({value: item.itmId,
+            text: item.name+ &quot; (&quot;+((item.cost.token&gt;0)?item.cost.token+&quot; token&quot;:&quot;free&quot;)+&quot;)&quot;,
+            disabled:item.disabled})); //todo: remove item instead 
+    }
+    ctrlItem.getValue=function(cat, sel) {
+        return cat.items.find(item =&gt; item.itmId == sel);
+    }
+    ctrlCat.mapData(catalog);
+    ctrlItem.addEventListener(&quot;change&quot;, updateText);
+    resetAll();
+}
+init();
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="11" name="sidebar" tags="" position="375,500" size="100,100">&lt;h3&gt;&lt;%=window.story.name%&gt; V&lt;%=window.gm.getSaveVersion().toString().replaceAll(&quot;,&quot;,&quot;.&quot;)%&gt;&lt;/h3&gt;
 &lt;img src=&#39;&lt;%=window.gm.getSidebarPic()%&gt;&#39; width=&quot;256&quot; height=&quot;256&quot;&gt;
 &lt;hr&gt;
 &lt;div&gt;&lt;%=window.gm.util.printLocationName(window.gm.player.location)%&gt;&lt;/br&gt;
 &lt;hr&gt;&lt;/div&gt;
-&lt;%=window.gm.util.bargraph(window.story.state.vars.mine.qSanity,100,&quot;red&quot;,&quot;Sanity: &quot;)%&gt;  
+&lt;%=window.gm.util.bargraph(window.story.state.vars.qSanity,100,&quot;red&quot;,&quot;Sanity: &quot;)%&gt;  
 &lt;form&gt;
 &lt;button type=&quot;button&quot; id=&quot;dashboard&quot;&gt;More&lt;/button&gt;
 &lt;hr&gt;
@@ -3622,8 +3833,8 @@ document.querySelector(&#39;#dashboard&#39;).addEventListener(&#39;click&#39;, f
 document.querySelector(&#39;#save&#39;).addEventListener(&#39;click&#39;, function(){window.gm.toggleDialog(&#39;#dialog_save&#39;);});
 document.querySelector(&#39;#help&#39;).addEventListener(&#39;click&#39;, function(){window.story.show(&#39;Help_Index&#39;);}); 
 document.querySelector(&#39;#settings&#39;).addEventListener(&#39;click&#39;, function(){window.story.show(&#39;Settings&#39;);}); 
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="8" name="CenterDialogs" tags="" position="975,100" size="100,100">&lt;!--called to include important dialogs; mainly the save-Dialog because of special behaviour--&gt;
-&lt;%=window.story.render(&quot;SaveDialog&quot;) %&gt;</tw-passagedata><tw-passagedata pid="9" name="LogPanel" tags="" position="1100,100" size="100,100">&lt;!--&lt;button type=&quot;button&quot; id=&quot;toggleview&quot; onclick=toggleview()&gt;&lt;i class=&quot;fa fa-compress&quot;&gt;&lt;/i&gt;&lt;/button&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="12" name="CenterDialogs" tags="" position="225,225" size="100,100">&lt;!--called to include important dialogs; mainly the save-Dialog because of special behaviour--&gt;
+&lt;%=window.story.render(&quot;SaveDialog&quot;) %&gt;</tw-passagedata><tw-passagedata pid="13" name="LogPanel" tags="" position="350,225" size="100,100">&lt;!--&lt;button type=&quot;button&quot; id=&quot;toggleview&quot; onclick=toggleview()&gt;&lt;i class=&quot;fa fa-compress&quot;&gt;&lt;/i&gt;&lt;/button&gt;
 &lt;button type=&quot;button&quot; id=&quot;clearview&quot; onclick=clearview()&gt;&lt;i class=&quot;fa fa-trash-alt&quot;&gt;&lt;/i&gt;&lt;/button&gt;--&gt;
 &lt;div&gt;&lt;a0 onclick=toggleview()&gt;toggle view&lt;/a&gt;&lt;a0 onclick=clearview()&gt;clear log&lt;/a&gt;&lt;/div&gt;
 &lt;div class=&quot;scroll&quot; style=&quot;font-size: smaller;&quot;&gt;&lt;%=window.gm.getLog()%&gt;&lt;/br&gt;&lt;/div&gt;
@@ -3634,7 +3845,7 @@ function toggleview(){
 function clearview(){
   window.gm.clearLog();window.gm.refreshAllPanel();
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="10" name="SaveDialog" tags="_noshortkey_" position="1225,100" size="100,100">&lt;dialog role=&quot;dialog&quot; id=&#39;dialog_save&#39; aria-labelledby=&quot;dialog-heading&quot;&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="14" name="SaveDialog" tags="_noshortkey_" position="475,225" size="100,100">&lt;dialog role=&quot;dialog&quot; id=&#39;dialog_save&#39; aria-labelledby=&quot;dialog-heading&quot;&gt;
     &lt;button id=&quot;close-dialog&quot;&gt;Back&lt;/button&gt; &lt;div&gt;&lt;%=(window.story.state._gm.nosave?&quot;save disabled in this scene&quot;:&quot;&quot;)%&gt;&lt;/div&gt;
     &lt;form&gt;
     &lt;label&gt;&lt;output&gt;&lt;/output&gt;&lt;/label&gt;&lt;/br&gt;
@@ -3701,7 +3912,7 @@ function readFile(input) {
       return;
     } //aborted by user
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="11" name="Inventory" tags="_back_ _nodeffered_" position="100,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="15" name="Inventory" tags="_back_ _nodeffered_" position="600,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;%=window.gm.player.name%&gt; inventory: &lt;/br&gt;&lt;/br&gt;
 &lt;%
@@ -3716,30 +3927,30 @@ for(var i=0;i&lt;maxSlots;i++){
 } 
 %&gt;
 &lt;div id=&#39;output&#39;&gt;&lt;/div&gt;&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="12" name="Relations" tags="_back_ _nodeffered_" position="225,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="16" name="Relations" tags="_back_ _nodeffered_" position="725,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;%=window.gm.player.name%&gt; relations: &lt;/br&gt;&lt;/br&gt;
 &lt;%=window.gm.printRelationSummary()%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="13" name="Achievements" tags="_back_" position="350,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="17" name="Achievements" tags="_back_" position="850,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;%=window.gm.printAchievements()%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="14" name="Player_Dashboard" tags="_back_" position="475,225" size="100,100">&lt;!--a dashboard where the player can check his other stuff--&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="18" name="Player_Dashboard" tags="_back_" position="975,225" size="100,100">&lt;!--a dashboard where the player can check his other stuff--&gt;
 &lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 Here you can check and modify several options: &lt;/br&gt;
 Your outfit can only be changed by using a wardrobe.&lt;/br&gt;
 Your party consist of &lt;%=(function(){var msg=[];for(el of window.story.state._gm.playerParty){msg.push(window.story.state[el].name);}return(msg);}()).join(&#39;,&#39;)%&gt;&lt;/br&gt;
 [[Back|_back_]] [[Status]] [[Levelup]] [[View|Mirror]] [[Inventory]] [[Relations]] [[QuestList]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="15" name="QuestList" tags="_back_" position="600,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="19" name="QuestList" tags="_back_" position="1100,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;%=window.gm.printQuestList()%&gt;
 &lt;/br&gt;[[Back|_back_]]
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="16" name="Mirror" tags="_back_" position="725,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="20" name="Mirror" tags="_back_" position="1225,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt; Checking out &lt;%=window.gm.player.name%&gt;:&lt;/br&gt;
 &lt;div id=&#39;output&#39;&gt;&lt;%=window.gm.printBodyDescription(window.gm.player,true)%&gt;&lt;div&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;!--todo: set height depending on browsersize--&gt;
 &lt;!--&lt;div id=&#39;Canvas&#39; style=&#39;height: 30em;background: url(&quot;assets/doll/doll_small_xcf-Skirt.png&quot;) no-repeat center,url(&quot;assets/doll/doll_small_xcf-Body.png&quot;) no-repeat center, url(&lt;%=window.gm.getScenePic(window.gm.player.location)%&gt;)no-repeat center;color:black;&#39;&gt;&lt;/div&gt;--&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="17" name="Wardrobe" tags="_back_ _nodeffered_" position="850,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="21" name="Wardrobe" tags="_back_ _nodeffered_" position="100,350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 &lt;p&gt;[[Back|_back_]] [[Mirror]]&lt;/p&gt; (Tools and weapons can be changed via Inventory.)&lt;/br&gt;
 &lt;%=window.gm.player.name%&gt; has equipped: &lt;%=window.gm.printEquipmentSummary()%&gt;&lt;/br&gt;&lt;/br&gt;
 &lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;div id=&quot;choice&quot;&gt;&lt;/div&gt;
@@ -3750,7 +3961,7 @@ var whom = window.gm.player,_ids2 = whom.Outfit.getAllIds();;
 var _ids = whom.Wardrobe.getAllIds().filter(x=&gt;{return(_ids2.indexOf(x)&lt;0)}); //filter away already equipped ids 
 for(var i=0;i&lt;_ids.length;i++){window.gm.printEquipment(whom,whom.Wardrobe.getItem(_ids[i]));}
 for(var i=0;i&lt;_ids2.length;i++){window.gm.printEquipment(whom,whom.Outfit.getItem(_ids2[i]));}
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="18" name="Settings" tags="_back_ _noshortkey_" position="975,225" size="100,100">&lt;section&gt; &lt;!--&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;--&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="22" name="Settings" tags="_back_ _noshortkey_" position="225,350" size="100,100">&lt;section&gt; &lt;!--&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;--&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;p class=&quot;author&quot;&gt;settings are stored in save-game until I find a way to store them in cookies.&lt;/p&gt;
 Theme:
@@ -3775,7 +3986,7 @@ function toggleSetting(elmt) {
   elmt.checked=toggle;
 }
 [&#39;showNSFWPictures&#39;,&#39;showDungeonMap&#39;,&#39;showCombatPictures&#39;].forEach(x=&gt;(document.querySelector(&quot;#&quot;+x).checked=window.story.state.Settings[x]));
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="19" name="Settings2" tags="_back_" position="1100,225" size="100,100">&lt;!--just test--&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="23" name="Settings2" tags="_back_" position="350,350" size="100,100">&lt;!--just test--&gt;
 &lt;section&gt;&lt;!--&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;--&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 &lt;div&gt;&lt;canvas id=&quot;exampleCanvas&quot; width=&quot;240&quot; height=&quot;225&quot;&gt;Your browser doesn&#39;t support the canvas tag.    &lt;/canvas&gt;&lt;/div&gt;
 &lt;button onclick=&#39;window.gm.printCombatScreen()&#39;&gt;test a&lt;/button&gt;
@@ -3792,7 +4003,7 @@ img.src = imgsrc;//&#39;https://twinery.org/homepage/img/logo.svg&#39;;   //todo
       onimage(&quot;assets/bird.gif&quot;);
     &lt;/script&gt;
 [[Back|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="20" name="Status" tags="_back_" position="1225,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="24" name="Status" tags="_back_" position="475,350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 &lt;%let char=window.gm.player;%&gt;
 Status of &lt;%=char.name%&gt;:   [[Back|_back_]]&lt;/br&gt;
 &lt;a0 onclick=&#39;window.gm.printOutput(window.gm.printEffectSummary(&quot;&lt;%=char.id%&gt;&quot;,true,false,false));&#39;&gt;Stats&lt;/a&gt;
@@ -3803,7 +4014,7 @@ Status of &lt;%=char.name%&gt;:   [[Back|_back_]]&lt;/br&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
 &lt;script&gt;
 window.gm.printOutput(window.gm.printEffectSummary(window.gm.player.id,true,false));
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="21" name="Levelup" tags="_back_ _nosave_ _noshortkey_" position="100,350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="25" name="Levelup" tags="_back_ _nosave_ _noshortkey_" position="600,350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;% let char=window.gm.player;if(char.canLevelUp){%&gt;
 &lt;%=char.name%&gt; has enough XP to &lt;a0 onclick=&#39;levelUp(&quot;&lt;%=char.id%&gt;&quot;)&#39;&gt;Level up&lt;/a&gt;!&lt;/br&gt;
@@ -3836,7 +4047,7 @@ function showStats(charname) {
   window.gm.printOutput(msg);
 }
 showStats(&lt;%=&quot;\&quot;&quot;+char.id+&quot;\&quot;&quot;%&gt;);
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="22" name="listsell" tags="" position="225,350" size="100,100">&lt;!--this fragment can be used to setup a list of items to sell:
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="26" name="listsell" tags="" position="725,350" size="100,100">&lt;!--this fragment can be used to setup a list of items to sell:
 add into passage: &lt;div id=&quot;choice&quot;&gt;&lt;/div&gt;&lt;/br&gt;&lt;/br&gt; &lt;div id=&quot;panel&quot;&gt;&lt;/div&gt;&lt;/br&gt;&lt;/br&gt;   
 in &lt;script&gt; define variable _Entrys and specify wares to sell
 and run renderToSelector(&quot;#panel&quot;, &quot;listsell&quot;); 
@@ -3850,7 +4061,7 @@ for(var i=0;window.gm.shop.WaresToSell.length&gt;i;i++) {
     cbCanBuy=(function(item){return(window.gm.shop.defaultCanSell(item,_cost));}),
     cbPostBuy=(function(item){window.gm.shop.defaultPostSell(item,_cost)}));
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="23" name="listbuy" tags="" position="350,350" size="100,100">&lt;!--this fragment can be used to setup a list of items to buy:
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="27" name="listbuy" tags="" position="850,350" size="100,100">&lt;!--this fragment can be used to setup a list of items to buy:
 add into passage: &lt;div id=&quot;choice&quot;&gt;&lt;/div&gt;&lt;/br&gt;&lt;/br&gt; &lt;div id=&quot;panel&quot;&gt;&lt;/div&gt;&lt;/br&gt;&lt;/br&gt;   
 in &lt;script&gt; define variable _Entrys and specify wares to buy
 and run renderToSelector(&quot;#panel&quot;, &quot;listbuy&quot;); 
@@ -3864,21 +4075,21 @@ for(var i=0;window.gm.shop.WaresToBuy.length&gt;i;i++) {
     cbCanBuy=(function(item){return window.gm.shop.cbCanBuyPerverse(item,_cost,0)}),
     cbPostBuy=(function(item){window.gm.shop.defaultPostBuy(item,_cost)}));
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="24" name="_back_" tags="" position="475,350" size="100,100">&lt;!--this just exists because Back-links would rendered as non existent--&gt;</tw-passagedata><tw-passagedata pid="25" name="PassageTemplate" tags="template" position="250,500" size="100,100">The page should be setup like this:
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="28" name="_back_" tags="" position="975,350" size="100,100">&lt;!--this just exists because Back-links would rendered as non existent--&gt;</tw-passagedata><tw-passagedata pid="29" name="PassageTemplate" tags="template" position="250,500" size="100,100">The page should be setup like this:
 &lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 content here !
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="26" name="SubpanelTemplate" tags="_back_" position="75,600" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="30" name="SubpanelTemplate" tags="_back_" position="75,600" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 If this is a subpanel you can use back-tag and _back_-Link
 [[Back|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="27" name="debug" tags="_back_" position="400,0" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="31" name="debug" tags="_back_" position="400,0" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 Some things for debugging:&lt;/br&gt;
 qHomeInspect=0x&lt;%=s.vars.qHomeInspect.toString(16)%&gt;&lt;/br&gt;
 [[Cheats|debug_cheat]]&lt;/br&gt;
 [[Back|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="28" name="debug_cheat" tags="_back_" position="500,0" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="32" name="debug_cheat" tags="_back_" position="500,0" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 Cheat buttons:&lt;/br&gt;
 &lt;a href=&quot;javascript:void(0)&quot; onclick=&#39;window.story.state.vars.debugInv.addItem(new window.storage.constructors[&quot;Money&quot;](),200);window.gm.refreshScreen();&#39;&gt;&lt;%=window.story.state.vars.debugInv.countItem(&#39;Money&#39;)+&quot;$ in stash&quot;%&gt;&lt;/a&gt;&lt;/br&gt;
@@ -3908,14 +4119,14 @@ function unhideStats() {
         window.gm.player.Stats.modifyHidden(ids[i],0);
     }
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="29" name="Help_Index" tags="_back_" position="600,100" size="100,100">&lt;section&gt; 
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="33" name="Help_Index" tags="_back_" position="600,100" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 Here you can find some information about the gameplay.&lt;/br&gt;&lt;/br&gt;
 [[FAQ|Help_Background]]&lt;/br&gt;
 [[Basics|Help_Basics]]&lt;/br&gt;
 [[What should I do, where should I go|Help_Quest]]&lt;/br&gt;
 [[Im stuck!|Help_Fixes]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="30" name="Help_Background" tags="_back_" position="900,100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="34" name="Help_Background" tags="_back_" position="900,100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 &quot;What kind of game is this?&quot;&lt;/br&gt;
 Mostly a walking simulator. For sure not an RPG with turnbased combat or a sophisticated simulation game. &lt;/br&gt;&lt;/br&gt;
 &quot;Why is the writing so bad&quot;&lt;/br&gt;
@@ -3932,23 +4143,23 @@ Sometimes it depends on the viewpoint. For some, free Pony-Boots are downgrades,
 I dont have a patron-account since I cannot work regulary on things except my regulary work. Lets see if I can find another way that allows this kind of game to be supported.
 &lt;/br&gt;&lt;/br&gt;
 [[Next|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="31" name="Help_Basics" tags="_back_" position="800,100" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="35" name="Help_Basics" tags="_back_" position="800,100" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 Use the sleep-option in your own room to rest.&lt;/br&gt;
 &lt;/br&gt;
 [[Next|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="32" name="Help_Quest" tags="_back_" position="500,100" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="36" name="Help_Quest" tags="_back_" position="500,100" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 
 [[Next|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="33" name="Help_Fixes" tags="_back_" position="700,100" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="37" name="Help_Fixes" tags="_back_" position="700,100" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 If you are stuck on a page and you cannot escape. Press this [[Button|Home]] to get back to your Home.&lt;/br&gt;&lt;/br&gt;
 If you are even unable to get to this page because you see a weird plain textmessage in your browser:&lt;/br&gt;
 Im sorry but no one can help you. I will try to add some debug-log that shows some more information that you can send me.&lt;/br&gt;
 Then I might be abel to backtrack the error.&lt;/br&gt;
 [[Next|_back_]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="34" name="StartPage" tags="" position="200,500" size="100,100">&lt;article&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="38" name="StartPage" tags="" position="200,500" size="100,100">&lt;article&gt;
 
 &lt;h1 align=&quot;center&quot;&gt;Kingdom of kinks &lt;%-window.gm.getSaveVersion()%&gt;&lt;/h1&gt;
 &lt;h1 align=&quot;center&quot;&gt;DISCLAIMER&lt;/h1&gt;
@@ -3970,7 +4181,7 @@ Therefore I recommend that no one below 35years should read this story. &lt;/br&
 &lt;hr&gt;&lt;hr&gt;
 This game is powered by twine and tweego.&lt;/br&gt; 
 &lt;img src=&quot;https://twinery.org/homepage/img/logo.svg&quot; width=&quot;256&quot; height=&quot;256&quot;&gt;
-&lt;/article&gt;</tw-passagedata><tw-passagedata pid="35" name="List_Fetish" tags="_back_" position="200,600" size="100,100">&lt;article&gt;
+&lt;/article&gt;</tw-passagedata><tw-passagedata pid="39" name="List_Fetish" tags="_back_" position="200,600" size="100,100">&lt;article&gt;
 &lt;h1 align=&quot;center&quot;&gt;Primary fetish&lt;/h1&gt;
 Those are very present through the game and in the main-story (also check the settings in game to disable some of them):  &lt;/br&gt;
 *  Beastiality; If you dont know what this means, than you are completely wrong here and should leave immediatly!
@@ -3999,19 +4210,19 @@ Those are very present through the game and in the main-story (also check the se
 *  Child-R_pe
 
 &lt;/br&gt;[[Back|_back_]]
-&lt;/article&gt;</tw-passagedata><tw-passagedata pid="36" name="Intro" tags="" position="350,500" size="100,100">&lt;article&gt;
+&lt;/article&gt;</tw-passagedata><tw-passagedata pid="40" name="Intro" tags="" position="350,500" size="100,100">&lt;article&gt;
 &lt;%window.gm.initGame();window.gm.player.location=window.passage.name;%&gt;
 Some place, some time&lt;/br&gt;
 Maybe present time or some decades ago. It doesnt matter that much. &lt;/br&gt;
 Right now you are passed out and soon you will find yourself in some circumstances where it is unimportant from which country or even continent you are.&lt;/br&gt;
 &lt;/br&gt;[[LT_Start]]&lt;/br&gt;
-&lt;/article&gt;</tw-passagedata><tw-passagedata pid="37" name="Laptop-PS" tags="" position="1200,600" size="100,100">A powersupply for a laptop.
-[[Back|&lt;%=window.gm.player.location%&gt;]]</tw-passagedata><tw-passagedata pid="38" name="AM_Lv2_MAP" tags="_back_" position="975,475" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;/article&gt;</tw-passagedata><tw-passagedata pid="41" name="Laptop-PS" tags="" position="1200,600" size="100,100">A powersupply for a laptop.
+[[Back|&lt;%=window.gm.player.location%&gt;]]</tw-passagedata><tw-passagedata pid="42" name="AM_Lv2_MAP" tags="_back_" position="225,600" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
 &lt;script&gt; window.gm.printMap(&quot;AM_Lv2&quot;,window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="39" name="Inv_Hud" tags="" position="1100,475" size="100,100">&lt;hr&gt;&lt;%if(window.story.state.vars.mine){%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="43" name="Inv_Hud" tags="" position="350,600" size="100,100">&lt;hr&gt;&lt;%if(window.story.state.vars.mine){%&gt;
 &lt;p&gt;Inventory:&lt;/p&gt;
-&lt;span &gt;Sanity:&lt;%=window.story.state.vars.mine.qSanity%&gt;%&lt;/span&gt;
-&lt;span &lt;%=(window.story.state.vars.mine.qCoverallHP&gt;0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Coverall:&lt;%=window.story.state.vars.mine.qCoverallHP%&gt;%&lt;/span&gt;&lt;/br&gt;
+&lt;span &gt;Sanity:&lt;%=window.story.state.vars.qSanity%&gt;%&lt;/span&gt;
+&lt;span &lt;%=(window.story.state.vars.qCoverallHP&gt;0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Coverall:&lt;%=window.story.state.vars.qCoverallHP%&gt;%&lt;/span&gt;&lt;/br&gt;
 &lt;span &lt;%=window.story.state.vars.mine.qHasSprayer?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Sprayer:&lt;%=window.story.state.vars.mine.qSprayerCharge%&gt; dose&lt;/span&gt;
 &lt;span &lt;%=window.story.state.vars.mine.qHasRope?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Rope:&lt;%=window.story.state.vars.mine.qHasRope%&gt;&lt;/span&gt;
 &lt;span &lt;%=(window.story.state.vars.mine.qHasPatchkit&gt;0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Patchkit:&lt;%=window.story.state.vars.mine.qHasPatchkit%&gt;&lt;/span&gt;&lt;/br&gt;
@@ -4026,7 +4237,7 @@ Right now you are passed out and soon you will find yourself in some circumstanc
 function damageTerm(HP) { 
     let terms=[&quot;destroyed&quot;,&quot;ripped&quot;,&quot;fine&quot;,&quot;perfect&quot;];
     return(terms[(Math.floor(terms.length*HP/105))])};
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="40" name="AM_Lv2_Entry" tags="" position="1225,475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="44" name="AM_Lv2_Entry" tags="" position="475,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 You are at the entry of this underground lair. 
 Unfortunatly the door that is blocking the exit can only be opened with a keycard and a code.&lt;/br&gt;
@@ -4034,15 +4245,15 @@ Either someone is coming for your rescue or you have to find a way out of here b
 There is a control terminal next to the door. All lights are of except the &lt;tgl id=&#39;lamp&#39; value=&#39;blue&#39; onclick=&#39;var x=this.attributes[&quot;value&quot;].nodeValue;switch(x){case &quot;blue&quot;:x=&quot;red&quot;;break;default:x=&quot;blue&quot;}this.attributes[&quot;value&quot;].nodeValue=this.style.color=this.textContent=x;&#39;&gt;blue&lt;/tgl&gt; one.
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;AM_Lv2_E1&#39;,{},&#39;Go East&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="41" name="AM_Lv2_E1" tags="" position="100,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="45" name="AM_Lv2_E1" tags="" position="600,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_Entry]] [[Go East|AM_Lv2_F1]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="42" name="AM_Lv2_F1" tags="" position="225,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="46" name="AM_Lv2_F1" tags="" position="725,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_Entry]][[Go East|AM_Lv2_G1]]&lt;/br&gt;[[Go Down|AM_Lv2_F2]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="43" name="AM_Lv2_G1" tags="" position="350,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="47" name="AM_Lv2_G1" tags="" position="850,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qHasPatchkit===0){%&gt;
 There is a sewing kit lying around.&lt;/br&gt;
@@ -4056,12 +4267,12 @@ But against what pest would some one use such a tool here?&lt;/br&gt;
 &lt;%}%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_F1]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="44" name="AM_Lv2_F2" tags="" position="475,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="48" name="AM_Lv2_F2" tags="" position="975,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 Inside the Elevator....
 &lt;p&gt;[[Go Up|AM_Lv2_F1]]&lt;/br&gt;[[Go East|AM_Lv2_G2]]&lt;/br&gt;[[Go Down|AM_Lv2_F3]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="45" name="AM_Lv2_G2" tags="" position="600,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="49" name="AM_Lv2_G2" tags="" position="1100,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;
 &lt;%if(window.story.state.vars.mine.qFoeG2&gt;0){%&gt;
@@ -4075,7 +4286,7 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
 &lt;%}%&gt;
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="46" name="AM_Lv2_H2" tags="" position="725,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="50" name="AM_Lv2_H2" tags="" position="1225,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qDoorH2&gt;0){%&gt;
 &lt;p&gt;The heavy door is open now.&lt;/p&gt;
@@ -4096,7 +4307,7 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
     &lt;%}%&gt;
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="47" name="AM_Lv2_I2" tags="" position="850,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="51" name="AM_Lv2_I2" tags="" position="100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;You are now in a large room or hall filled with round tanks in different sizes, electric machinery and pipes. The larger tanks have glass windows but when you peek inside you dont see much due the bad lighting and the cloudy fluid inside. The windows on some tanks are broken. &lt;/p&gt;
 &lt;p&gt;Maybe its not a good idea to snoope around...&lt;/p&gt;
@@ -4135,7 +4346,7 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
 [[Go West|AM_Lv2_H2]]
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="48" name="AM_Lv2_E3" tags="" position="975,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="52" name="AM_Lv2_E3" tags="" position="225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qHasCrowbar===0){%&gt;
 There is a crowbar over there on a tool panel. That might be useful as a meele weapon or to break open things.&lt;/br&gt;
@@ -4144,14 +4355,14 @@ There is a crowbar over there on a tool panel. That might be useful as a meele w
 &lt;p&gt;[[Go East|AM_Lv2_F3]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="49" name="AM_Lv2_F3" tags="" position="1100,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="53" name="AM_Lv2_F3" tags="" position="350,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 Inside the Elevator....
 &lt;p&gt;
 [[Go Up|AM_Lv2_F2]]&lt;/br&gt;[[Go West|AM_Lv2_E3]][[Go East|AM_Lv2_G3]]&lt;/br&gt;[[Go Down|AM_Lv2_F4]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="50" name="AM_Lv2_G3" tags="" position="1225,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="54" name="AM_Lv2_G3" tags="" position="475,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;This room seems a lot safer then the others and might be a good choice for [[resting|AM_Lv2_Rest]] or [[fixing|AM_Lv2_Patch]] your gear.&lt;/p&gt;
 &lt;p&gt;Taking a breather regenerates some of your sanity, but also some of the critters might use the time to regrow.&lt;/p&gt;
@@ -4159,7 +4370,7 @@ Inside the Elevator....
 [[Go West|AM_Lv2_F3]][[Go East|AM_Lv2_H3]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="51" name="AM_Lv2_Rest" tags="_back_" position="100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="55" name="AM_Lv2_Rest" tags="_back_" position="600,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p&gt;TODO you rest for some time and regain some energy&lt;/p&gt;
 &lt;p&gt;
 [[Next|_back_]]
@@ -4169,7 +4380,7 @@ Inside the Elevator....
 &lt;script&gt;
 var s=window.story.state.vars.mine;
 s.qFoeG2=100,s.qFoeH3=100,s.qFoeI2=100;
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="52" name="AM_Lv2_Patch" tags="_back_" position="225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="56" name="AM_Lv2_Patch" tags="_back_" position="725,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p&gt;TODO You inspect your clothing for damages. Die vergangenen Ereignisse haben es etwas in Mitleidenschaft gezogen. Wenn das so weitergeht musst du in Fetzen herumlaufen und das wäre vielleicht keine gute Idee.&lt;/p&gt;
 &lt;p&gt;You could use a sewing kit to patch up your clothes:&lt;/p&gt;
 &lt;%if(window.story.state.vars.mine.qHasPatchkit&gt;=1){%&gt;
@@ -4198,7 +4409,7 @@ function fixCoverall() {
     s.qHasPatchkit=Math.max(0,s.qHasPatchkit-1);
     s.qCoverallHP=Math.min(100,s.qCoverallHP+40);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="53" name="AM_Lv2_H3_GrabCrank" tags="_nosave_ _back_" position="350,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="57" name="AM_Lv2_H3_GrabCrank" tags="_nosave_ _back_" position="850,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%if(window.story.state.vars.mine.qFoeH3&gt;0){%&gt;
     You sneak to the desk to grab the crank. Just as you are passing below the pod, it starts gurgling and twitching slightly.&lt;/br&gt; 
     &lt;/br&gt;&#39;Does it react to my movement or is this just a coincidence&#39; you think. A moment later it releases a spray of some fluid through pores scattered around it bulbous stalk.
@@ -4209,7 +4420,7 @@ function fixCoverall() {
     &lt;p&gt;[[Next|_back_]]&lt;/p&gt;
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="54" name="AM_Lv2_H3" tags="" position="475,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="58" name="AM_Lv2_H3" tags="" position="975,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qHasCrank===0){%&gt;
     A crank handle lies on a workbench. Maybe that could be used to operate a mechanism.&lt;/br&gt;
@@ -4222,12 +4433,12 @@ function fixCoverall() {
 &lt;%}%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_G3]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="55" name="AM_Lv2_F4" tags="" position="600,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="59" name="AM_Lv2_F4" tags="" position="1100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;[[Go Up|AM_Lv2_F3]]&lt;/br&gt;[[Go East|AM_Lv2_G4]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="56" name="AM_Lv2_G4" tags="" position="725,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="60" name="AM_Lv2_G4" tags="" position="1225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(true){%&gt;
 There is a sewing kit laying around. Needle and thread could be handy to patch up your clothes.
@@ -4236,7 +4447,7 @@ But that might only work as long as your clothes are not damaged to much.
 &lt;p&gt;[[Go West|AM_Lv2_F4]][[Go East|AM_Lv2_H4]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="57" name="AM_Lv2_H4" tags="" position="850,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="61" name="AM_Lv2_H4" tags="" position="100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 TODO Its just to dark to see anything. You need a source of light.
 &lt;/br&gt;[[Go West|AM_Lv2_G4]]
@@ -4250,7 +4461,7 @@ TODO Its just to dark to see anything. You need a source of light.
 &lt;%}else{%&gt;
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="58" name="AM_Lv2_H5" tags="" position="975,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="62" name="AM_Lv2_H5" tags="" position="225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qDoorH5!==-1){%&gt;
     You are now standing on some kind of platform in a hallway. There is a door further down but the way to it is flooded. You arent sure if it is water or something different.&lt;/br&gt;
@@ -4264,7 +4475,7 @@ TODO Its just to dark to see anything. You need a source of light.
 &lt;%}%&gt;
 [[Go Up|AM_Lv2_H4]]
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="59" name="AM_Lv2_H5_Valves" tags="_nosave_" position="1100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="63" name="AM_Lv2_H5_Valves" tags="_nosave_" position="350,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 There are several valves. If you set them correctly to 100%, the level of the liquid should decrease. But if you overdoe it, you get yourself drowned in it.
 On the valves is missing the labeling how much each contributes to total pressure. Seems you need to do this with trial and error.
 &lt;/br&gt;&lt;/br&gt;&lt;span&gt;Current flowrate: &lt;/span&gt;&lt;span id=&#39;flow&#39;&gt;&lt;/span&gt;&lt;/br&gt;&lt;div id=&#39;valves&#39;&gt;
@@ -4288,16 +4499,16 @@ var flow=0;
 for(var x=0;(window.story.state.vars.mine.qDoorH5!==-1)&amp;&amp;x&lt;=4;x++){
     document.querySelector([&#39;#ValveA&#39;,&#39;#ValveB&#39;,&#39;#ValveC&#39;,&#39;#ValveD&#39;,&#39;#ValveE&#39;][x]).addEventListener(&#39;click&#39;, function(me){window.gm.setValve(me,cbfail,cbsucess);});
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="60" name="AM_Lv2_H5_Valves_Pass" tags="" position="1225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="64" name="AM_Lv2_H5_Valves_Pass" tags="" position="475,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 A gurgling sound can be heard and the liqid starts moving. Finally most of it is removed and you might now be able to walk down the hallway without getting your feet wet. 
 &lt;p&gt;[[Next|AM_Lv2_H5]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="61" name="AM_Lv2_H5_Valves_Fail" tags="" position="100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="65" name="AM_Lv2_H5_Valves_Fail" tags="" position="600,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;span class=&quot;tPC&quot;&gt;&#39;Oh no&#39; &lt;/span&gt; you think as you hear a screeching sound and then a trembling noise. Shortly thereafter, the level begins to rise rapidly. Your attempt to reach the ladder is thwarted by a burst pipe. The gush from it pushes you away from the saving ladder.
 You drown down here in this abyss.&lt;/br&gt;&lt;/br&gt;
 TODO BAD END 
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="62" name="AM_Lv2_H5_OBSOLETE" tags="" position="225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="66" name="AM_Lv2_H5_OBSOLETE" tags="" position="725,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p class=&quot;tNPC1&quot;&gt;&quot;Contamination detected. Please remove all clothing before before start of decontamination process.&quot;&lt;/p&gt;
 You are surprised to hear someones voice down here  - maybe there are some survivors here.
@@ -4334,7 +4545,7 @@ So what now do you also place your undergarments inside the box?
 &lt;p class=&quot;tPC&quot;&gt;&#39;I just hope that this is not a mistake.&#39;&lt;/p&gt;
 You shiver at the tought to run around naked in this devasted area.
 
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="63" name="AM_Lv2_G2_Attack" tags="_back_" position="350,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="67" name="AM_Lv2_G2_Attack" tags="_back_" position="850,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%if(window.story.state.vars.mine.qHasSprayer===0){%&gt;
 You dont posses anything useful to use as weapon. And for sure you dont touch those slimy things!  
 &lt;%}else{%&gt;
@@ -4344,13 +4555,13 @@ You could give a try with the Sprayer. Maybe its content is useful against this 
 &lt;div&gt; [[Back|_back_]]
 &lt;/div&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="64" name="AM_Lv2_G2_Kill" tags="" position="475,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="68" name="AM_Lv2_G2_Kill" tags="" position="975,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 You give those wriggling worms a good shower from the sprayer. Their color changes quickly from dirty black to dark red and they are swelling too.  
 &lt;p class=&quot;tPC&quot;&gt;&#39;Is this more useful to grow those worms instead of killing them ?&#39;&lt;/p&gt;
 Just as you begin to worry that this was a mistake, the swelling worms just pop one after another until only a few of them are left.  
 &lt;a0 onclick=&#39;window.story.show(&quot;AM_Lv2_H2&quot;);&#39;&gt;Walk on&lt;/a&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="65" name="AM_Lv2_G2_Sneak" tags="" position="600,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="69" name="AM_Lv2_G2_Sneak" tags="" position="1100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p class=&quot;tPC&quot;&gt;&#39;I will just walk in the middle of the tunnel&#39;&lt;/p&gt;
 Reassuring yourself you carefully stride forward, being careful to stay away from the eels squirming at the walls.&lt;/br&gt;
 The tunnel is broad enough, you just hope that there are not more of them further down the dark alley.&lt;/br&gt;
@@ -4366,45 +4577,61 @@ The tunnel is broad enough, you just hope that there are not more of them furthe
     &lt;a0 onclick=&#39;window.story.show(&quot;AM_Lv2_H2&quot;);&#39;&gt;Walk on&lt;/a&gt;
 &lt;/div&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="66" name="AM_Attack" tags="_nosave_" position="725,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="70" name="AM_Attack" tags="_nosave_" position="1225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%=window.story.state.tmp.args[4](window.story.state.tmp.args[3])%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="67" name="LT_Start" tags="" position="700,425" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="71" name="AM_Lv3_MAP" tags="_back_" position="100,975" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;script&gt; window.gm.printMap(&quot;AM_Lv3&quot;,window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="72" name="LT_Start" tags="" position="700,425" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-Waking up in stasis chamber.
+Waking up standing in some tube made of semi-transparent glass.
 Where are you and where is everyone else?
+
+Eine unverständliche Computerstimme sagt etwas and the tube starts filling slowly with some kind of liquid. You arent going to drown here?
+Be patient |
+Du versuchst ruhigen Kopf zu bewahren und schaust dich um. The tube hat keine Naht aber einen Boden und Deckel aus anderem Material.
+Einige Knopfartige Dinge sind im oberen Deckel erkennbar.
+[[TubePuzzle]] 
+
+ call for help |
+&quot;Help please! Is there someone please help !&quot; using your fist to hammer against the confinement.
+But the glass is though obviously.
+Panic. BadEnd: You drown.
+
 
 There is a control terminal next to the door. All lights are of except the &lt;tgl id=&#39;lamp&#39; value=&#39;blue&#39; onclick=&#39;var x=this.attributes[&quot;value&quot;].nodeValue;switch(x){case &quot;blue&quot;:x=&quot;red&quot;;break;default:x=&quot;blue&quot;}this.attributes[&quot;value&quot;].nodeValue=this.style.color=this.textContent=x;&#39;&gt;blue&lt;/tgl&gt; one.
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go East&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="68" name="LT_HibRoom" tags="" position="700,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="73" name="LT_HibRoom" tags="" position="700,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 Exit cryopod.
 wearing fullbody coverall.
+&lt;div id=&#39;select10&#39; &lt;%=((s.vars.qBabble&lt;=0)?&quot;&quot;:&quot;hidden&quot;)%&gt;&gt;
+&lt;a0 onclick=&#39;window.story.state.vars.qBabble=1;window.gm.printTalkLink($(&quot;div#select10&quot;)[0],&quot;div#choicea&quot;);&#39;&gt;pick up datapad&lt;/a&gt;
+&lt;/div&gt;&lt;div id=&#39;choicea&#39; hidden&gt;Aquired a datapad that speaks.
+&lt;/div&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor&#39;,{},&#39;Go East&#39;)%&gt;&lt;/p&gt;
-&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="69" name="LT_Corridor" tags="" position="1100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv3_MAP&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="74" name="LT_Corridor" tags="" position="475,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 Firedoor to S is closed.
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Navigation&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go W&#39;)%&gt;&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Medic&#39;,{},&#39;Go E&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go W&#39;)%&gt;   &lt;%=window.gm.printGoto(&#39;LT_Medic&#39;,{},&#39;Go E&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor2&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
-&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="70" name="LT_Corridor2" tags="" position="1225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv3_MAP&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="75" name="LT_Corridor2" tags="" position="600,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go W&#39;)%&gt;&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Crewdeck&#39;,{},&#39;Down&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go W&#39;)%&gt;   &lt;%=window.gm.printGoto(&#39;LT_Crewdeck&#39;,{},&#39;Down&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Workshop&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="71" name="LT_Navigation" tags="" position="100,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="76" name="LT_Navigation" tags="" position="725,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 Navigation or cockpit of the ship.
@@ -4413,20 +4640,20 @@ Unlock firedoor.
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="72" name="LT_Medic" tags="" position="225,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="77" name="LT_Medic" tags="" position="850,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="73" name="LT_Workshop" tags="" position="350,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="78" name="LT_Workshop" tags="" position="975,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 The reactor and Antrieb is further down at the other end of ship. Can only be reached from outside.
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor2&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="74" name="LT_Crewdeck" tags="" position="475,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="79" name="LT_Crewdeck" tags="" position="1100,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 Mensa
@@ -4434,7 +4661,7 @@ Mensa
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor2&#39;,{},&#39;Upstairs&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor3&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="75" name="LT_Corridor3" tags="" position="600,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="80" name="LT_Corridor3" tags="" position="1225,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Crewdeck&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
@@ -4442,7 +4669,7 @@ Mensa
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Kitchen&#39;,{},&#39;Go W&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor4&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="76" name="LT_Corridor4" tags="" position="725,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="81" name="LT_Corridor4" tags="" position="100,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor3&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
@@ -4450,7 +4677,7 @@ Mensa
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Shower&#39;,{},&#39;Go W&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor5&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="77" name="LT_Corridor5" tags="" position="850,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="82" name="LT_Corridor5" tags="" position="225,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor4&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
@@ -4458,24 +4685,51 @@ Mensa
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Storage&#39;,{},&#39;Go W&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Airlock&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="78" name="LT_Armory" tags="" position="975,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="83" name="LT_Armory" tags="" position="350,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor5&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="79" name="LT_Storage" tags="" position="1100,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="84" name="LT_Storage" tags="" position="475,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor5&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="80" name="LT_Airlock" tags="" position="1225,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="85" name="LT_Airlock" tags="" position="600,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor5&#39;,{},&#39;Corridor&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_AirlockExtern&#39;,{},&#39;Leave ship&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="81" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="86" name="LT_AirlockExtern" tags="" position="725,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+
+Stepping out onto foreign object. Artifical, possibly metal.
+Shuttle is anchored to hull with some grippers.
+Some light up ahead on walkway.
+
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Airlock&#39;,{},&#39;Back to shuttle&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Hull1&#39;,{},&#39;Go E&#39;)%&gt;&lt;/p&gt;
+&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="87" name="LT_Hull1" tags="" position="850,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+
+Found flashlight.
+There is a open hatch. Possibly airlock to hull?
+
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_AirlockExtern&#39;,{},&#39;Back to shuttle&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Airlock2&#39;,{},&#39;Use Cavity&#39;)%&gt;&lt;/p&gt;
+&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="88" name="LT_Airlock2" tags="" position="975,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+
+Now Inside Hull.
+
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Hull1&#39;,{},&#39;Leave&#39;)%&gt;&lt;/p&gt;
+&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="89" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 That didnt work out as expected. &lt;/br&gt;
@@ -4502,7 +4756,7 @@ function downgrade_option(elmnt) {
 function downgrade_option2(elmnt) {
     window.gm.onSelect(elmnt,&quot;div#choice table tbody tr td img&quot;,&quot;div#choice table tbody tr td span&quot;);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="82" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="90" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 You selected the icon and flickers up while the others vanish. &lt;/br&gt;
@@ -4513,22 +4767,22 @@ Thankfully you straighten up and timidly glance back at it. &lt;/br&gt;
 Making some steps backward the robot gives you some room but seems still to stare at you.&lt;/br&gt;
 
 [[Better go with them|Home]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="83" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="91" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;lisa_anal_vortex&quot;&gt;Swirling vortex, a black hole that sucks everthing in. Or portal that sends you home?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="84" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="92" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&#39;lisa_armbinder&#39;&gt;That could be a person. Not sure what that V-shape means. Some kind of outfit?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="85" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="93" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_plus&quot; &gt;Symbol for male, thats easy. But what does it stand for and whats the meaning of the cross?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="86" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="94" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_X&quot; &gt;That symbol you saw already. The cross looks different this time.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="87" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="95" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_tongue&quot; &gt;A tongue maybe? Or something ompletely different.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="88" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="96" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_mouth&quot; &gt;Are those lips? A mouth that speaks. I think I get insane if I dont meet someone to speak with soon.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="89" name="Start" tags="" position="200,400" size="100,100">Select a Link:
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="97" name="Start" tags="" position="200,400" size="100,100">Select a Link:
 &lt;ul&gt;
     &lt;li&gt;[[StartPage]]&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="90" name="GenericPassage" tags="_nosave_" position="1225,1100" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="98" name="GenericPassage" tags="_nosave_" position="975,1225" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
 &lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;div id=&#39;panel&#39;&gt;&lt;/div&gt;&lt;!--description is rendered here--&gt;
 &lt;div id=&#39;choice&#39;&gt;&lt;/div&gt; &lt;!--choice is rendered here--&gt;

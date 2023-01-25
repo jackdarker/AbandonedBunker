@@ -4,7 +4,7 @@
 <hr>
 <div><%=window.gm.util.printLocationName(window.gm.player.location)%></br>
 <hr></div>
-<%=window.gm.util.bargraph(window.story.state.vars.mine.qSanity,100,"red","Sanity: ")%>  
+<%=window.gm.util.bargraph(window.story.state.vars.qSanity,100,"red","Sanity: ")%>  
 <form>
 <button type="button" id="dashboard">More</button>
 <hr>

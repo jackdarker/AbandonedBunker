@@ -16,10 +16,10 @@ window.gm.printDo=function(doThat,cost,alias){
       ((_cost.will!==0)?' '+_cost.will+'W':'') + (_cost.difficult?(' <b>'+_cost.difficult+'</b>'):'');
     if(k!=='')k=" ("+k+")";
     msg=window.gm.printLink((alias===''?location:alias)+k,
-    "(function(){let v=window.story.state.vars.mine;if(!(("+_cost.energy+"<0 && v.qBattery<"+(-1*_cost.energy)+")||("+_cost.will+"<0 && v.qSanity<"+(-1*_cost.will)+"))){"+
+    "(function(){let v=window.story.state.vars;if(!(("+_cost.energy+"<0 && v.qBattery<"+(-1*_cost.energy)+")||("+_cost.will+"<0 && v.qSanity<"+(-1*_cost.will)+"))){"+
     "v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+
     "}else{alert(\"Cant do it!\")}}())",
-    {class:(!((_cost.energy<0 && window.story.state.vars.mine.qBattery<(-1*_cost.energy))||(_cost.will<0 && window.story.state.vars.mine.qSanity<(-1*_cost.will))))?"":"done"}); //TODO replace alert with ??
+    {class:(!((_cost.energy<0 && window.story.state.vars.qBattery<(-1*_cost.energy))||(_cost.will<0 && window.story.state.vars.qSanity<(-1*_cost.will))))?"":"done"}); //TODO replace alert with ??
     return(msg);
 };
 class Player { //fake class
@@ -45,51 +45,12 @@ class Player { //fake class
       s._gm.dbgShowCombatRoll= true,
       s._gm.dbgShowQuestInfo= true;
       s._gm.dbgShowMoreInfo=true;
-      if (!s.vars||forceReset) { // storage of variables that doesnt fit player
-          s.vars = {
-          activePlayer : 'Lisa', //id of the character that the player controls currently
-          }; 
-          s.vars.mine= {
-            mapReveal:0,
-            visited:[],
-            qFoundPlantPod:0,
-            qHasSprayer:0,
-            qSprayerCharge:0,
-            qHasCrowbar:0,
-            qHasCrank:0,
-            qHasExtinguisher:0,
-            qHasLighter:0,
-            qHasPatchkit:0,
-            qHasRope:0,
-            qSanity:100,
-            qCoverallHP:100,
-            qBattery:100,
-            qLingeryHP:100,
-            qDoorH2:0,
-            qDoorF2:0,
-            qDoorH5:0,
-            qFoeG2:100,//Worms
-            qFoeI2:100,//Tentacle
-            qFoeH3:100,//Pod
-            qFoeH4:100 //Boss
-            };
-      }
       if(!s.player || forceReset) {
         s.player=window.gm.player=new Player();
       }
-      if (!window.gm.achievements||forceReset) {  //outside of window.story !
-        window.gm.achievements= {
-          moleKillerGoldMedal: false //add your flags here
-        }
-        window.storage.loadAchivementsFromBrowser();
-      }
       window.gm.initGameFlags(forceReset,NGP);
-      //take over flags for newgameplus
-      if(NGP) { //window.story.state.vars.crowBarLeft = NGP.crowBarLeft; 
-      }
-      NGP=null; //release memory
   }
-//stuff for ForbiddenIsle
+//stuff for AB
 window.gm.initGameFlags = function(forceReset,NGP=null) {
     let s= window.story.state;
     function dataPrototype(){return({visitedTiles:[],mapReveal:[],tmp:{},version:0});}
@@ -106,6 +67,11 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
     if (!s.vars||forceReset) { // storage of variables that doesnt fit player
         s.vars = {
         activePlayer : 'Lisa', //id of the character that the player controls currently
+        qSanity:100,
+        qCoverallHP:100,
+        qLingeryHP:100,
+        qBattery:50,
+        qBabble:0
         }; 
         s.vars.mine= {
           mapReveal:0,
@@ -119,9 +85,6 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
           qHasLighter:0,
           qHasPatchkit:0,
           qHasRope:0,
-          qSanity:100,
-          qCoverallHP:100,
-          qLingeryHP:100,
           qDoorH2:0,
           qDoorF2:0,
           qDoorH5:0,
@@ -155,6 +118,13 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
     s.NGP=window.gm.util.mergePlainObject(NGP,s.NGP);
     s.DngSY=window.gm.util.mergePlainObject(DngSY,s.DngSY);
     //todo cleanout obsolete data ( filtering those not defined in template) 
+}
+window.gm.printBodyDescription = function() {
+    let msg="",v=window.story.state.vars;
+    msg = "You have short brwon hair.</br>";
+    if(v.qBabble===1){ msg+= "A datapad is in your possession."; }
+    if(v.qBabble===2){msg+= "The babble companion is talking by an in-ear speaker to you.";}
+    return msg+"</br>"
 }
 window.gm.resetAchievements = function() { //declare achievements here
     window.gm.achievements={
@@ -290,7 +260,7 @@ window.gm.setValve=function(evt,cbfail,cbsucess) {
     window.gm.printCombatSceneNext(msg);
   }
   window.gm.printMinePodDamage=function() { //pod blast or spray attack
-    let msg='',s=window.story.state.vars.mine;
+    let msg='',s=window.story.state.vars;
     if(s.qCoverallHP>0) {
         s.qCoverallHP=Math.max(0,s.qCoverallHP-10);
         msg += 'You got hit too and whatever was inside the pod, is now eating away your cloths!</br><statdown>clothing damage</statdown></br>';
@@ -302,7 +272,7 @@ window.gm.setValve=function(evt,cbfail,cbsucess) {
     return(msg);
   }
   window.gm.printMineTentacleCombatMenu=function(FoeId){
-    let msg ='',s=window.story.state.vars.mine;
+    let msg ='',s=window.story.state.vars;
     window.story.state.tmp.args[1] = window.story.state.tmp.args[1]||{bound:0, enraged:0}; //buffers data between calls
     if(s[FoeId]<=0) {
         let tmp = window.story.state.tmp.args[2];
