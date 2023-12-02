@@ -1,12 +1,7 @@
-:: AM_Lv3_MAP [_back_]
-<hr><p>Map:</p><div id='canvas'></div></br>
-<script> window.gm.printMap("AM_Lv3",window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
-</script>
 
-
-:: LT_Start {"position":"700,425"}
+:: LT_Start {"position":"700,425"} 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
+<%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc="Medical Bay";%>
 Waking up standing in some tube made of semi-transparent glass.
 Where are you and where is everyone else?
 
@@ -29,7 +24,7 @@ There is a control terminal next to the door. All lights are of except the <tgl 
 
 :: LT_HibRoom {"position":"700,600"}
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
+<%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc="Medical Bay";%>
 
 Exit cryopod.
 wearing fullbody coverall.
@@ -39,20 +34,18 @@ wearing fullbody coverall.
 </div>
 
 <p><%=window.gm.printGoto('LT_Corridor',{},'Go East')%></p>
-<%=window.story.render("Inv_Hud")%><%=window.story.render("AM_Lv3_MAP")%>
 </article><article id="LogPanel"></article></section>
 
 
 :: LT_Corridor 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
+<%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc="Corridor West";%>
 
 Firedoor to S is closed.
 
 <p><%=window.gm.printGoto('LT_Navigation',{},'Go N')%></p>
 <p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%>   <%=window.gm.printGoto('LT_Medic',{},'Go E')%></p>
 <p><%=window.gm.printGoto('LT_Corridor2',{},'Go S')%></p>
-<%=window.story.render("Inv_Hud")%><%=window.story.render("AM_Lv3_MAP")%>
 </article><article id="LogPanel"></article></section>
 
 :: LT_Corridor2

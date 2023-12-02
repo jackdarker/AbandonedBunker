@@ -35,7 +35,7 @@ var SVG=function(){"use strict";const t={},e=[];function n(e,i){if(Array.isArray
 <link rel="stylesheet" href="./css/default.css" type="text/css" media="screen, projection">
 <link rel="stylesheet" href="./css/light.css" type="text/css" media="screen, projection">
 <link rel="alternate stylesheet" href="./css/dark.css" title='dark' type="text/css" media="screen, projection" disabled="">
-<script src="imagesMaps.js"></script><script src="imagesBattlers.js"></script><script src="imagesEquip.js"></script><script src="imagesIcons.js"></script>
+<script src="imagesMaps.js"></script><script src="imagesBattlers.js"></script><script src="imagesEquip.js"></script><script src="imagesIcons.js"></script><script src="imagesScenes.js"></script>
 </head>
 	<body>
 		<tw-story tags></tw-story>
@@ -2329,7 +2329,7 @@ window.gm.Encounter.onMoveSelect=function(){var s=window.story.state;var result=
     window.gm.Encounter.onVictory = function(){
         return('you dominated him.</br>'+ window.gm.printPassageLink('Next','RuffVictory'));
     }*/if(!_params.noStart)window.gm.Encounter.initCombat();};"use strict";window.gm.dbgHelper=function(){window.gm.getSaveVersion();};/* bundles some utility operations*/window.gm.getSaveVersion=function(){return[0,0,1,0];};// reimplement to setup the game
-var _origInitGame=window.gm.initGame;window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);window.gm.images=imagesScene(window.gm.images);//if svg have no size set, they use whole space, use this to force them to fit into a box
+var _origInitGame=window.gm.initGame;window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);window.gm.images=imagesScenes(window.gm.images);//if svg have no size set, they use whole space, use this to force them to fit into a box
 window.gm.images._sizeTo=function(_pic,width,height){var node=SVG(_pic);node.width(width),node.height(height);return node.node.outerHTML;};var s=window.story.state;s._gm.timeRL=s._gm.timeVR=s._gm.time;s._gm.dayRL=s._gm.dayVR=s._gm.day;s._gm.debug=1,//   <==    TODO set debug to 0 for distribution or 1 for debug!
 s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.vars||forceReset){var _s$vars;// storage of variables that doesnt fit player
 s.vars=(_s$vars={inVR:false,spawnAt:'ForestRespawnPodExit',playerPartyVR:[],//names of chars
@@ -2543,7 +2543,7 @@ _cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energ
 return msg;};var Player=//fake class
 function Player(){_classCallCheck(this,Player);this.location='';};/* bundles some utility operations*/window.gm.getSaveVersion=function(){return[0,1,0];};// reimplement to setup the game
 //_origInitGame = window.gm.initGame;
-window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);var s=window.story.state;s._gm.timeRL=s._gm.timeVR=s._gm.time;s._gm.dayRL=s._gm.dayVR=s._gm.day;//TODO set debug to 0 for distribution !
+window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);var s=window.story.state;window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);window.gm.images=imagesScenes(window.gm.images);s._gm.timeRL=s._gm.timeVR=s._gm.time;s._gm.dayRL=s._gm.dayVR=s._gm.day;//TODO set debug to 0 for distribution !
 s._gm.debug=1,s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.player||forceReset){s.player=window.gm.player=new Player();}window.gm.initGameFlags(forceReset,NGP);};//stuff for AB
 window.gm.initGameFlags=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;var s=window.story.state;function dataPrototype(){return{visitedTiles:[],mapReveal:[],tmp:{},version:0};}if(forceReset){s.NGP=s.Settings=s.DngSY=null;s.Lab=s.Known=null;}var Settings={autoSave:true,showCombatPictures:true,showNSFWPictures:true,showDungeonMap:true};if(!s.vars||forceReset){// storage of variables that doesnt fit player
 s.vars={activePlayer:'Lisa',//id of the character that the player controls currently
@@ -2560,7 +2560,7 @@ NGP={token:0,tokenUsed:0};}else{//grant NGP-options; window.gm.player is not val
 }if(!window.gm.achievements){//||forceReset) { 
 window.gm.resetAchievements();}window.storage.loadAchivementsFromBrowser();//see comment in rebuildFromSave why this is done
 s.Settings=window.gm.util.mergePlainObject(Settings,s.Settings);s.NGP=window.gm.util.mergePlainObject(NGP,s.NGP);s.DngSY=window.gm.util.mergePlainObject(DngSY,s.DngSY);//todo cleanout obsolete data ( filtering those not defined in template) 
-};window.gm.printBodyDescription=function(){var msg="";msg="You have short brwon hair.</br>";switch(window.story.state.vars.qBabble){case 1:msg+="A datapad is in your possession.";break;case 2:msg+="The babble companion is talking by an in-ear speaker to you.";default:}return msg+"</br>";};window.gm.resetAchievements=function(){//declare achievements here
+};window.gm.printBodyDescription=function(){var msg="",v=window.story.state.vars;msg="You have short brwon hair.</br>";if(v.qBabble===1){msg+="A datapad is in your possession.";}if(v.qBabble===2){msg+="The babble companion is talking by an in-ear speaker to you.";}return msg+"</br>";};window.gm.resetAchievements=function(){//declare achievements here
 window.gm.achievements={looseEnd:0//
 ,swamToFar:0,starveBreakfast:0,survive7days:0,insaneTFHuman:0};window.gm.achievementsInfo={//this is kept separate to not bloat savegame
 //hidden bitmask: 0= all visisble, 1= Name ???, 2= Todo ???
@@ -3810,30 +3810,25 @@ function init(){
     resetAll();
 }
 init();
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="11" name="sidebar" tags="" position="375,500" size="100,100">&lt;h3&gt;&lt;%=window.story.name%&gt; V&lt;%=window.gm.getSaveVersion().toString().replaceAll(&quot;,&quot;,&quot;.&quot;)%&gt;&lt;/h3&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="11" name="sidebar" tags="" position="100,225" size="100,100">&lt;h3&gt;&lt;%=window.story.name%&gt; V&lt;%=window.gm.getSaveVersion().toString().replaceAll(&quot;,&quot;,&quot;.&quot;)%&gt;&lt;/h3&gt;
 &lt;img src=&#39;&lt;%=window.gm.getSidebarPic()%&gt;&#39; width=&quot;256&quot; height=&quot;256&quot;&gt;
+&lt;div&gt;&lt;%=window.story.state.vars.qLoc%&gt;&lt;/br&gt;&lt;%=window.gm.getTimeString()%&gt;&lt;/br&gt;&lt;%=window.gm.getDateString()%&gt;&lt;/br&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;div&gt;&lt;%=window.gm.player.name%&gt;&lt;/br&gt;
+&lt;%=window.gm.util.bargraph(window.story.state.vars.qSanity,100,&quot;red&quot;,&quot;Sanity: &quot;)%&gt; 
+&lt;div&gt;&lt;/div&gt;
 &lt;hr&gt;
-&lt;div&gt;&lt;%=window.gm.util.printLocationName(window.gm.player.location)%&gt;&lt;/br&gt;
-&lt;hr&gt;&lt;/div&gt;
-&lt;%=window.gm.util.bargraph(window.story.state.vars.qSanity,100,&quot;red&quot;,&quot;Sanity: &quot;)%&gt;  
 &lt;form&gt;
-&lt;button type=&quot;button&quot; id=&quot;dashboard&quot;&gt;More&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;LinkS&quot; onclick=&#39;window.story.show(&quot;InspectPlayer&quot;);&#39;&gt;Status&lt;sup&gt;[s]&lt;/sup&gt;&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;LinkI&quot; onclick=&#39;window.story.show(&quot;Inventory&quot;);&#39;&gt;Inventory&lt;sup&gt;[i]&lt;/sup&gt;&lt;/button&gt;
 &lt;hr&gt;
-&lt;button type=&quot;button&quot; id=&quot;save&quot; style=&quot;width: 80%&quot;&gt;Save/load&lt;/button&gt;
-&lt;button type=&quot;button&quot; id=&quot;help&quot; style=&quot;width: 80%&quot;&gt;Help&lt;/button&gt;
-&lt;button type=&quot;button&quot; id=&quot;settings&quot; style=&quot;width: 80%&quot;&gt;Settings&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;save&quot; onclick=&#39;window.gm.toggleDialog(&quot;#dialog_save&quot;);&#39; style=&quot;width: 80%&quot;&gt;Save/load&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;help&quot; onclick=&#39;window.story.show(&quot;Help_Index&quot;);&#39; style=&quot;width: 80%&quot;&gt;Help&lt;/button&gt;
+&lt;button type=&quot;button&quot; id=&quot;settings&quot; onclick=&#39;window.story.show(&quot;Settings&quot;);&#39; style=&quot;width: 80%&quot;&gt;Settings&lt;/button&gt;
 &lt;button type=&quot;button&quot; id=&quot;achievements&quot; onclick=&#39;window.story.show(&quot;Achievements&quot;);&#39; style=&quot;width: 80%&quot;&gt;Achievements&lt;/button&gt;
 &lt;%if(s._gm.debug&amp; 0x1&gt;0){%&gt;
-&lt;button type=&quot;button&quot; id=&quot;debug&quot; style=&quot;width: 80%&quot;&gt;Debug&lt;/button&gt;
-&lt;script&gt;document.querySelector(&#39;#debug&#39;).addEventListener(&#39;click&#39;, function(){window.story.show(&#39;debug&#39;);});&lt;/script&gt;
+&lt;button type=&quot;button&quot; id=&quot;LinkD&quot; onclick=&#39;window.story.show(&quot;debug&quot;);&#39; style=&quot;width: 80%&quot;&gt;Debug&lt;sup&gt;[d]&lt;/sup&gt;&lt;/button&gt;
 &lt;%}%&gt;
-&lt;/form&gt;
-&lt;script&gt;
-document.querySelector(&#39;#dashboard&#39;).addEventListener(&#39;click&#39;, function(){window.story.show(&#39;Player_Dashboard&#39;);});
-document.querySelector(&#39;#save&#39;).addEventListener(&#39;click&#39;, function(){window.gm.toggleDialog(&#39;#dialog_save&#39;);});
-document.querySelector(&#39;#help&#39;).addEventListener(&#39;click&#39;, function(){window.story.show(&#39;Help_Index&#39;);}); 
-document.querySelector(&#39;#settings&#39;).addEventListener(&#39;click&#39;, function(){window.story.show(&#39;Settings&#39;);}); 
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="12" name="CenterDialogs" tags="" position="225,225" size="100,100">&lt;!--called to include important dialogs; mainly the save-Dialog because of special behaviour--&gt;
+&lt;/form&gt;</tw-passagedata><tw-passagedata pid="12" name="CenterDialogs" tags="" position="225,225" size="100,100">&lt;!--called to include important dialogs; mainly the save-Dialog because of special behaviour--&gt;
 &lt;%=window.story.render(&quot;SaveDialog&quot;) %&gt;</tw-passagedata><tw-passagedata pid="13" name="LogPanel" tags="" position="350,225" size="100,100">&lt;!--&lt;button type=&quot;button&quot; id=&quot;toggleview&quot; onclick=toggleview()&gt;&lt;i class=&quot;fa fa-compress&quot;&gt;&lt;/i&gt;&lt;/button&gt;
 &lt;button type=&quot;button&quot; id=&quot;clearview&quot; onclick=clearview()&gt;&lt;i class=&quot;fa fa-trash-alt&quot;&gt;&lt;/i&gt;&lt;/button&gt;--&gt;
 &lt;div&gt;&lt;a0 onclick=toggleview()&gt;toggle view&lt;/a&gt;&lt;a0 onclick=clearview()&gt;clear log&lt;/a&gt;&lt;/div&gt;
@@ -3914,18 +3909,7 @@ function readFile(input) {
 }
 &lt;/script&gt;</tw-passagedata><tw-passagedata pid="15" name="Inventory" tags="_back_ _nodeffered_" position="600,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
-&lt;%=window.gm.player.name%&gt; inventory: &lt;/br&gt;&lt;/br&gt;
-&lt;%
-var x = 0, id=&#39;&#39;; 
-var inv = window.gm.player.Inv;
-var maxSlots = inv.count(); 
-for(var i=0;i&lt;maxSlots;i++){
-  id=inv.getItemId(i);
-  %&gt;&lt;%=window.gm.printItem(id,inv.countItem(id).toString()+&#39;x &#39;+inv.getItem(id).desc+&#39; &#39;
-    //+inv.getItem(id).usable(inv).msg
-    ,window.gm.player)%&gt;&lt;%
-} 
-%&gt;
+&lt;%=window.story.render(&quot;Inv_Hud&quot;) %&gt;
 &lt;div id=&#39;output&#39;&gt;&lt;/div&gt;&lt;/br&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="16" name="Relations" tags="_back_ _nodeffered_" position="725,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
@@ -4086,7 +4070,6 @@ If this is a subpanel you can use back-tag and _back_-Link
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="31" name="debug" tags="_back_" position="400,0" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 Some things for debugging:&lt;/br&gt;
-qHomeInspect=0x&lt;%=s.vars.qHomeInspect.toString(16)%&gt;&lt;/br&gt;
 [[Cheats|debug_cheat]]&lt;/br&gt;
 [[Back|_back_]]&lt;/br&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="32" name="debug_cheat" tags="_back_" position="500,0" size="100,100">&lt;section&gt; 
@@ -4219,7 +4202,12 @@ Right now you are passed out and soon you will find yourself in some circumstanc
 &lt;/article&gt;</tw-passagedata><tw-passagedata pid="41" name="Laptop-PS" tags="" position="1200,600" size="100,100">A powersupply for a laptop.
 [[Back|&lt;%=window.gm.player.location%&gt;]]</tw-passagedata><tw-passagedata pid="42" name="AM_Lv2_MAP" tags="_back_" position="225,600" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
 &lt;script&gt; window.gm.printMap(&quot;AM_Lv2&quot;,window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="43" name="Inv_Hud" tags="" position="350,600" size="100,100">&lt;hr&gt;&lt;%if(window.story.state.vars.mine){%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="43" name="InspectPlayer" tags="_back_ _nodeffered_" position="350,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+[[Back|_back_]]&lt;/br&gt;
+TODO: what are you wearing, are you restrained, are you feeling healthy
+
+&lt;div id=&#39;output&#39;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="44" name="Inv_Hud" tags="" position="475,600" size="100,100">&lt;hr&gt;&lt;%if(window.story.state.vars.mine){%&gt;
 &lt;p&gt;Inventory:&lt;/p&gt;
 &lt;span &gt;Sanity:&lt;%=window.story.state.vars.qSanity%&gt;%&lt;/span&gt;
 &lt;span &lt;%=(window.story.state.vars.qCoverallHP&gt;0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Coverall:&lt;%=window.story.state.vars.qCoverallHP%&gt;%&lt;/span&gt;&lt;/br&gt;
@@ -4237,7 +4225,7 @@ Right now you are passed out and soon you will find yourself in some circumstanc
 function damageTerm(HP) { 
     let terms=[&quot;destroyed&quot;,&quot;ripped&quot;,&quot;fine&quot;,&quot;perfect&quot;];
     return(terms[(Math.floor(terms.length*HP/105))])};
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="44" name="AM_Lv2_Entry" tags="" position="475,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="45" name="AM_Lv2_Entry" tags="" position="600,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 You are at the entry of this underground lair. 
 Unfortunatly the door that is blocking the exit can only be opened with a keycard and a code.&lt;/br&gt;
@@ -4245,15 +4233,15 @@ Either someone is coming for your rescue or you have to find a way out of here b
 There is a control terminal next to the door. All lights are of except the &lt;tgl id=&#39;lamp&#39; value=&#39;blue&#39; onclick=&#39;var x=this.attributes[&quot;value&quot;].nodeValue;switch(x){case &quot;blue&quot;:x=&quot;red&quot;;break;default:x=&quot;blue&quot;}this.attributes[&quot;value&quot;].nodeValue=this.style.color=this.textContent=x;&#39;&gt;blue&lt;/tgl&gt; one.
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;AM_Lv2_E1&#39;,{},&#39;Go East&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="45" name="AM_Lv2_E1" tags="" position="600,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="46" name="AM_Lv2_E1" tags="" position="725,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_Entry]] [[Go East|AM_Lv2_F1]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="46" name="AM_Lv2_F1" tags="" position="725,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="47" name="AM_Lv2_F1" tags="" position="850,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_Entry]][[Go East|AM_Lv2_G1]]&lt;/br&gt;[[Go Down|AM_Lv2_F2]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="47" name="AM_Lv2_G1" tags="" position="850,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="48" name="AM_Lv2_G1" tags="" position="975,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qHasPatchkit===0){%&gt;
 There is a sewing kit lying around.&lt;/br&gt;
@@ -4267,12 +4255,12 @@ But against what pest would some one use such a tool here?&lt;/br&gt;
 &lt;%}%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_F1]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="48" name="AM_Lv2_F2" tags="" position="975,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="49" name="AM_Lv2_F2" tags="" position="1100,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 Inside the Elevator....
 &lt;p&gt;[[Go Up|AM_Lv2_F1]]&lt;/br&gt;[[Go East|AM_Lv2_G2]]&lt;/br&gt;[[Go Down|AM_Lv2_F3]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="49" name="AM_Lv2_G2" tags="" position="1100,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="50" name="AM_Lv2_G2" tags="" position="1225,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;
 &lt;%if(window.story.state.vars.mine.qFoeG2&gt;0){%&gt;
@@ -4286,7 +4274,7 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
 &lt;%}%&gt;
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="50" name="AM_Lv2_H2" tags="" position="1225,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="51" name="AM_Lv2_H2" tags="" position="100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qDoorH2&gt;0){%&gt;
 &lt;p&gt;The heavy door is open now.&lt;/p&gt;
@@ -4296,7 +4284,7 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
     &lt;%if(window.story.state.vars.mine.qHasCrank&gt;0){%&gt;
     &lt;p&gt;The crank you carry with you might fit to the coupling.&lt;/p&gt;
     &lt;div id=&#39;select1&#39; &gt;
-    &lt;a0 onclick=&#39;window.story.state.vars.mine.qDoorH2=1;window.gm.printTalkLink($(&quot;div#select1&quot;)[0],&quot;div#choice1a&quot;)&#39;&gt;use the crank&lt;/a&gt;
+    &lt;a0 onclick=&#39;window.story.state.vars.mine.qDoorH2=1;window.gm.printTalkLink(&quot;div#select1&quot;,&quot;div#choice1a&quot;)&#39;&gt;use the crank&lt;/a&gt;
     [[Go West|AM_Lv2_G2]]
     &lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
     You place the crank in the coupling and start moving it around. It takes a lot of cranks to move the door slowly to the side.  
@@ -4307,22 +4295,22 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
     &lt;%}%&gt;
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="51" name="AM_Lv2_I2" tags="" position="100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="52" name="AM_Lv2_I2" tags="" position="225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;You are now in a large room or hall filled with round tanks in different sizes, electric machinery and pipes. The larger tanks have glass windows but when you peek inside you dont see much due the bad lighting and the cloudy fluid inside. The windows on some tanks are broken. &lt;/p&gt;
 &lt;p&gt;Maybe its not a good idea to snoope around...&lt;/p&gt;
 &lt;%if(window.story.state.vars.mine.qFoeI2&gt;0){%&gt;
     &lt;div id=&#39;select1&#39;&gt;
     [[Go West|AM_Lv2_H2]]
-    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#select1&quot;)[0],&quot;div#choice1a&quot;)&#39;&gt;Peek in one of the tanks with the broken window.&lt;/a&gt;
+    &lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#select1&quot;,&quot;div#choice1a&quot;)&#39;&gt;Peek in one of the tanks with the broken window.&lt;/a&gt;
     &lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
     &lt;/br&gt;Checking on one of the steel tanks you peek inside, beeing careful to not touch anything of the sticky fluid beeing smeared about its surface.&lt;/br&gt;
     A wild jumble of thick, rubbery tubes is inside it and you wonder if this was some kind of chemical reactor. &lt;/br&gt;
     You move around the tank to check if there is some label or plate with more information about its content. &lt;/br&gt;&lt;/br&gt;
     Just as you pass by another damaged window, the rubbery hoses suddenly comes to life. Those are tentacles trying to grab you !
     &lt;div id=&#39;select2&#39; &gt;
-        &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#select2&quot;)[0],&quot;div#choice2a&quot;)&#39;&gt;Jump backward to get out of reach&lt;/a&gt;
-        &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#select2&quot;)[0],&quot;div#choice2b&quot;)&#39;&gt;Stop your movement immediatly&lt;/a&gt;
+        &lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#select2&quot;,&quot;div#choice2a&quot;)&#39;&gt;Jump backward to get out of reach&lt;/a&gt;
+        &lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#select2&quot;,&quot;div#choice2b&quot;)&#39;&gt;Stop your movement immediatly&lt;/a&gt;
         &lt;/div&gt;&lt;div id=&#39;choice2a&#39; hidden&gt;
             You want to do a backward leap, but get caught on a hose lying around and fall on your butt. The slimy appendages shoot outward and you quickly crawl backward out of reach.&lt;/br&gt;
             But one of the tentacles grabs you around your ankle and starts pulling you closer to the encasement. 
@@ -4346,7 +4334,7 @@ As you walk deeper into the tunnel, you spot some large worms on its walls.
 [[Go West|AM_Lv2_H2]]
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="52" name="AM_Lv2_E3" tags="" position="225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="53" name="AM_Lv2_E3" tags="" position="350,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qHasCrowbar===0){%&gt;
 There is a crowbar over there on a tool panel. That might be useful as a meele weapon or to break open things.&lt;/br&gt;
@@ -4355,14 +4343,14 @@ There is a crowbar over there on a tool panel. That might be useful as a meele w
 &lt;p&gt;[[Go East|AM_Lv2_F3]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="53" name="AM_Lv2_F3" tags="" position="350,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="54" name="AM_Lv2_F3" tags="" position="475,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 Inside the Elevator....
 &lt;p&gt;
 [[Go Up|AM_Lv2_F2]]&lt;/br&gt;[[Go West|AM_Lv2_E3]][[Go East|AM_Lv2_G3]]&lt;/br&gt;[[Go Down|AM_Lv2_F4]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="54" name="AM_Lv2_G3" tags="" position="475,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="55" name="AM_Lv2_G3" tags="" position="600,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;This room seems a lot safer then the others and might be a good choice for [[resting|AM_Lv2_Rest]] or [[fixing|AM_Lv2_Patch]] your gear.&lt;/p&gt;
 &lt;p&gt;Taking a breather regenerates some of your sanity, but also some of the critters might use the time to regrow.&lt;/p&gt;
@@ -4370,7 +4358,7 @@ Inside the Elevator....
 [[Go West|AM_Lv2_F3]][[Go East|AM_Lv2_H3]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="55" name="AM_Lv2_Rest" tags="_back_" position="600,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="56" name="AM_Lv2_Rest" tags="_back_" position="725,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p&gt;TODO you rest for some time and regain some energy&lt;/p&gt;
 &lt;p&gt;
 [[Next|_back_]]
@@ -4380,7 +4368,7 @@ Inside the Elevator....
 &lt;script&gt;
 var s=window.story.state.vars.mine;
 s.qFoeG2=100,s.qFoeH3=100,s.qFoeI2=100;
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="56" name="AM_Lv2_Patch" tags="_back_" position="725,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="57" name="AM_Lv2_Patch" tags="_back_" position="850,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p&gt;TODO You inspect your clothing for damages. Die vergangenen Ereignisse haben es etwas in Mitleidenschaft gezogen. Wenn das so weitergeht musst du in Fetzen herumlaufen und das wäre vielleicht keine gute Idee.&lt;/p&gt;
 &lt;p&gt;You could use a sewing kit to patch up your clothes:&lt;/p&gt;
 &lt;%if(window.story.state.vars.mine.qHasPatchkit&gt;=1){%&gt;
@@ -4390,7 +4378,7 @@ s.qFoeG2=100,s.qFoeH3=100,s.qFoeI2=100;
     Your overall is far to damaged to get fixed with that !
     &lt;%}else{%&gt;
     &lt;div id=&#39;select1&#39; &gt;
-    &lt;a0 onclick=&#39;fixCoverall(),window.gm.printTalkLink($(&quot;div#select1&quot;)[0],&quot;div#choice1a&quot;)&#39;&gt;fix coverall&lt;/a&gt;
+    &lt;a0 onclick=&#39;fixCoverall(),window.gm.printTalkLink(&quot;div#select1&quot;,&quot;div#choice1a&quot;)&#39;&gt;fix coverall&lt;/a&gt;
     &lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
     &lt;/br&gt; You repaired the coverall as best as possible.
     &lt;/div&gt;
@@ -4409,7 +4397,7 @@ function fixCoverall() {
     s.qHasPatchkit=Math.max(0,s.qHasPatchkit-1);
     s.qCoverallHP=Math.min(100,s.qCoverallHP+40);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="57" name="AM_Lv2_H3_GrabCrank" tags="_nosave_ _back_" position="850,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="58" name="AM_Lv2_H3_GrabCrank" tags="_nosave_ _back_" position="975,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%if(window.story.state.vars.mine.qFoeH3&gt;0){%&gt;
     You sneak to the desk to grab the crank. Just as you are passing below the pod, it starts gurgling and twitching slightly.&lt;/br&gt; 
     &lt;/br&gt;&#39;Does it react to my movement or is this just a coincidence&#39; you think. A moment later it releases a spray of some fluid through pores scattered around it bulbous stalk.
@@ -4420,7 +4408,7 @@ function fixCoverall() {
     &lt;p&gt;[[Next|_back_]]&lt;/p&gt;
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="58" name="AM_Lv2_H3" tags="" position="975,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="59" name="AM_Lv2_H3" tags="" position="1100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qHasCrank===0){%&gt;
     A crank handle lies on a workbench. Maybe that could be used to operate a mechanism.&lt;/br&gt;
@@ -4433,12 +4421,12 @@ function fixCoverall() {
 &lt;%}%&gt;
 &lt;p&gt;[[Go West|AM_Lv2_G3]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv2_MAP&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="59" name="AM_Lv2_F4" tags="" position="1100,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="60" name="AM_Lv2_F4" tags="" position="1225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;[[Go Up|AM_Lv2_F3]]&lt;/br&gt;[[Go East|AM_Lv2_G4]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="60" name="AM_Lv2_G4" tags="" position="1225,725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="61" name="AM_Lv2_G4" tags="" position="100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(true){%&gt;
 There is a sewing kit laying around. Needle and thread could be handy to patch up your clothes.
@@ -4447,13 +4435,13 @@ But that might only work as long as your clothes are not damaged to much.
 &lt;p&gt;[[Go West|AM_Lv2_F4]][[Go East|AM_Lv2_H4]]
 &lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="61" name="AM_Lv2_H4" tags="" position="100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="62" name="AM_Lv2_H4" tags="" position="225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 TODO Its just to dark to see anything. You need a source of light.
 &lt;/br&gt;[[Go West|AM_Lv2_G4]]
 &lt;%if(window.story.state.vars.mine.qHasLighter&gt;0){%&gt;
     &lt;div id=&#39;select1&#39; &gt;Maybe the lighter can be of help here.
-    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#select1&quot;)[0],&quot;div#choice1a&quot;)&#39;&gt;use lighter&lt;/a&gt;
+    &lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#select1&quot;,&quot;div#choice1a&quot;)&#39;&gt;use lighter&lt;/a&gt;
     &lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
         With the little bit of light you have, you spot a hatch on the rooms floor. The hatch can be opened and a ladder leads further down into another hall or room. 
         &lt;/br&gt;[[Go Down|AM_Lv2_H5]]
@@ -4461,7 +4449,7 @@ TODO Its just to dark to see anything. You need a source of light.
 &lt;%}else{%&gt;
 &lt;%}%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="62" name="AM_Lv2_H5" tags="" position="225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="63" name="AM_Lv2_H5" tags="" position="350,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%if(window.story.state.vars.mine.qDoorH5!==-1){%&gt;
     You are now standing on some kind of platform in a hallway. There is a door further down but the way to it is flooded. You arent sure if it is water or something different.&lt;/br&gt;
@@ -4475,7 +4463,7 @@ TODO Its just to dark to see anything. You need a source of light.
 &lt;%}%&gt;
 [[Go Up|AM_Lv2_H4]]
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="63" name="AM_Lv2_H5_Valves" tags="_nosave_" position="350,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="64" name="AM_Lv2_H5_Valves" tags="_nosave_" position="475,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 There are several valves. If you set them correctly to 100%, the level of the liquid should decrease. But if you overdoe it, you get yourself drowned in it.
 On the valves is missing the labeling how much each contributes to total pressure. Seems you need to do this with trial and error.
 &lt;/br&gt;&lt;/br&gt;&lt;span&gt;Current flowrate: &lt;/span&gt;&lt;span id=&#39;flow&#39;&gt;&lt;/span&gt;&lt;/br&gt;&lt;div id=&#39;valves&#39;&gt;
@@ -4499,16 +4487,16 @@ var flow=0;
 for(var x=0;(window.story.state.vars.mine.qDoorH5!==-1)&amp;&amp;x&lt;=4;x++){
     document.querySelector([&#39;#ValveA&#39;,&#39;#ValveB&#39;,&#39;#ValveC&#39;,&#39;#ValveD&#39;,&#39;#ValveE&#39;][x]).addEventListener(&#39;click&#39;, function(me){window.gm.setValve(me,cbfail,cbsucess);});
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="64" name="AM_Lv2_H5_Valves_Pass" tags="" position="475,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="65" name="AM_Lv2_H5_Valves_Pass" tags="" position="600,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 A gurgling sound can be heard and the liqid starts moving. Finally most of it is removed and you might now be able to walk down the hallway without getting your feet wet. 
 &lt;p&gt;[[Next|AM_Lv2_H5]]&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="65" name="AM_Lv2_H5_Valves_Fail" tags="" position="600,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="66" name="AM_Lv2_H5_Valves_Fail" tags="" position="725,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;span class=&quot;tPC&quot;&gt;&#39;Oh no&#39; &lt;/span&gt; you think as you hear a screeching sound and then a trembling noise. Shortly thereafter, the level begins to rise rapidly. Your attempt to reach the ladder is thwarted by a burst pipe. The gush from it pushes you away from the saving ladder.
 You drown down here in this abyss.&lt;/br&gt;&lt;/br&gt;
 TODO BAD END 
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="66" name="AM_Lv2_H5_OBSOLETE" tags="" position="725,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="67" name="AM_Lv2_H5_OBSOLETE" tags="" position="850,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p class=&quot;tNPC1&quot;&gt;&quot;Contamination detected. Please remove all clothing before before start of decontamination process.&quot;&lt;/p&gt;
 You are surprised to hear someones voice down here  - maybe there are some survivors here.
@@ -4545,7 +4533,7 @@ So what now do you also place your undergarments inside the box?
 &lt;p class=&quot;tPC&quot;&gt;&#39;I just hope that this is not a mistake.&#39;&lt;/p&gt;
 You shiver at the tought to run around naked in this devasted area.
 
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="67" name="AM_Lv2_G2_Attack" tags="_back_" position="850,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="68" name="AM_Lv2_G2_Attack" tags="_back_" position="975,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%if(window.story.state.vars.mine.qHasSprayer===0){%&gt;
 You dont posses anything useful to use as weapon. And for sure you dont touch those slimy things!  
 &lt;%}else{%&gt;
@@ -4555,18 +4543,18 @@ You could give a try with the Sprayer. Maybe its content is useful against this 
 &lt;div&gt; [[Back|_back_]]
 &lt;/div&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="68" name="AM_Lv2_G2_Kill" tags="" position="975,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="69" name="AM_Lv2_G2_Kill" tags="" position="1100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 You give those wriggling worms a good shower from the sprayer. Their color changes quickly from dirty black to dark red and they are swelling too.  
 &lt;p class=&quot;tPC&quot;&gt;&#39;Is this more useful to grow those worms instead of killing them ?&#39;&lt;/p&gt;
 Just as you begin to worry that this was a mistake, the swelling worms just pop one after another until only a few of them are left.  
 &lt;a0 onclick=&#39;window.story.show(&quot;AM_Lv2_H2&quot;);&#39;&gt;Walk on&lt;/a&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="69" name="AM_Lv2_G2_Sneak" tags="" position="1100,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="70" name="AM_Lv2_G2_Sneak" tags="" position="1225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p class=&quot;tPC&quot;&gt;&#39;I will just walk in the middle of the tunnel&#39;&lt;/p&gt;
 Reassuring yourself you carefully stride forward, being careful to stay away from the eels squirming at the walls.&lt;/br&gt;
 The tunnel is broad enough, you just hope that there are not more of them further down the dark alley.&lt;/br&gt;
 &lt;div id=&#39;select1&#39; &gt;
-&lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#select1&quot;)[0],&quot;div#choice1a&quot;)&#39;&gt;Next&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#select1&quot;,&quot;div#choice1a&quot;)&#39;&gt;Next&lt;/a&gt;
 &lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
     But you didnt check the ceiling above you. &lt;/br&gt;
     As you take a peek to above you, right then a bunch of them drop down on you.&lt;/br&gt;
@@ -4577,14 +4565,12 @@ The tunnel is broad enough, you just hope that there are not more of them furthe
     &lt;a0 onclick=&#39;window.story.show(&quot;AM_Lv2_H2&quot;);&#39;&gt;Walk on&lt;/a&gt;
 &lt;/div&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="70" name="AM_Attack" tags="_nosave_" position="1225,850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="71" name="AM_Attack" tags="_nosave_" position="100,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;%=window.story.state.tmp.args[4](window.story.state.tmp.args[3])%&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="71" name="AM_Lv3_MAP" tags="_back_" position="100,975" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
-&lt;script&gt; window.gm.printMap(&quot;AM_Lv3&quot;,window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="72" name="LT_Start" tags="" position="700,425" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="72" name="LT_Start" tags="" position="700,425" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc=&quot;Medical Bay&quot;;%&gt;
 Waking up standing in some tube made of semi-transparent glass.
 Where are you and where is everyone else?
 
@@ -4604,31 +4590,29 @@ There is a control terminal next to the door. All lights are of except the &lt;t
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go East&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="73" name="LT_HibRoom" tags="" position="700,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc=&quot;Medical Bay&quot;;%&gt;
 
 Exit cryopod.
 wearing fullbody coverall.
 &lt;div id=&#39;select10&#39; &lt;%=((s.vars.qBabble&lt;=0)?&quot;&quot;:&quot;hidden&quot;)%&gt;&gt;
-&lt;a0 onclick=&#39;window.story.state.vars.qBabble=1;window.gm.printTalkLink($(&quot;div#select10&quot;)[0],&quot;div#choicea&quot;);&#39;&gt;pick up datapad&lt;/a&gt;
-&lt;/div&gt;&lt;div id=&#39;choicea&#39; hidden&gt;Aquired a datapad that speaks.
+&lt;a0 onclick=&#39;window.story.state.vars.qBabble=1;window.gm.printTalkLink(&quot;div#select10&quot;,&quot;div#choice10a&quot;);&#39;&gt;pick up datapad&lt;/a&gt;
+&lt;/div&gt;&lt;div id=&#39;choice10a&#39; hidden&gt;Aquired a datapad that speaks.
 &lt;/div&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor&#39;,{},&#39;Go East&#39;)%&gt;&lt;/p&gt;
-&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv3_MAP&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="74" name="LT_Corridor" tags="" position="475,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc=&quot;Corridor West&quot;;%&gt;
 
 Firedoor to S is closed.
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Navigation&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go W&#39;)%&gt;   &lt;%=window.gm.printGoto(&#39;LT_Medic&#39;,{},&#39;Go E&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor2&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
-&lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;&lt;%=window.story.render(&quot;AM_Lv3_MAP&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="75" name="LT_Corridor2" tags="" position="600,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Corridor&#39;,{},&#39;Go N&#39;)%&gt;&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_HibRoom&#39;,{},&#39;Go W&#39;)%&gt;   &lt;%=window.gm.printGoto(&#39;LT_Crewdeck&#39;,{},&#39;Down&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;                &lt;%=window.gm.printGoto(&#39;LT_Crewdeck&#39;,{},&#39;Down&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_Workshop&#39;,{},&#39;Go S&#39;)%&gt;&lt;/p&gt;
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="76" name="LT_Navigation" tags="" position="725,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;

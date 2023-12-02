@@ -2,7 +2,6 @@
 <section> 
 <aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 Some things for debugging:</br>
-qHomeInspect=0x<%=s.vars.qHomeInspect.toString(16)%></br>
 [[Cheats|debug_cheat]]</br>
 [[Back|_back_]]</br>
 </article><article id="LogPanel"></article></section>
