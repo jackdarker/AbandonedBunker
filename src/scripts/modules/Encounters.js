@@ -8,12 +8,18 @@ window.gm.encounters._setup= function(params){
     _params.amount=(params&&params.amount)?params.amount:1, _params.location=(params&&params.location)?params.location:window.passage.name;
     _params.type =(params&&params.type)?params.type:0, _params.levelUp=(params&&params.levelUp)?params.levelUp:0;
     _params.noStart = (params&&params.noStart)?params.noStart:false,_params.noFlee =(params&&params.noFlee)?params.noFlee:false;
+    _params.sceneDecoy =(params&&params.sceneDecoy)?params.sceneDecoy:{fg:[],bg:[]};
     window.gm.Encounter = new Encounter();
     window.gm.Encounter.enableFlee=!_params.noFlee;
     window.gm.Encounter.Location = _params.location;
     window.gm.Encounter.scenePic = window.gm.getScenePic(window.gm.Encounter.Location);
+    window.gm.Encounter.sceneDecoy= _params.sceneDecoy;
     return(_params)
 };
+//TODO Howto dynamic encounters like dryad + wolf?  
+//window.gm.encounters.generic({foes:[{amount:1,type:"Wolf",sub:"AlphaWolf"},{amount:1,type:"Dryad"}],...,noStart:true}) 
+//window.gm.Encounter.onSubmit=function...
+
 //params = {location:window.passage.name, amount:1};
 //params={[{amount:1,type:"Wolf",sub:"AlphaWolf", location:"cave", levelUp:3}]} but how to assign submit/defeat??
 window.gm.encounters.mole = function(params){
@@ -64,6 +70,7 @@ window.gm.encounters.slug = function(params){
     if(!_params.noStart) window.gm.Encounter.initCombat();
 }
 window.gm.encounters.spider = function(params){
+    params.sceneDecoy={bg:['bg_web']}; //TODO depends on location ?
     let _params=window.gm.encounters._setup(params);
     window.gm.Encounter.EnemyFunc = (function(){ 
         let mobs =[];
@@ -320,7 +327,7 @@ window.gm.encounters.dryad = function(params){
 window.gm.encounters.Carlia = function(params){
     let _params=window.gm.encounters._setup(params);
     window.gm.Encounter.EnemyFunc = (function(){ 
-        let x = window.story.state.Carlia;
+        let x = window.story.state.chars.Carlia;
         x.name=x.baseName;
         x.Stats.increment("health",9999); x.Stats.increment("energy",9999);x.Stats.increment("will",9999);
         return([x]);});
@@ -346,7 +353,7 @@ window.gm.encounters.Carlia = function(params){
 window.gm.encounters.Trent = function(params){
     let _params=window.gm.encounters._setup(params);
     window.gm.Encounter.EnemyFunc = (function(){ 
-        let x = window.story.state.Trent; 
+        let x = window.story.state.chars.Trent; 
         x.name=x.baseName;
         x.Stats.increment("health",9999); x.Stats.increment("energy",9999);x.Stats.increment("will",9999); 
         return([x]);});
@@ -361,7 +368,7 @@ window.gm.encounters.Trent = function(params){
 window.gm.encounters.Ruff = function(params){
     let _params=window.gm.encounters._setup(params);
     window.gm.Encounter.EnemyFunc = (function(){ 
-        let x = window.story.state.Ruff; 
+        let x = window.story.state.chars.Ruff; 
         x.name=x.baseName;
         x.Stats.increment("health",9999); x.Stats.increment("energy",9999);x.Stats.increment("will",9999); 
         return([x]);});

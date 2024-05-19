@@ -103,10 +103,22 @@ class Inventory {
         return(this.list[_idx].item);
     }
     //returns all Ids in list
-    getAllIds(){   
-        var ids=[];
+    getAllIds(params){
+        let _params=params||{};
+        let _withTag = _params.withTag??[];   //[['tool','!weapon'],['consumable']]   exclude with '!'
+        var ids=[],item,filter;
         for(var i=0;i<this.list.length;i++){
-            ids.push(this.list[i].id);
+            item=this.list[i]; filter=true;
+            _withTag.forEach(function(tags){    //multiple tag-combination, at least one has to be found
+                var filter2=true;
+                tags.forEach(function(tag){
+                    let _tag = tag,inv=false;
+                    if(tag.at(0)=='!') {_tag = tag.slice(0), inv=true;}
+                    filter2 = filter2 && (item.item.hasTag(_tag)^inv);
+                })
+                filter =filter&&filter2;
+            })
+            if(filter==true) ids.push(item.id);
         }
         return(ids);
     }

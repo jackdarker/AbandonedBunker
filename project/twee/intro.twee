@@ -24,43 +24,9 @@ This game is powered by twine and tweego.</br>
 </article>
 
 
-:: List_Fetish [_back_] {"position":"200,600"}
-<article>
-<h1 align="center">Primary fetish</h1>
-Those are very present through the game and in the main-story (also check the settings in game to disable some of them):  </br>
-*  Beastiality; If you dont know what this means, than you are completely wrong here and should leave immediatly!
-*  Not-so-consent-sex, formerly known as rape
-*  Size difference; (between certain body parts of interacting subjects; see previous point)
-*  Enslavement/Submission and Domination (well, not on your side maybe)
-*  bondage and masochism
-*  Dismembermend; some of your bodyparts have gone missing, we are sorry for the inconvienience
-*  Parasite infestation
-*  Death and suffering;
-
-<h1 align="center">Other fetish with rare occurence</h1>
-*  Milking
-*  Egg-Laying
-*  Orgasm denial
-*  Latex-play
-*  Size-change (of certain body parts)
-
-<h1 align="center">Fetish that might be added at some point</h1>
-*  Homosexual; oh no
-*  Brainwash/Hypnotizing
-
-<h1 align="center">Things you will definitly not find here</h1>
-*  Scat
-*  Diapers
-*  Child-R_pe
-
-</br>[[Back|_back_]]
-</article>
-
 :: Intro {"position":"350,500"}
 <article>
 <%window.gm.initGame();window.gm.player.location=window.passage.name;%>
-Some place, some time</br>
-Maybe present time or some decades ago. It doesnt matter that much. </br>
-Right now you are passed out and soon you will find yourself in some circumstances where it is unimportant from which country or even continent you are.</br>
+TODO This is my own version of Stranded</br>
 </br>[[LT_Start]]</br>
 </article>

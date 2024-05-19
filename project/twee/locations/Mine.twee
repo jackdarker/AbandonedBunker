@@ -8,14 +8,15 @@
 :: sidebar
 <h3><%=window.story.name%> V<%=window.gm.getSaveVersion().toString().replaceAll(",",".")%></h3>
 <img src='<%=window.gm.getSidebarPic()%>' width="256" height="256">
-<div><%=window.story.state.vars.qLoc%></br><%=window.gm.getTimeString()%></br><%=window.gm.getDateString()%></br></div><hr>
+<div><%=window.gm.util.printLocationName(window.gm.player.location)%></br><%=window.gm.getTimeString()%></br><%=window.gm.getDateString()%></br></div><hr>
 <div><%=window.gm.player.name%></br>
-<%=window.gm.util.bargraph(window.story.state.vars.qSanity,100,"red","Sanity: ")%> 
+
 <div></div>
 <hr>
 <form>
 <button type="button" id="LinkS" onclick='window.story.show("InspectPlayer");'>Status<sup>[s]</sup></button>
 <button type="button" id="LinkI" onclick='window.story.show("Inventory");'>Inventory<sup>[i]</sup></button>
+<button type="button" onclick='window.story.show("Contestant");'>Contestant<sup>[i]</sup></button>
 <hr>
 <button type="button" id="save" onclick='window.gm.toggleDialog("#dialog_save");' style="width: 80%">Save/load</button>
 <button type="button" id="help" onclick='window.story.show("Help_Index");' style="width: 80%">Help</button>
@@ -31,13 +32,6 @@
 [[Back|_back_]]</br>
 TODO: what are you wearing, are you restrained, are you feeling healthy
 
-<div id='output'></div></br>
-</article><article id="LogPanel"></article></section>
-
-:: Inventory [_back_ _nodeffered_]
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
-[[Back|_back_]]</br>
-<%=window.story.render("Inv_Hud") %>
 <div id='output'></div></br>
 </article><article id="LogPanel"></article></section>
 

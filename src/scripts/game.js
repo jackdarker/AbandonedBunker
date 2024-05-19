@@ -17,7 +17,6 @@ class IDGenerator {//extends Singleton{
   toJSON(){return window.storage.Generic_toJSON("IDGenerator", this); }
   static fromJSON(value){return(window.storage.Generic_fromJSON(IDGenerator, value.data));}
 }
-
 // helper for publisher/subscriber-pattern; myObject.ps =PubSub(); myObject.ps.subscribe(...
 // !! warning, dont use for objects that need to be loaded from savegame
 // the reviver calls constructor of nested objects multiple times which lead to multiple registrations with partially incomplete objects in the PubSub;
@@ -137,7 +136,8 @@ window.gm.util.addShortKeyHandler=function(){
           n.click();
         }
       }
-      if (["d","i","s","o","q"].indexOf(e.key)>=0){ //some special keys of hud
+      if (["d","i","s","o","q"].indexOf(e.key)>=0){ //some special keys of hud  
+        //f.e. <button type="button" id="LinkS" onclick='window.story.show("InspectPlayer");'>Status<sup>[s]</sup></button>
         n=document.querySelector("#Link" + e.key.toUpperCase());
         if (n){
           e.preventDefault();
@@ -347,12 +347,15 @@ window.gm.initGame= function(forceReset,NGP=null){
         msg: ''   // memorizes a message to display when returning from _back-passage; please clear it when leaving the passage
       }
     }
-    if (!s.GlobalChest||forceReset){  
+    if(!s.chars||forceReset){
+      s.chars={};
+    }
+    if (!s.chars.GlobalChest||forceReset){  
       let ch = new Character();
       ch.id="GlobalChest";
       ch.name="GlobalChest";
       ch.faction="Player";
-      s.GlobalChest=ch;
+      s.chars.GlobalChest=ch;
     }
     if (!s.combat||forceReset){ //see encounter & combat.js
       s.combat = {
@@ -476,10 +479,33 @@ window.gm.forwardTime=function(until){
 // use: child._parent = window.gm.util.refToParent(parent);
 window.gm.util.refToParent = function(me){ return function(){return(me);}};  //todo causes problem with replaceState??
 //since there is no builtin function to format numbers here is one: formatNumber(-1002.4353,2) -> 1,002.44  
-window.gm.util.formatNumber = function(n, dp){
-  var s = ''+(Math.floor(n)), d = Math.abs(n % 1), i = s.length, r = '';
+window.gm.util.formatNumber = function(n, dp,sign=false){
+  var out='',s = ''+((dp>0)?((n>0)?Math.floor(n):Math.ceil(n)):Math.round(n)),d = Math.abs(n % 1), i = s.length, r = '';
   while ( (i -= 3) > 0 ){ r = ',' + s.substr(i, 3) + r; }  //todo . & , is hardcoded
-  return s.substr(0, i + 3) + r + (dp>0 ? '.' +(d ? Math.round(d * Math.pow(10, dp || 2)) : '0'.repeat(dp)) : '');
+  out= s.substr(0, i + 3) + r;
+  if(sign){
+    out=((n>=0)?'+':'')+out;
+  }
+  return(out + (dp>0 ? '.' +(d ? Math.round(d * Math.pow(10, dp )) : '0'.repeat(dp)) : ''));
+};
+/** formatInt is meant for formating integer to string; n may be decimal and gets rounded
+ * sign: if true prepend + if positive 
+ * width: if not null prepend 0s to stuff; disables 1000s indicator
+ * <%=window.gm.util.formatInt(-1234.66,true,5)%> -01235</br>
+*  <%=window.gm.util.formatInt(1234.66,true,5)%> +01235</br>
+ */
+window.gm.util.formatInt = function(n,sign=false, width=null){
+  var out='',s = ''+(Math.abs(Math.round(n))), i = s.length, r = '';
+  if(width!=null) {
+    out='0'.repeat(Math.max(0,width-i))+s;
+  } else {
+    while ( (i -= 3) > 0 ){ r = ',' + s.substr(i, 3) + r; }  //1000s marking; todo . & , is hardcoded
+    out= s.substr(0, i + 3) + r;
+  } 
+  if(sign){
+    out=((n>=0)?'+':'-')+out;
+  }
+  return(out);
 };
 //---------------------------------------------------------------------------------
 //TODO 
@@ -587,7 +613,11 @@ window.story.__proto__.show = function(idOrName, noHistory = false){
   let tagsnext,namenext,nextp,namenow;
   clearInterval(KBIntervalID);
   if(idOrName==='') tagsnext=[];
-  else tagsnext = window.story.passage(idOrName).tags;
+  else {
+    nextp = window.story.passage(idOrName);
+    if(nextp) tagsnext = window.story.passage(idOrName).tags;
+    else throw new Error("no such passage: "+idOrName);
+  }
   if(inGame && window.story.state._gm.defferedStack.length>0 && //deffered event if allowed and requested
     //tagsnext.indexOf('_back_')<0 &&
     tagsnext.indexOf('_nosave_')<0 && tagsnext.indexOf('_nodeffered_')<0 ){ 
@@ -641,8 +671,8 @@ window.story.__proto__.show = function(idOrName, noHistory = false){
 	// Search passages for links every x ms, just in case they get updated, and marks them for key clicks
 	//KBIntervalID = setInterval(window.gm.util.updateLinks,1000);  todo do we need this?
 };
-/* when returning from back-passage, restore view by hiding/unhiding programatical modified elements, see printTalkLink
-*/
+
+/* when returning from back-passage, restore view by hiding/unhiding programatical modified elements, see printTalkLink*/
 window.gm.restorePage=function(){
   if(window.story.state.tmp){
     let elmts =Object.keys(window.story.state.tmp.flags);
@@ -661,7 +691,7 @@ window.gm.restorePage=function(){
 //changes the active player and will add him to party!
 window.gm.switchPlayer = function(playername){
   var s = window.story.state;
-  window.gm.player= s[playername];
+  window.gm.player= s.chars[playername];
   s._gm.activePlayer = playername;
   window.gm.addToParty(playername);
 }
@@ -671,7 +701,7 @@ window.gm.removeFromParty= function(name){
   if(i>=0) s._gm.playerParty.splice(i,1);
 }
 //adds the character to the party
-//there has to be a CharacterObject for window.story.state[name]
+//there has to be a CharacterObject for window.story.state.chars[name]
 window.gm.addToParty= function(name){
   var s=window.story.state;
   if(s._gm.playerParty.indexOf(name)<0)
@@ -728,8 +758,9 @@ window.gm.roll=function(n,sides){ //rolls n x dies with sides
   return(rnd); 
 }
 //expects DOM like <section><article>..<div id='output'></div>..</article></section>
-window.gm.printOutput= function(text,where="section article div#output"){
-  document.querySelector(where).innerHTML = text;
+window.gm.printOutput= function(text,where="section article div#output",append=false){
+  let n=document.querySelector(where);
+  n.innerHTML = (append?n.innerHTML:"")+text;
 };
 //connect to onclick to toggle selected-style for element + un-hiding related text
 //the elmnt (f.e.<img>) needs to be inside a parentnode f.e. <div id="choice">
@@ -772,8 +803,9 @@ window.gm.printPassageLink= function(label,target){
 //prints a link where target is a expression called onClick. Use \" instead of " or ' !
 window.gm.printLink= function(label,target,params){
   let _params=params||{}
-  _params.class=(params&&params.class)?params.class:"";
-  return('<a href=\'javascript:void(0)\' class=\''+_params.class+'\' onclick=\''+target+'\'>'+label+'</a>');
+  _params.once = (params&&params.once)?params.once:false; //auto disable  doesnt work if the Link was added to page dynamical as it has no parent??
+  _params.class=(params&&params.class)?params.class:"";  //CSS-class
+  return('<a href=\'javascript:void(0)\' class=\''+_params.class+'\' onclick=\''+target+';'+(_params.once?'this.remove(this);':'')+'\'>'+label+'</a>');
 };
 
 //prints a link that when clicked picksup an item and places it in the inventory, if itemleft is <0, no link appears
@@ -960,17 +992,17 @@ window.gm.printEffectSummary= function(who='player',what){
   _what.showskill =(what&&what.showskill)?what.showskill:false;
   let elmt='', s= window.story.state, result ='';
   result+='<table>';
-  let ids =window.story.state[who].Stats.getAllIds();
+  let ids =window.story.state.chars[who].Stats.getAllIds();
   ids.sort(); //Todo better sort
   for(var k=0;k<ids.length;k++){
-      var data = window.story.state[who].Stats.get(ids[k])
+      var data = window.story.state.chars[who].Stats.get(ids[k])
       let isFetish = (data.id.slice(0,2)==='ft'), isSkill=(data.id.slice(0,3)==='sk_'); //Fetish starts with ft
       let isResistance = (data.id.slice(0,4)==='rst_')||(data.id.slice(0,4)==='arm_'); //
       if(data.hidden!==4){
         if(isFetish && _what.showfetish && !(data.id.slice(-4,-2)==='_M') ){
           //expects names of fetish like ftXXX and limits ftXXX_Min ftXXX_Max
-          let min = window.story.state[who].Stats.get(ids[k]+"_Min");
-          let max = window.story.state[who].Stats.get(ids[k]+"_Max");
+          let min = window.story.state.chars[who].Stats.get(ids[k]+"_Min");
+          let max = window.story.state.chars[who].Stats.get(ids[k]+"_Max");
           result+='<tr><td>'+((data.hidden & 0x1)?'???':data.id)+':</td><td>'+((data.hidden & 0x2)?'???':data.value)+'</td>';
           result+='<td>'+((data.hidden & 0x2)?'???':'('+(min.value+' to '+max.value))+')</td></tr>';
         }
@@ -982,10 +1014,10 @@ window.gm.printEffectSummary= function(who='player',what){
   }
   result+='</table>';
   result+='</br>Active Effects:<table>'
-  ids = window.story.state[who].Effects.getAllIds();
+  ids = window.story.state.chars[who].Effects.getAllIds();
   ids.sort(); //Todo better sort
   for(var i=0;i<ids.length;i++){
-      var data = window.story.state[who].Effects.get(ids[i]);
+      var data = window.story.state.chars[who].Effects.get(ids[i]);
       if(data.hidden!==4){
       result+='<tr><td>'+((data.hidden & 0x1)?'???':data.name)+':</td><td>'+((data.hidden & 0x1)?'???':data.desc)+'</td><td>'+((data.hidden & 0x2)?'???':data.data.duration)+'h left</td></tr>';
       }

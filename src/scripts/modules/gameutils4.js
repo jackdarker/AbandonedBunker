@@ -1,346 +1,450 @@
 "use strict";
-//special stuff for AB
-//prints link to other passage
-window.gm.printGoto=function(location,cost,alias){
-    let msg='',res={OK:true,msg:''};
-    msg=window.gm.printDo("window.story.show(\""+location+"\");",cost,alias);
-    return(msg);
-};
-//prints link that executes doThat f.e. "window.story.show(\"NewGame\")";
-window.gm.printDo=function(doThat,cost,alias){
-    let k='',msg='',res={OK:true,msg:''};
-    let _cost = cost||{}; //cost={time:30,energy:-10,will:-10,difficult:hard}  easy, average, hard
-    _cost.time=(cost&&cost.time)?cost.time:0, _cost.energy=(cost&&cost.energy)?cost.energy:0, _cost.will=(cost&&cost.will)?cost.will:0; 
-    _cost.difficult=(cost&&cost.difficult)?cost.difficult:'';
-    k=((_cost.time>0)?' '+_cost.time+'min':'') + ((_cost.energy!==0)?' '+_cost.energy+'E':'') + 
-      ((_cost.will!==0)?' '+_cost.will+'W':'') + (_cost.difficult?(' <b>'+_cost.difficult+'</b>'):'');
-    if(k!=='')k=" ("+k+")";
-    msg=window.gm.printLink((alias===''?location:alias)+k,
-    "(function(){let v=window.story.state.vars;if(!(("+_cost.energy+"<0 && v.qBattery<"+(-1*_cost.energy)+")||("+_cost.will+"<0 && v.qSanity<"+(-1*_cost.will)+"))){"+
-    "v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+
-    "}else{alert(\"Cant do it!\")}}())",
-    {class:(!((_cost.energy<0 && window.story.state.vars.qBattery<(-1*_cost.energy))||(_cost.will<0 && window.story.state.vars.qSanity<(-1*_cost.will))))?"":"done"}); //TODO replace alert with ??
-    return(msg);
-};
-class Player { //fake class
-    constructor() {
-      this.location='';
+//stuff for VillaSunflower
+class Card extends Item {
+    constructor(){ super('Card');
+        /*this.addTags([window.gm.ItemTags.Material]); this.price=this.basePrice=10;*/   
+        this.style=101;this.lossOnRespawn = false;
+        this.addTags(['card'])
     }
-  }
-  /* bundles some utility operations*/
-  window.gm.getSaveVersion= function(){   return([0,1,0]); };
-  // reimplement to setup the game
-  //_origInitGame = window.gm.initGame;
-  window.gm.initGame= function(forceReset,NGP=null) {
-    _origInitGame(forceReset,NGP);
-      var s = window.story.state;
-      window.gm.images = imagesBattlers(window.gm.images||{});
-      window.gm.images = imagesMaps(window.gm.images);
-      window.gm.images = imagesEquip(window.gm.images);
-      window.gm.images = imagesIcons(window.gm.images);
-      window.gm.images = imagesScenes(window.gm.images);
-      s._gm.timeRL= s._gm.timeVR = s._gm.time;
-      s._gm.dayRL= s._gm.dayVR = s._gm.day;
-      //TODO set debug to 0 for distribution !
-      s._gm.debug = 1,   
-      s._gm.dbgShowCombatRoll= true,
-      s._gm.dbgShowQuestInfo= true;
-      s._gm.dbgShowMoreInfo=true;
-      if(!s.player || forceReset) {
-        s.player=window.gm.player=new Player();
-      }
-      window.gm.initGameFlags(forceReset,NGP);
-  }
-//stuff for AB
-window.gm.initGameFlags = function(forceReset,NGP=null) {
-    let s= window.story.state;
-    function dataPrototype(){return({visitedTiles:[],mapReveal:[],tmp:{},version:0});}
-    if (forceReset) { 
-        s.NGP=s.Settings=s.DngSY=null; 
-        s.Lab=s.Known=null;
-    }
-    let Settings = {
-        autoSave:true,
-        showCombatPictures:true,
-        showNSFWPictures:true,
-        showDungeonMap:true
-    };
-    if (!s.vars||forceReset) { // storage of variables that doesnt fit player
-        s.vars = {
-        activePlayer : 'Lisa', //id of the character that the player controls currently
-        qSanity:100,
-        qCoverallHP:100,
-        qLingeryHP:100,
-        qBattery:50,
-        qBabble:0
-        }; 
-        s.vars.mine= {
-          mapReveal:0,
-          visited:[],
-          qFoundPlantPod:0,
-          qHasSprayer:0,
-          qSprayerCharge:0,
-          qHasCrowbar:0,
-          qHasCrank:0,
-          qHasExtinguisher:0,
-          qHasLighter:0,
-          qHasPatchkit:0,
-          qHasRope:0,
-          qDoorH2:0,
-          qDoorF2:0,
-          qDoorH5:0,
-          qFoeG2:100,//Worms
-          qFoeI2:100,//Tentacle
-          qFoeH3:100,//Pod
-          qFoeH4:100 //Boss
-          };
-    }
-    if(!s.player || forceReset) {
-      s.player=window.gm.player=new Player();
-    }
-    let DngSY = {
-        visitedTiles: [],mapReveal: [],
-        dng:'', //current dungeon name
-        prevLocation:'', nextLocation:'', //used for nav-logic
-        dngMap:{} //dungeon map info
-    };
-    if(!NGP) { //init if missing
-        NGP={token:0,tokenUsed:0}
-    }else{ //grant NGP-options; window.gm.player is not valid yet!
-        //if(!!NGP.ProteinBars) window.story.state.PlayerVR.Inv.addItem(window.gm.ItemsLib["SnackBar"](),12);
-    }
-    if(!window.gm.achievements){//||forceReset) { 
-        window.gm.resetAchievements();
-    }
-    window.storage.loadAchivementsFromBrowser();
-
-    //see comment in rebuildFromSave why this is done
-    s.Settings=window.gm.util.mergePlainObject(Settings,s.Settings);
-    s.NGP=window.gm.util.mergePlainObject(NGP,s.NGP);
-    s.DngSY=window.gm.util.mergePlainObject(DngSY,s.DngSY);
-    //todo cleanout obsolete data ( filtering those not defined in template) 
-}
-window.gm.printBodyDescription = function() {
-    let msg="",v=window.story.state.vars;
-    msg = "You have short brwon hair.</br>";
-    if(v.qBabble===1){ msg+= "A datapad is in your possession."; }
-    if(v.qBabble===2){msg+= "The babble companion is talking by an in-ear speaker to you.";}
-    return msg+"</br>"
-}
-window.gm.resetAchievements = function() { //declare achievements here
-    window.gm.achievements={
-        looseEnd: 0 //
-        ,swamToFar: 0
-        ,starveBreakfast:0
-        ,survive7days: 0
-        ,insaneTFHuman: 0
-      }
-      window.gm.achievementsInfo={ //this is kept separate to not bloat savegame
-          //hidden bitmask: 0= all visisble, 1= Name ???, 2= Todo ???
-          looseEnd: {set:1, hidden:3, name:"loose end", descToDo:"Find a loose end.",descDone:"Found a link without target. Gained a NGPtoken."} //
-          ,starveBreakfast: {set:1, hidden:3, name:"starved at breakfast", descToDo:"Have nothing to eat at breakfast and no will.",descDone:"You starved at breakfast because you had no food left and no will to go and find something."} //
-          ,swamToFar: {set:1, hidden:2, name:"swam to far", descToDo:"swim to far into the sea",descDone:"You swam to far and drowned."} //
-          ,survive7days: {set:1, hidden:1, name:"survive 7 days", descToDo:"Make it to day 8.",descDone:"You survived a week. But this is only the beginning."} //
-          ,insaneTFHuman: {set:1, hidden:1, name:"insane human TF", descToDo:"Got insane by transforming to much.",descDone:"You stayed human but all the TF are stressing you to much."} //
-      }
-}
-window.gm.setValve=function(evt,cbfail,cbsucess) {
-    var bit=0;
-    switch(evt.target.id) {
-        case 'ValveA':
-            bit= 0x1;
+    set style(style){  //last 2 digits is level
+        this._style = style; 
+        this._lvl = style%100; 
+        switch((style-this._lvl)/100){
+        case 1: this.id=this.name='Boob-Swell';
             break;
-        case 'ValveB':
-            bit= 0x2;
-            break;
-        case 'ValveC':
-            bit= 0x4;
-            break;
-        case 'ValveD':
-            bit= 0x8;
-            break;
-        case 'ValveE':
-            bit= 0x10;
+        case 2: this.id=this.name='Boob-Shrink';
             break
+        default: throw new Error(this.id +' doesnt know '+style);
+        }
+        this.id=this.name=(this.name+' Lv'+this._lvl.toString());
+    }
+    get style(){return this._style;}
+    get desc(){ 
+        let msg ='';
+        switch(this._style){
+            case 0: 
+                msg ='some strange material';
+                break;
+            default: msg="a mysterious card";//throw new Error(this.id +' doesnt know '+style);
+        }
+        return(msg);
+    }
+    toJSON(){return window.storage.Generic_toJSON("Card", this); };
+    static fromJSON(value){ return window.storage.Generic_fromJSON(Card, value.data);};
+}
+
+class Gun extends Weapon {
+    static factory(style){
+        let x = new Gun();
+        x.style=style;
+        return(x);
+    }
+    constructor(){
+        super();
+        this.slotUse = ['RHand'];
+        this.style=0;
+    }
+    set style(style){ 
+        this._style = style; 
+        if(style===0) this.id=this.name='Taser';
+        else if(style===100) this.id=this.name='Blaster';
+        else if(style===105) this.id=this.name='BlasterMK2';
+        else if(style===120) this.id=this.name='Cryonizer';
+        else throw new Error(this.id +' doesnt know '+style);
+    }
+    get style(){return this._style;}
+    get desc(){ 
+        let msg ='';
+        switch(this._style){
+            case 0: msg+=(' pistol-like plastic tool that shocks someone with 30kV');  
+            break;
+            case 100: msg+=('scifi-revolver that fires a plasma-fireball');  
+            break;
+            case 105: msg+=('scifi-revolver that fires a bigger plasma-fireball');  
+            break;
+            case 120: msg+=('looks like a hair-dryer but can deep freeze something on short distance');  
+            break;
+            default:
+        }
+        return(msg);
+    }
+    toJSON(){return window.storage.Generic_toJSON("Gun", this); }
+    static fromJSON(value){return(window.storage.Generic_fromJSON(Gun, value.data));}
+    onEquip(context){
+        let res=super.onEquip(context);
+        if(res.OK){
+            let sk = new SkillSpark();
+            sk.weapon = this.id;
+            this.parent.parent.Skills.addItem(sk);  //todo
+        }
+        return(res);
+    }
+    onUnequip(context){
+        super.onUnequip(context)
+        this.parent.parent.Skills.removeItem('Spark');
+        return({OK:true, msg:'unequipped'});
+    }
+    /*attackMod(target){  //todo
+        let mod = new SkillMod();
+        mod.onHit = [{ target:target, eff: [effDamage.factory(11,'blunt')]}];
+        mod.critChance=5;
+        mod.onCrit = [{ target:target, eff: [effDamage.factory(11,'blunt'), new effStunned()]}];
+        return(mod);
+    }*/
+}
+
+window.gm.ItemsLib = (function (ItemsLib){
+    window.storage.registerConstructor(Card);
+    window.storage.registerConstructor(Gun);
+    ItemsLib['Boob-Swell Lv1'] = function(){ let x= new Card();x.style=101;return(x);}
+    ItemsLib['Boob-Shrink Lv1'] = function(){ let x= new Card();x.style=201;return(x);}
+return ItemsLib; 
+}(window.gm.ItemsLib || {}));
+
+window.gm.dealRandomCards = function(countmin,countmax){
+    return([new window.gm.ItemsLib['Boob-Swell Lv1'](),new window.gm.ItemsLib['Boob-Swell Lv1']()]);
+}
+//try to apply a card to some character
+//Inv is either Char-Inventory or Trap or null
+window.gm.useCard = function(who,Inv,cardid,params){
+    let _params=params||{};
+    _params.silent = _params.silent??true;  //no notification
+    //remove card from Inv if not null
+    if(Inv!=null && Inv.removeItem) {
+        Inv.removeItem(cardid);
+    }
+    //if not silent inject deffered scene
+    window.gm.MutationsLib['growBreast'](who); //TODO silent
+}
+//either there is no card and character can place one -> show choice
+//or there is one and character knows -> nothing happens, no timechange
+//or there is one -> trigger trap
+window.gm.interactTrap = function(who,location,trapid){
+    let s=window.story.state;
+    let trap=s.DngNG.trap[location+":"+trapid];
+    window.story.state.tmp.args=[who,location,trapid];//mem for called passage
+    if(!trap) {alert("unknown trap-location "+location+":"+trapid);}
+    else if(trap.who==who){
+        window.story.show("LT_TrapExist");
+    } else if(trap.cardid==""){
+        window.story.show("LT_TrapSetup");
+    } else {
+        window.story.show("LT_TrapTrigger");
+    }
+}
+window.gm.removeTrap = function(location,trapid){
+    let s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];
+    trap.cardid="",trap.who="";
+}
+window.gm.addTrap = function(who,location,trapid,cardid){
+    let s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];
+    trap.cardid=cardid,trap.who=who;
+}
+window.gm.build_DngNG=function(){
+    function addMob(type,pos){
+        //type refers either to a unique char existing in s.chars
+        //or is generic mob, then we have to append idcounter and create instance
+        let _id=type;
+        if(!window.story.state.chars[type]) {
+            _id=type+IDGenerator.instance().createID();
+            window.story.state.chars[_id]=window.gm.Mobs[type]();
+        }
+        //state = see window.gm.mobAI
+        //timerA & B = ; used for mobAI
+        //att = 0=indifferent|1=friendly|-1=unfriendly|-2=hostile;
+        //tick = last time updated
+        data.tmp.mobs.push({
+            id:_id,
+            mob:type,pos:pos,path:[pos],state:0,tick:'',att:0,timerA:0,timerB:0});
+    }
+    function getTilesByVisual(visual){
+        let _r=[];
+        for (let value of data.map.grid.values()) {
+            if(value.visuals===visual) { 
+                _r.push(value);
+            }
+        }
+        if(_r.length===0) throw new Error("no room with visual "+visual);
+        return(_r);
+    }
+    let s = window.story.state,data;
+    
+    /////// --!!!!
+    const version=1;
+    ////// -- !!!!                          // <== increment this if you change anything below - it will reinitialize data !
+    if(s.DngNG && s.DngNG.version===version){
+        data=s.DngNG;
+    } else {
+        data=s.DngNG,data.version=version;
+        data.map= window.GenerateDng.DngGen.generate({length:5,doors:2,naming:"12_01",branches:2})
+        data.Exit="DngNG_"+getTilesByVisual("entry")[0].room;// data.map.grid.entries().next().value[0];
+        data.tmp={tickPass:'', tier:0
+            ,powerLevel:0
+            ,inCombat:false
+            ,hiding:false
+        };
+        data.tmp.evtLeave = { //events on tile-leave
+            A1_B1: [{id:"Trap_Gas",type:'encounter',tick:window.gm.getTime(),state:0,chance:100 }, //todo cannot assign fct here because saveing
+                {id:"Box",type:'encounter',tick:window.gm.getTime(),state:0,chance:100 },
+                {id:"Fungus",type:'encounter',tick:window.gm.getTime(),state:0,chance:100 }],
+            F4_G4: [{id:"Trap_Dehair",type:'encounter',tick:window.gm.getTime(),state:0,chance:100 }],
+            I4_H4: null
+        }
+        data.tmp.evtEnter = { //events on tile-enter
+             //F4: {sbot:{tick:window.gm.getTime(),state:0 }}
+            //,H4: {gas:{tick:window.gm.getTime(),state:0 }}
+        }
+        data.tmp.doors = { //doors 2way
+            //E4:{E5:{state:0 }},
+            //G4:{G3:{state:0 },G5:{state:0 }},
+            //H4:{I4:{state:0 }},
+            //E5:{F5:{state:0 }},
+        }
+        data.tmp.mobs = [ //wandering mobs pos=current tile, path = walk area, nogo = dont enter here,
+            //{id:"Ruff",mob:"Ruff",pos:"G3",path:["G3"],state:0,tick:'',att:0,timerA:0,timerB:0}
+            //,{id:"SlimeG2",mob:"slime",pos:"G2",path:["G2"],state:0,hp:15,tick:'',att:0,timerA:0,timerB:0}
+            //,{id:"SlimeI2",mob:"slime",pos:"I2",path:["I2"],state:0,hp:15,tick:'',att:-2,timerA:0,timerB:0}
+          ];
+        data.tmp.evtSpawn = { }//respawn evts 
+        data.tmp.evtSpawn["DngNG_"+getTilesByVisual("mushroom")[0].room]={ mushroom:{tick:window.gm.getTime(),state:0,loot:"BrownMushroom" }};
+        let _adr,_tiles=getTilesByVisual("bushes").concat(getTilesByVisual("trees")).sort(() => Math.random() - 0.5);;
+        for(var i=_tiles.length-1;i>=0;i--){
+            _adr="DngNG_"+_tiles[i].room;
+            data.tmp.evtSpawn[_adr]=data.tmp.evtSpawn[_adr]||{};
+            data.tmp.evtSpawn[_adr].lectern={tick:window.gm.getTime(),state:0};
+            if(i===0) addMob("Ruff",_tiles[i].room);  
+            if(i===1) addMob("Slime",_tiles[i].room);//TODO spawn generic mobs inplay
+        }
+        
+        //addMob("Ruff","G3"),addMob("Slime","I2"),addMob("Slime","G2");
+        data.task = {},data.rolledTask=[]; //active task
+        data.tasks = { //task list 
+        };
+        //{"LT_RoomLiving:Sofa":{cardid:"Boobswell Lvl1",who:"Player"}}
+        data.trap = {
+            "LT_RoomLiving:":{cardid:"",who:""},
+            "LT_RoomLiving:Sofa":{cardid:"",who:""},
+            "LT_RoomLiving:TV":{cardid:"",who:""}
+        }; 
+    }
+    //install function to calculate chance of evtLeave
+    window.gm.encounterChance=function(evt){
+        let res=100.0,s=window.story.state,dng=window.story.state.DngSY.dng;
+        res*=evt.chance/100.0;
+        if(evt.id==='Trap_Dehair'){ //Dehair if nude and hair
+            //if(window.gm.player.clothLevel()==='naked') {res*=2;}
+            if(window.gm.getDeltaTime(window.gm.getTime(),evt.tick)>200) res*=2;
+            else res=0;
+        }
+        return(res);
+    }
+    //TODO cannot save graph due circular neigbours data.tmp.graph = window.gm.gridToGraph(_grid);  //for pathfinding  let path = window.astar.search(data.tmp.graph,"F2","I2",null,{heuristic:(function(a,b){return(1);})})
+    //add some helper funcs
+    data.getMobById=function(id){
+        for(var i=data.tmp.mobs.length-1;i>=0;i--){
+            if(data.tmp.mobs[i].id===id) return(data.tmp.mobs[i]);
+        }
+        return(null);
+    }
+    data.addMob=addMob;
+    return({map:data.map,data:data});
+};
+window.gm.renderRoomNG= function(room){ //see also window.gm.renderRoom
+    let msg="",s=window.story.state, dng=s.DngSY.dng;
+    let _c=room.replace(dng+"_",""), _v=s.DngNG.map.grid.get(_c).visuals;
+    switch(_v){
+        case "trees":
+            msg+="There is a group of smaller trees."
+            break;
+        case "bushes":
+            msg+="Bushes of different sizes are growing close to each other."
+            break;
+        case 'bigtree':
+            msg+="The area here lies in the shadow of a huge tree."
+            break;
+        case 'meadow':
+            msg+="The sun shines down on the meadow, casting a warm and inviting glow over the entire area."
+            break;
         default:
             break;
     }
-    flow=flow^bit;
-    document.querySelector('#'+evt.target.id).textContent=evt.target.id+': '+((flow&bit)?'ON':'OFF');
-    var val = ((flow>>0)&1)*30+((flow>>1)&1)*15+((flow>>2)&1)*45+((flow>>3)&1)*25+((flow>>4)&1)*20;
-    document.querySelector('#flow').textContent=val+'%';
-    if(val===100) {
-        cbsucess();
-    } else if(val>100) {
-        cbfail();
-    }
-  };
-  
-  
-  /*  combat-sm:  from AM_Lv2_H3 set ..args[1]=null and move to AM_Lv2_H3_Attack
-    AM_Lv2_H3_Attack calls printMinePodCombatMenu
-  
-    window.story.state.tmp.args[0] = called by GenericPassage to render output + Next-Link
-  *  ...args[1] = {} - store for your temporary data between combat-steps
-    ...args[2] = passage-name to return on flee success 
-    ...args[3] = foe variable name
-    ...args[4] = CombatMenu-function
-  */
-  
-  window.gm.printCombatSceneNext=function(msg) {
-    window.story.state.tmp.args[0] = function() {window.gm.printOutput(msg,"section article div#choice");};
-    window.story.show("GenericPassage");
-  };
-  
-  window.gm.printMinePodCombatMenu=function(FoeId){
-    let msg ='',s=window.story.state.vars.mine;
-    window.story.state.tmp.args[1] = window.story.state.tmp.args[1]||{blast:0}; //buffers data between calls
-    if(s[FoeId]<=0) {
-        let tmp = window.story.state.tmp.args[2];//window.gm.player.location.slice(0,window.gm.player.location.lastIndexOf('_')); //AM_Lv2_G2_Attack -> AM_Lv2_G2
-        msg= 'The hull of the pod is completely deflated. Should be no thread anymore.</br>';
-        msg+= '<a href=\'javascript:void(0)\' onclick=\'window.story.show(\"'+tmp+'\")\'>Next</a></br>';
-    } else { 
-        if(s[FoeId]<50) {
-            msg= 'The pod is still alive.</br>';
-        } else {
-            msg= 'The pod looks healthy.</br>';
-        }
-        if(s.qSprayerCharge>0) {
-            msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMinePodCombat(\"'+FoeId+'\",\"Sprayer\")\'>use Sprayer</a></br>';
-        } else {
-            msg+= 'Your sprayer is empty.</br>';
-        }
-        if(s.qHasCrowbar>0) {
-            msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMinePodCombat(\"'+FoeId+'\",\"Crowbar\")\'>use Crowbar</a></br>'//;window.gm.printLink('use Crowbar','window.gm.printMinePodCombat(\"'+FoeId+'\",\"Crowbar\")');
-        }
-        msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMinePodCombat(\"'+FoeId+'\",\"Stone\")\'>throw a Stone</a></br>'
-        msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMinePodCombat(\"'+FoeId+'\",\"Flee\")\'>Run away</a></br>'
+    switch(_v){
+        case "appletree":
+            msg+=window.story.render(dng+'_'+_v);
+            break;
+        case "entry":
+            msg+=window.story.render(dng+'_'+_v);
+            break;
+        default:
+            break;
     }
     return(msg);
-  }
-  window.gm.printMinePodCombat=function(FoeId,Weapon){
-    let msg='',s=window.story.state.vars.mine;
-    let rnd = _.random(0,100);
-    if(Weapon==='Flee') {
-        msg+= 'You fled from the fight.</br>' 
-        msg+= window.gm.printLink('Next','window.story.show(window.story.state.tmp.args[2])');
-        window.gm.printCombatSceneNext(msg);
-        return;
-    }else if(Weapon==='Crowbar') { //
-        msg = 'Your crowbar deals some damage to the pods hull.'
-        s[FoeId]+=-45;
-    } else if(Weapon==='Stone') {
-        msg = 'Grabing a stone from the ground, you throw it full force against the pod.</br>'
-        if(rnd<30) {
-            msg += 'You hit the pod but only deal little damage.</br>'
-            s[FoeId]+=-25;
-        } else {
-            msg += 'Your throw missed its target.</br>'
+}
+//build message+actions for NPC around player.
+//returns {msg,attitudeToPlayer}
+// 
+//hostile=attack on sight ; this indicates to trigger combat
+window.gm.build_NPCInfo=function(mob,position){
+    let att=mob.att, msg,_mob =window.story.state.chars[mob.id]; //only unique mobs are stored here TODO 
+    msg = "A "+mob.mob+" is here."; //TODO what is the mob doing? sleeping/hiding/lurking
+    if(_mob instanceof Mob) {
+        msg = _mob.unique?(mob.id+" is around."):msg;
+        msg+=window.gm.images._sizeTo(window.gm.images[_mob.pic](),200,200)
+        //Todo interaction depends on mob (can talk, detects player, is cloaked) and player (crawl toward)
+        //att=0;  //Todo calc attitude by history/relation and player-state (vulnerable or not)
+        //msg+= window.gm.printPassageLink("Talk to"+mob.id,"DngNG_"+mob.id+"_Talk");
+        if(mob.state===4 || mob.state===3){ 
+            att-=(att>-2)?1:0;
+            msg+="You better not get closer."
         }
-    } else if(Weapon==='Sprayer') { s.qSprayerCharge-=1;
-        window.story.state.tmp.args[1].blast+=1;
-        msg = 'The color of the pod changes and it expands as well.'
-        s[FoeId]+=-60;
+    } 
+    mob.att=att;
+    return({msg:msg,att:att});
+};
+
+//build message about NPC in surrounding tiles(tiles connected to this position)
+window.gm.build_NPCProximity=function(position){
+    let msg ="", mob,_d=window.story.state[window.story.state.DngSY.dng].tmp;
+    let rooms= window.gm.getRoomDirections(position).map((x)=>{return(x.dir);});
+    for(var i=_d.mobs.length-1;i>=0;i--){ // go through list of mobs and check if they are in rooms around position
+        mob=_d.mobs[i];
+        if(mob.state<0) continue;
+        if(rooms.indexOf(mob.pos)<0) continue;
+        msg+=(mob.state===3)?"Something is approaching from "+mob.pos:"There seems to be someone in "+mob.pos;  //TODO ...is stomping in your direction/ shuffling around/ slushing
+        msg+=".<br>"
     }
-    if(s[FoeId]<=0) { 
-        s[FoeId]=0;
-        if(window.story.state.tmp.args[1].blast>1) {
-            msg += '</br>The pod explodes in a fiery mess, scatering its remains around.</br>'+window.gm.printMinePodDamage();
+    
+    //translate _to in north/south/above...
+    //Was there some noise coming from western direction? You hear something shuffling around east of here | Ruff might be hunting north of here 
+    return(msg)
+}
+
+window.gm.simpleCombatInit=function(instance) {
+    var s = window.story.state;
+    s.combat.tmp={};
+    var tmp=s.combat.tmp;
+    tmp.inst=instance;
+    tmp.now="";
+}
+window.gm.simpleCombatCleanup=function() {
+    var s = window.story.state,tmp=s.combat.tmp;
+
+    s.combat.tmp={};
+}
+//overrides for Latec
+window.gm.InspectSelf = function() {
+    let msg="",s=window.story.state;
+    if(s.DngNG.tmp.qBabble===1){ msg+= "</br>A datapad is in your possession."; }
+    if(s.DngNG.tmp.qBabble===2){msg+= "</br>The babble companion is talking by an in-ear speaker to you.";}
+    msg += window.gm.printBodyDescription(window.gm.player,true);
+    return msg+"</br>"
+}
+window.gm.canOpenDoor=function(from,to) {
+    let s=window.story.state,res={OK:false,msg:''};
+    if(from==='E4' && to==='E5') {
+        if(s.DngNG.tmp.qKeyBlue!==0) { res.OK=true; 
+            s.DngNG.tmp.doors[from][to].state=1;
+            res.msg= "</br>With the blue keycard in your possesion, you can open the door.";
+        } else res.msg= "</br>There is a sl.";
+    }
+    return(res);
+};
+
+window.gm.doMobAi=function(){
+    let _info,msg="",here = window.gm.player.location,_d=window.story.state[window.story.state.DngSY.dng].tmp;
+    let fightMobs=[],interactMobs=[];
+    let node="section article div#output";
+    for(var i=_d.mobs.length-1;i>=0;i--){ //check persistent mobs
+      var mob=_d.mobs[i];
+      window.gm.mobAI(mob);
+      //TODO if mob is with other mob, they might interact; if they are with player he will witness, if they are closely around, he will hear something 
+      if(window.story.state.DngSY.dng+"_"+mob.pos===here){
+        //if mob is at same position as player and alive: trigger passage or just show note
+        if(mob.state>=0){
+            if(mob.att<=-2) { fightMobs.push(mob);
+            } else {
+                interactMobs.push(mob);
+            }
         } else {
-            msg += '</br>The pod shakes violently but its content just squirts out from a wound at its side. The once proud bulb quickly deflates in a pitiable sag.</br>';
+            window.gm.printOutput("A "+mob.mob+" was once possibly around. ",node,true);
         }
+      }
+    }
+    _d.inCombat=false;
+    if(fightMobs.length>0) {     //there might be mobs forcing a fight
+        //TODO make this trapquest-style: pictures to click on with cmds; mmore foes could approach!
+        //after click calc turn
+        //switch scene after defeat
+        _d.inCombat=true;
+        for(var i=fightMobs.length-1;i>=0;i--){
+            _info = window.gm.build_NPCCombat(fightMobs[i],here);
+            window.gm.printOutput(_info.msg,node,true);
+        }
+        document.getElementById("navpanel").replaceChildren("You cant escape");
+        /*window.gm.encounters[fightMobs[0].mob]({noStart:true});
+        var _oldVictory=window.gm.Encounter.onVictory.bind(window.gm.Encounter);
+        window.gm.Encounter.onVictory= function(){fightMobs[0].state=-1;return(_oldVictory());}
+        window.gm.Encounter.initCombat(); return;*/
     } else {
-        msg+='As the bulb releases some of its content into the air you try to gain some distance.</br>'
-        if(rnd<30) {
-            msg += 'But unfortunatly you got a good dose of it.</br>'+window.gm.printMinePodDamage();
-        } else {
+        for(var i=interactMobs.length-1;i>=0;i--){
+            _info = window.gm.build_NPCInfo(interactMobs[i],here);
+            window.gm.printOutput(_info.msg,node,!_info.clear);
         }
     }
-    //back to combat passage
-    msg+= "</br>"+window.gm.printLink('Next','window.story.show(window.gm.player.location)');
-    window.gm.printCombatSceneNext(msg);
-  }
-  window.gm.printMinePodDamage=function() { //pod blast or spray attack
-    let msg='',s=window.story.state.vars;
-    if(s.qCoverallHP>0) {
-        s.qCoverallHP=Math.max(0,s.qCoverallHP-10);
-        msg += 'You got hit too and whatever was inside the pod, is now eating away your cloths!</br><statdown>clothing damage</statdown></br>';
-        if(s.qCoverallHP<=0) msg += 'All of your overgarment is now falling apart. You use some of the shreds to wipe off the fluids from your skin.</br>';
-    } else {
-        msg += 'You got hit too and and you feel the goo stinging your skin. You should find something to wash it off !</br><statdown>sanity damage</statdown></br>';
-        s.qSanity=Math.max(0,s.qSanity-5);
+    if(_d.inCombat==false && _d.hiding==false){
+        msg+= window.gm.printLink("Hide",'window.gm.tryHide()');
+    } else if(_d.hiding==true) {
+        msg+= "You are hidden, but maybe its time to "+window.gm.printLink("leave your hiding spot.",'window.gm.tryUnhide()');
     }
+    window.gm.printOutput(msg,node,true);
+    window.gm.printOutput(window.gm.build_NPCProximity(here),node,true);
+};
+//mob does act, desc & list of player choices is returned
+window.gm.build_NPCCombat=function(mob,position){
+    let msg, dmg=_.random(2,10), clear=false,_d=window.story.state[window.story.state.DngSY.dng].tmp,_mob =window.story.state.chars[mob.id];;
+    _d.hiding=false; //mob found you
+    msg = mob.mob+" attacks you:";
+    msg+= "-"+dmg.toFixed(0)+'dmg</br>';
+    msg+=window.gm.images._sizeTo(window.gm.images[_mob.pic](),200,200)
+    window.gm.player.Stats.increment("health",dmg*-1);
+    if(window.gm.player.isDead()) {
+        msg+= window.gm.printLink("Accept your defeat",'window.gm.respawn({keepInventory:true});');
+        clear=true; //remove actions from prev combatants
+    }else {
+        msg+= window.gm.printLink("Slap it",'window.gm.slapMob(\"'+mob.id+'\")');
+    }
+    return({msg:msg,clear:clear});
+};
+//player acts, then press button for next turn
+window.gm.slapMob=function(mobid){
+    let msg,dmg=5,_d=window.story.state[window.story.state.DngSY.dng].tmp;
+    let mob=window.story.state[window.story.state.DngSY.dng].getMobById(mobid),_mob=window.story.state.chars[mob.id];//window.story.state[window.story.state.DngSY.dng].getMobById(id);
+    _d.hiding=false; //TODO suprise attack
+    _mob.Stats.increment("health",-1*dmg);
+    msg="You punch toward the "+_mob.baseName+" and hit it for "+dmg.toFixed(0)+"dmg (now "+ _mob.health().value.toFixed(0)+"HP)."; 
+    if(_mob.health().value<=0) {
+        msg+=window.gm.mobDefeat(mob);
+    }
+    msg+=window.gm.printLink('Next','window.story.show(window.gm.player.location)'); 
+    window.gm.printOutput(msg,"section article div#output");//<= overwrite output!
+};
+window.gm.tryHide=function(){
+    let _d=window.story.state[window.story.state.DngSY.dng].tmp,msg="";
+    _d.hiding=true; //TODO trying to hide while someone is around fails
+    msg+="TODO You hide somewhere. ";
+    msg+=window.gm.printLink('Stay quiet','window.story.show(window.gm.player.location)'); 
+    window.gm.printOutput(msg,"section article div#output");
+};
+window.gm.tryUnhide=function(){
+    let _d=window.story.state[window.story.state.DngSY.dng].tmp,msg="";
+    _d.hiding=false; //TODO option for suprise attack
+    msg+="You get out of your hidingspot. ";
+    msg+=window.gm.printLink('Next','window.story.show(window.gm.player.location)'); 
+    window.gm.printOutput(msg,"section article div#output");
+};
+window.gm.mobDefeat=function(mob) {
+    let msg="";
+    mob.state=-2; //knocked out
+    msg=mob.mob+" got knocked out."; 
     return(msg);
-  }
-  window.gm.printMineTentacleCombatMenu=function(FoeId){
-    let msg ='',s=window.story.state.vars;
-    window.story.state.tmp.args[1] = window.story.state.tmp.args[1]||{bound:0, enraged:0}; //buffers data between calls
-    if(s[FoeId]<=0) {
-        let tmp = window.story.state.tmp.args[2];
-        s[FoeId]=0;
-        msg+='</br>Finally you dealt enough damage to break free from the grip of the tentacle. It quickly retreats in the safety of its encasing and you crawl away quickly to get a safe distance as well.'
-        msg+='<a href=\'javascript:void(0)\' onclick=\'window.story.show(\"'+tmp+'\")\'>Next</a></br>';
-    } else if(window.story.state.tmp.args[1].bound===4){ //BAD END
-        msg+='</br></br>The vile creature finally proved to strong (or your tactic to bad). As it now entwines your lower body with multiple of its strong appendages and can easily move you insides its own homestead.';
-        msg+='</br>TODO BAD END';
-    } else { 
-        if(s[FoeId]<50) {
-            msg= 'The tentacle is twitching around.</br>';
-        } else {
-            msg= 'The tentacle has a strong grip on you.</br>';
-        }
-        if(s.qSprayerCharge>0) {
-            msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMineTentacleCombat(\"'+FoeId+'\",\"Sprayer\")\'>use Sprayer</a></br>';
-        } else {
-            msg+= 'Your sprayer is empty.</br>';
-        }
-        if(s.qHasCrowbar>0) {
-            msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMineTentacleCombat(\"'+FoeId+'\",\"Crowbar\")\'>use Crowbar</a></br>';
-        } 
-        msg+= '<hr><a href=\'javascript:void(0)\' onclick=\'window.gm.printMineTentacleCombat(\"'+FoeId+'\",\"Struggle\")\'>Struggle</a></br>';
-    }
-    return(msg);
-  };
-  window.gm.printMineTentacleCombat=function(FoeId,Weapon){
-    let msg='',s=window.story.state.vars.mine,t=window.story.state.tmp.args[1];
-    let rnd = _.random(0,100);
-    if(Weapon==='Crowbar') { //
-        msg = 'You hit the tentacle and it seemed to release its grip somewhat, even if just for a moment. Maybe with some more hits you can break free.'
-        s[FoeId]+=-20;
-    } else if(Weapon==='Sprayer') {
-        s.qSprayerCharge-=1;
-        if(t.enraged===0) {
-            msg+= 'The tentacles starts sweeling and its color get more lifely, the grip on you tightens even more.'
-            s[FoeId]+=-35;t.enraged+=1;
-        } else {
-            msg+= 'The sprayer doesnt seem to affect the creature any further. Maybe it needs a higher dose?'
-        }
-    } else if(Weapon==='Struggle') {
-        t.bound = Math.max(0,t.bound-2);
-        msg+= 'You trash around to get away from the slimy appendage. ' + (t.bound===0)?'The thing still has a hold on you. You need to deal soe damage to break free.':'';
-    }
-    if(t.enraged>=1) {
-        t.bound+=1;
-        if (t.bound>=3) {
-            msg+= '</br>You have to struggle free or you will be entwined by the creature completely !'
-        } else {
-            msg+= '</br>The angry tentacle pulls you in closer !'
-        }
-    }
-    if(t.bound>1) {}
-    //back to combat passage
-    msg+= "</br>"+window.gm.printLink('Next','window.story.show(window.gm.player.location)');
-    window.gm.printCombatSceneNext(msg);
-  };
-  window.gm.printMineTentacleDamage=function() {
-    let msg='',s=window.story.state.vars.mine;
-    if(s.qCoverallHP>0) {
-        s.qCoverallHP=Math.max(0,s.qCoverallHP-5);
-        msg += 'TODO !</br><statdown>clothing damage</statdown></br>';
-        if(s.qCoverallHP<=0) msg += 'All of your overgarment is now falling apart.</br>';
-    } else {
-        msg += '</br>You can feel the slimy appendage squishing around your limbs.</br><statdown>sanity damage</statdown></br>';
-        s.qSanity=Math.max(0,s.qSanity-35);
-    }
-    return(msg);
-  };
+}

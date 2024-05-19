@@ -1,210 +1,123 @@
 
 :: LT_Start {"position":"700,425"} 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc="Medical Bay";%>
-Waking up standing in some tube made of semi-transparent glass.
-Where are you and where is everyone else?
-
-Eine unverständliche Computerstimme sagt etwas and the tube starts filling slowly with some kind of liquid. You arent going to drown here?
-Be patient |
-Du versuchst ruhigen Kopf zu bewahren und schaust dich um. The tube hat keine Naht aber einen Boden und Deckel aus anderem Material.
-Einige Knopfartige Dinge sind im oberen Deckel erkennbar.
-[[TubePuzzle]] 
-
- call for help |
-"Help please! Is there someone please help !" using your fist to hammer against the confinement.
-But the glass is though obviously.
-Panic. BadEnd: You drown.
-
-
-There is a control terminal next to the door. All lights are of except the <tgl id='lamp' value='blue' onclick='var x=this.attributes["value"].nodeValue;switch(x){case "blue":x="red";break;default:x="blue"}this.attributes["value"].nodeValue=this.style.color=this.textContent=x;'>blue</tgl> one.
-<p><%=window.gm.printGoto('LT_HibRoom',{},'Go East')%></p>
-<%=window.story.render("Inv_Hud")%>
+<%window.gm.player.location=window.passage.name;%>
+[[LT_PostSleep]] TODO Introduction by gamemaster & NGP Shop
 </article><article id="LogPanel"></article></section>
 
-:: LT_HibRoom {"position":"700,600"}
+:: LT_PostSleep
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc="Medical Bay";%>
-
-Exit cryopod.
-wearing fullbody coverall.
-<div id='select10' <%=((s.vars.qBabble<=0)?"":"hidden")%>>
-<a0 onclick='window.story.state.vars.qBabble=1;window.gm.printTalkLink("div#select10","div#choice10a");'>pick up datapad</a>
-</div><div id='choice10a' hidden>Aquired a datapad that speaks.
-</div>
-
-<p><%=window.gm.printGoto('LT_Corridor',{},'Go East')%></p>
+<%window.gm.player.location=window.passage.name;%>
+Energie und MR regeneriert
+TODO Tutorial Karten
+Some more cards where added to your inentory !
+<br><div id="newcards"></div>
+<p class="author">TODO NPC get cards but just drop them off if there are to many?</p>
+[[LT_UseCardFromHand]]
 </article><article id="LogPanel"></article></section>
+<script>
+var cards=window.gm.dealRandomCards(3,3);
+cards.forEach(function(x){
+   window.gm.player.Inv.addItem(x);
+   window.gm.printOutput(x.name+'<br>','#newcards',true);
+})
+</script>
 
 
-:: LT_Corridor 
+:: LT_UseCardFromHand
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;window.story.state.vars.qLoc="Corridor West";%>
+window.gm.useCard(window.game.player,window.game.player.Inv,item.id)
+ effect anzeigen, dann zurück zu hier
+<br><div id="newcards" hidden></div>
+<div id="next" hidden>[[LT_GoSomewhere]]</div>
+</article><article id="LogPanel"></article></section>
+<script>
+var i=0,item,cards=window.gm.player.Inv.getAllIds({withTag:[ ['card'] ]}); //write [ [...]] not [[...]]!
+cards.forEach(function(x){ i+=1;
+   item=window.gm.player.Inv.getItem(x);
+   window.gm.printOutput(item.name+'<br>','#newcards',true);
+})
+if(i>5) { document.getElementById('newcards').removeAttribute("hidden"); 
+}else { document.getElementById('next').removeAttribute("hidden");} 
+</script>
 
-Firedoor to S is closed.
+:: LT_GoSomewhere
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<p>First Floor:</p>
+<p><%=window.gm.printGoto('LT_RoomLiving',{},'Living Room')%></p>
+<p><%=window.gm.printGoto('LT_RoomKitchen',{},'Kitchen')%></p>
+<p><%=window.gm.printGoto('LT_RoomShop',{},'Shop')%></p>
+<p>Outside:</p> Pool, Blumengarten, Garage, Schuppen
+<p>Basement:</p> Waschküche, Heizungskeller,Gym
 
-<p><%=window.gm.printGoto('LT_Navigation',{},'Go N')%></p>
-<p><%=window.gm.printGoto('LT_HibRoom',{},'Go W')%>   <%=window.gm.printGoto('LT_Medic',{},'Go E')%></p>
-<p><%=window.gm.printGoto('LT_Corridor2',{},'Go S')%></p>
 </article><article id="LogPanel"></article></section>
 
-:: LT_Corridor2
+
+:: LT_RoomLiving {"position":"700,600"}
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 
-<p><%=window.gm.printGoto('LT_Corridor',{},'Go N')%></p>
-<p>                <%=window.gm.printGoto('LT_Crewdeck',{},'Down')%></p>
-<p><%=window.gm.printGoto('LT_Workshop',{},'Go S')%></p>
-<%=window.story.render("Inv_Hud")%>
+ - Ereignis beim betreten ? ->
+ - wer ist noch hier ? 
+   - macht was ?
+     - danach?
+ - welche Aktionsmöglichkeiten gibt es?
+    - benutzen ->
+ - welche Verstecke?
+    - benutzen -> 
+
+ - sonst go somewhere 
+
+ Ein Wohnzimmer mit großer Couch und einigen Sesseln vor einem riesigen Fernseher.
+ An der Seitenwand steht eine Bar-Theke mit Barhockern davor.
+ <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Sofa");'>Sit on the couch</a>
+ <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"TV");'>Check on the TV</a>
+ <a0>Sit at the bar</a>  
+
+<p>[[LT_GoSomewhere]]</p>
 </article><article id="LogPanel"></article></section>
 
 
-:: LT_Navigation
+:: LT_RoomKitchen
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 
-Navigation or cockpit of the ship.
-Check outside with Cam. Shuttle is landed on large structure.
-Unlock firedoor.
+Eine Küche mit imposamter Küchenzeile. Herd, Backofen, Geschirrspüler, Küchenmaschine. Und Mikrowelle für den Junkfood-Junkie.
+ <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Dishwasher");'>Check the dishwasher</a>
+ <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Microwave");'>Open the Microwave</a>
 
-<p><%=window.gm.printGoto('LT_Corridor',{},'Corridor')%></p>
-<%=window.story.render("Inv_Hud")%>
+<p>[[LT_GoSomewhere]]</p>
 </article><article id="LogPanel"></article></section>
 
 
-:: LT_Medic
+:: LT_TrapExist [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-
-<p><%=window.gm.printGoto('LT_Corridor',{},'Corridor')%></p>
-<%=window.story.render("Inv_Hud")%>
+You remember that this location was already trapped. So better leave that place alone.<br>   
+<a0 onclick='window.story.show(window.gm.player.location);'>Continue</a>
 </article><article id="LogPanel"></article></section>
 
-
-:: LT_Workshop
+:: LT_TrapSetup [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-The reactor and Antrieb is further down at the other end of ship. Can only be reached from outside.
-
-<p><%=window.gm.printGoto('LT_Corridor2',{},'Corridor')%></p>
-<%=window.story.render("Inv_Hud")%>
+This location looks like a good place to setup a trap.<br>
+Lets see what card you could place here:<br>
+<div id="cards"></div><br>
+<a0 onclick='window.story.show(window.gm.player.location);'>Leave</a>
 </article><article id="LogPanel"></article></section>
+<script>
+var i=0,item,cards=window.gm.player.Inv.getAllIds({withTag:[ ['card']]}); //write [ [...]] not [[...]]!
+cards.forEach(function(x){
+   item=window.gm.player.Inv.getItem(x);i=window.gm.player.Inv.countItem(x)
+   var msg=window.gm.printLink(i+"x "+item.name,
+   'window.gm.addTrap(window.story.state.tmp.args[0],window.story.state.tmp.args[1],window.story.state.tmp.args[2],"'+item.id+'");'+
+   'window.gm.printOutput("You carefully place the trap and memorize the location.","#cards");');
+   window.gm.printOutput(msg+'<br>','#cards',true);
+})
+</script>
 
-
-:: LT_Crewdeck
+:: LT_TrapTrigger [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-Mensa
-
-<p><%=window.gm.printGoto('LT_Corridor2',{},'Upstairs')%></p>
-<p><%=window.gm.printGoto('LT_Corridor3',{},'Corridor')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Corridor3
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-<p><%=window.gm.printGoto('LT_Crewdeck',{},'Go N')%></p>
-<p><%=window.gm.printGoto('LT_Crew1',{},'Go E')%></p>
-<p><%=window.gm.printGoto('LT_Kitchen',{},'Go W')%></p>
-<p><%=window.gm.printGoto('LT_Corridor4',{},'Go S')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Corridor4
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-<p><%=window.gm.printGoto('LT_Corridor3',{},'Go N')%></p>
-<p><%=window.gm.printGoto('LT_Crew2',{},'Go E')%></p>
-<p><%=window.gm.printGoto('LT_Shower',{},'Go W')%></p>
-<p><%=window.gm.printGoto('LT_Corridor5',{},'Go S')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Corridor5
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-<p><%=window.gm.printGoto('LT_Corridor4',{},'Go N')%></p>
-<p><%=window.gm.printGoto('LT_Armory',{},'Go E')%></p>
-<p><%=window.gm.printGoto('LT_Storage',{},'Go W')%></p>
-<p><%=window.gm.printGoto('LT_Airlock',{},'Go S')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Armory
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-<p><%=window.gm.printGoto('LT_Corridor5',{},'Corridor')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Storage
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-<p><%=window.gm.printGoto('LT_Corridor5',{},'Corridor')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Airlock
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-
-
-<p><%=window.gm.printGoto('LT_Corridor5',{},'Corridor')%></p>
-<p><%=window.gm.printGoto('LT_AirlockExtern',{},'Leave ship')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_AirlockExtern
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-Stepping out onto foreign object. Artifical, possibly metal.
-Shuttle is anchored to hull with some grippers.
-Some light up ahead on walkway.
-
-<p><%=window.gm.printGoto('LT_Airlock',{},'Back to shuttle')%></p>
-<p><%=window.gm.printGoto('LT_Hull1',{},'Go E')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-
-:: LT_Hull1
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-Found flashlight.
-There is a open hatch. Possibly airlock to hull?
-
-<p><%=window.gm.printGoto('LT_AirlockExtern',{},'Back to shuttle')%></p>
-<p><%=window.gm.printGoto('LT_Airlock2',{},'Use Cavity')%></p>
-<%=window.story.render("Inv_Hud")%>
-</article><article id="LogPanel"></article></section>
-
-
-:: LT_Airlock2
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-
-Now Inside Hull.
-
-<p><%=window.gm.printGoto('LT_Hull1',{},'Leave')%></p>
-<%=window.story.render("Inv_Hud")%>
+Oh my you triggered a trap.
+TODO flavour depending on who is affected, the card and location 
+<div id="cards"></div>
+<a0 onclick='window.gm.removeTrap(window.story.state.tmp.args[1],window.story.state.tmp.args[2]);window.story.show(window.gm.player.location);'>Continue</a>
 </article><article id="LogPanel"></article></section>
