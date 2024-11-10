@@ -2778,7 +2778,11 @@ var _ch3=new Trent();_ch3.name=_ch3.id="Trent";_ch3.unique=true;s.chars.Trent=_c
 _ch4.Outfit.addItem(new BaseHumanoid());_ch4.Outfit.addItem(new SkinHuman());_ch4.Outfit.addItem(new FaceHuman());_ch4.Outfit.addItem(HeadHairHuman.factory('smooth'));_ch4.Outfit.addItem(HandsHuman.factory('human'));_ch4.Outfit.addItem(AnusHuman.factory('human'));_ch4.Outfit.addItem(PenisHuman.factory('human'));_ch4.Outfit.addItem(new Briefs());_ch4.Outfit.addItem(window.gm.ItemsLib.ShortsDenim());_ch4.Outfit.addItem(new Sneakers());_ch4.Outfit.addItem(new TankShirt());if(s._gm.debug){_ch4.Skills.addItem(new SkillInspect());_ch4.Skills.addItem(new SkillUltraKill());_ch4.Skills.addItem(SkillCallHelp.factory('Wolf'));_ch4.Skills.addItem(SkillDetermined.factory());_ch4.Skills.addItem(new SkillStun());_ch4.Skills.addItem(new SkillHeal());_ch4.Skills.addItem(new SkillTease());_ch4.Skills.addItem(new SkillSubmit());}//ch.Effects.addItem(effMutator.factory("")); //Mutationlogic
 s.chars.PlayerVR=_ch4;}if(!s.chars.PlayerRL||forceReset){var _ch5=new Character();_ch5.id="PlayerRL";_ch5.name="Andrew";_ch5.unique=true;_ch5.faction="Player";//ch.Effects.addItem(new skCooking());
 //add some basic inventory
-_ch5.Inv.addItem(new Money(),20);_ch5.Inv.addItem(new LighterDad());_ch5.Inv.addItem(new FlashBang(),2);_ch5.Inv.addItem(new CanOfCoffee(),2);_ch5.Wardrobe.addItem(new Jeans());_ch5.Wardrobe.addItem(new Briefs());_ch5.Wardrobe.addItem(new Sneakers());_ch5.Wardrobe.addItem(new TankShirt());_ch5.Wardrobe.addItem(new Pullover());_ch5.Outfit.addItem(new BaseHumanoid());_ch5.Outfit.addItem(new FaceHuman());_ch5.Outfit.addItem(HandsHuman.factory('human'));_ch5.Outfit.addItem(new SkinHuman());_ch5.Outfit.addItem(AnusHuman.factory('human'));_ch5.Outfit.addItem(PenisHuman.factory('human'));_ch5.Wardrobe.addItem(new Briefs());_ch5.Outfit.addItem(new Jeans());_ch5.Outfit.addItem(new Sneakers());_ch5.Outfit.addItem(new Pullover());//special skills
+//ch.Inv.addItem(new Money(),20);
+//ch.Inv.addItem(new LighterDad());
+//ch.Inv.addItem(new FlashBang(),2);
+//ch.Inv.addItem(new CanOfCoffee(),2);
+_ch5.Wardrobe.addItem(new Jeans());_ch5.Wardrobe.addItem(new Briefs());_ch5.Wardrobe.addItem(new Sneakers());_ch5.Wardrobe.addItem(new TankShirt());_ch5.Wardrobe.addItem(new Pullover());_ch5.Outfit.addItem(new BaseHumanoid());_ch5.Outfit.addItem(new FaceHuman());_ch5.Outfit.addItem(HandsHuman.factory('human'));_ch5.Outfit.addItem(new SkinHuman());_ch5.Outfit.addItem(AnusHuman.factory('human'));_ch5.Outfit.addItem(PenisHuman.factory('human'));_ch5.Wardrobe.addItem(new Briefs());_ch5.Outfit.addItem(new Jeans());_ch5.Outfit.addItem(new Sneakers());_ch5.Outfit.addItem(new Pullover());//special skills
 _ch5.Effects.addItem(new effNotTired());//depending on sleep Tired will be set to NotTired or Tired
 //ch.Skills.addItem(SkillCallHelp.factory('Mole'));
 s.chars.PlayerRL=_ch5;}/*let dngs = [BeeHive,ShatteredCity]; //add your dngs here !
@@ -3015,7 +3019,7 @@ window.gm.printDo=function(doThat,cost,alias){var k='',msg='',res={OK:true,msg:'
 _cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energy:0,_cost.will=cost&&cost.will?cost.will:0;_cost.difficult=cost&&cost.difficult?cost.difficult:'';k=(_cost.time>0?' '+_cost.time+'min':'')+(_cost.energy!==0?' '+_cost.energy+'E':'')+(_cost.will!==0?' '+_cost.will+'W':'')+(_cost.difficult?' <b>'+_cost.difficult+'</b>':'');if(k!=='')k=" ("+k+")";msg=window.gm.printLink((alias===''?location:alias)+k,"(function(){if(!(("+_cost.energy+"<0 && window.gm.player.energy().value<"+-1*_cost.energy+")||("+_cost.will+"<0 && window.gm.player.Stats.get(\"will\").value<"+-1*_cost.will+"))){"+"window.gm.player.Stats.increment(\"energy\","+_cost.energy+");window.gm.player.Stats.increment(\"will\","+_cost.will+");window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+"}else{alert(\"Cant do it!\")}}())",{class:!(_cost.energy<0&&window.gm.player.energy().value<-1*_cost.energy||_cost.will<0&&window.gm.player.Stats.get("will").value<-1*_cost.will)?"":"done"});//TODO replace alert with ??
 return msg;};window.gm.qID=window.gm.qID||{};window.gm.questDef=window.gm.questDef||{};{var quest=new Quest("qGarden","Green thumb","");quest.addMileStone(new QuestMilestone(1,"","Find the garden.",QuestMilestone.NOP,QuestMilestone.HIDDEN));quest.addMileStone(new QuestMilestone(100,"","The garden is a mess and you dont have a use for it. So why bother?.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(200,"","Get some tools to clear the garden from the rubble..",QuestMilestone.NOP));window.gm.qID.qGarden=quest.id;window.gm.questDef[quest.id]=quest;quest=new Quest("qBarJob","Serve'em drinks","");quest.addMileStone(new QuestMilestone(1,"","Find the Inn.",QuestMilestone.NOP,QuestMilestone.HIDDEN));quest.addMileStone(new QuestMilestone(100,"","Maybe the owner of the Inn has a job for you?.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(200,"","Earn money by working as a waitress.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(300,"","Work at least 6 shifts between Monday and sunday.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(10000,"","???",QuestMilestone.NOP));window.gm.qID[quest.id]=quest.id;window.gm.questDef[quest.id]=quest;quest=new Quest("qTraderThomas","A Trader to trade","");quest.addMileStone(new QuestMilestone(1,"","Find the Traders house.",QuestMilestone.NOP,QuestMilestone.HIDDEN));quest.addMileStone(new QuestMilestone(100,"","Ask around for the traders absence.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(200,"","Find the lookout point.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(300,"","Report back to the innkeeper.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(500,"","Find the traders carriage on the road to Redwick.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(900,"","Return with Thomas to his store.",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(1000,"","NYI",QuestMilestone.NOP));quest.addMileStone(new QuestMilestone(10000,"","???",QuestMilestone.NOP));window.gm.qID.qTraderThomas=quest.id;window.gm.questDef[quest.id]=quest;}"use strict";//stuff for VillaSunflower
 var Card=/*#__PURE__*/function(_Item2){_inherits(Card,_Item2);var _super53=_createSuper(Card);function Card(){var _this52;_classCallCheck(this,Card);_this52=_super53.call(this,'Card');/*this.addTags([window.gm.ItemTags.Material]); this.price=this.basePrice=10;*/_this52.style=101;_this52.lossOnRespawn=false;_this52.addTags(['card']);return _this52;}_createClass(Card,[{key:"toJSON",value:function toJSON(){return window.storage.Generic_toJSON("Card",this);}},{key:"style",set:function set(style){//last 2 digits is level
-this._style=style;this._lvl=style%100;switch((style-this._lvl)/100){case 1:this.id=this.name='Boob-Swell';break;case 2:this.id=this.name='Boob-Shrink';break;default:throw new Error(this.id+' doesnt know '+style);}this.id=this.name=this.name+' Lv'+this._lvl.toString();},get:function get(){return this._style;}},{key:"desc",get:function get(){var msg='';switch(this._style){case 0:msg='some strange material';break;default:msg="a mysterious card";//throw new Error(this.id +' doesnt know '+style);
+this._style=style;this._lvl=style%100;switch((style-this._lvl)/100){case 1:this.id=this.name='Boob-Swell';break;case 2:this.id=this.name='Boob-Shrink';break;default:throw new Error(this.id+' doesnt know '+style);}this.id=this.name=this.name+'-Lv'+this._lvl.toString();},get:function get(){return this._style;}},{key:"desc",get:function get(){var msg='';switch(this._style){case 0:msg='some strange material';break;default:msg="a mysterious card.";//throw new Error(this.id +' doesnt know '+style);
 }return msg;}}],[{key:"fromJSON",value:function fromJSON(value){return window.storage.Generic_fromJSON(Card,value.data);}}]);return Card;}(Item);var Gun=/*#__PURE__*/function(_Weapon){_inherits(Gun,_Weapon);var _super54=_createSuper(Gun);_createClass(Gun,null,[{key:"factory",value:function factory(style){var x=new Gun();x.style=style;return x;}}]);function Gun(){var _this53;_classCallCheck(this,Gun);_this53=_super54.call(this);_this53.slotUse=['RHand'];_this53.style=0;return _this53;}_createClass(Gun,[{key:"toJSON",value:function toJSON(){return window.storage.Generic_toJSON("Gun",this);}},{key:"onEquip",value:function onEquip(context){var res=_get(_getPrototypeOf(Gun.prototype),"onEquip",this).call(this,context);if(res.OK){var sk=new SkillSpark();sk.weapon=this.id;this.parent.parent.Skills.addItem(sk);//todo
 }return res;}},{key:"onUnequip",value:function onUnequip(context){_get(_getPrototypeOf(Gun.prototype),"onUnequip",this).call(this,context);this.parent.parent.Skills.removeItem('Spark');return{OK:true,msg:'unequipped'};}/*attackMod(target){  //todo
         let mod = new SkillMod();
@@ -3023,7 +3027,7 @@ this._style=style;this._lvl=style%100;switch((style-this._lvl)/100){case 1:this.
         mod.critChance=5;
         mod.onCrit = [{ target:target, eff: [effDamage.factory(11,'blunt'), new effStunned()]}];
         return(mod);
-    }*/},{key:"style",set:function set(style){this._style=style;if(style===0)this.id=this.name='Taser';else if(style===100)this.id=this.name='Blaster';else if(style===105)this.id=this.name='BlasterMK2';else if(style===120)this.id=this.name='Cryonizer';else throw new Error(this.id+' doesnt know '+style);},get:function get(){return this._style;}},{key:"desc",get:function get(){var msg='';switch(this._style){case 0:msg+=' pistol-like plastic tool that shocks someone with 30kV';break;case 100:msg+='scifi-revolver that fires a plasma-fireball';break;case 105:msg+='scifi-revolver that fires a bigger plasma-fireball';break;case 120:msg+='looks like a hair-dryer but can deep freeze something on short distance';break;default:}return msg;}}],[{key:"fromJSON",value:function fromJSON(value){return window.storage.Generic_fromJSON(Gun,value.data);}}]);return Gun;}(Weapon);window.gm.ItemsLib=function(ItemsLib){window.storage.registerConstructor(Card);window.storage.registerConstructor(Gun);ItemsLib['Boob-Swell Lv1']=function(){var x=new Card();x.style=101;return x;};ItemsLib['Boob-Shrink Lv1']=function(){var x=new Card();x.style=201;return x;};return ItemsLib;}(window.gm.ItemsLib||{});window.gm.dealRandomCards=function(countmin,countmax){return[new window.gm.ItemsLib['Boob-Swell Lv1'](),new window.gm.ItemsLib['Boob-Swell Lv1']()];};//try to apply a card to some character
+    }*/},{key:"style",set:function set(style){this._style=style;if(style===0)this.id=this.name='Taser';else if(style===100)this.id=this.name='Blaster';else if(style===105)this.id=this.name='BlasterMK2';else if(style===120)this.id=this.name='Cryonizer';else throw new Error(this.id+' doesnt know '+style);},get:function get(){return this._style;}},{key:"desc",get:function get(){var msg='';switch(this._style){case 0:msg+=' pistol-like plastic tool that shocks someone with 30kV';break;case 100:msg+='scifi-revolver that fires a plasma-fireball';break;case 105:msg+='scifi-revolver that fires a bigger plasma-fireball';break;case 120:msg+='looks like a hair-dryer but can deep freeze something on short distance';break;default:}return msg;}}],[{key:"fromJSON",value:function fromJSON(value){return window.storage.Generic_fromJSON(Gun,value.data);}}]);return Gun;}(Weapon);window.gm.ItemsLib=function(ItemsLib){window.storage.registerConstructor(Card);window.storage.registerConstructor(Gun);ItemsLib['Boob-Swell_Lv1']=function(){var x=new Card();x.style=101;return x;};ItemsLib['Boob-Shrink_Lv1']=function(){var x=new Card();x.style=201;return x;};return ItemsLib;}(window.gm.ItemsLib||{});window.gm.dealRandomCards=function(countmin,countmax){var cards=[],pool=['Boob-Swell_Lv1','Boob-Shrink_Lv1'];for(var i=1;i<=countmax;i++){if(i<=countmin||_.random(0,100)>50){cards.push(new window.gm.ItemsLib[pool[_.random(0,pool.length-1)]]());}}return cards;};//try to apply a card to some character
 //Inv is either Char-Inventory or Trap or null
 window.gm.useCard=function(who,Inv,cardid,params){var _params$silent;var _params=params||{};_params.silent=(_params$silent=_params.silent)!==null&&_params$silent!==void 0?_params$silent:true;//no notification
 //remove card from Inv if not null
@@ -3033,7 +3037,20 @@ window.gm.MutationsLib['growBreast'](who);//TODO silent
 //or there is one and character knows -> nothing happens, no timechange
 //or there is one -> trigger trap
 window.gm.interactTrap=function(who,location,trapid){var s=window.story.state;var trap=s.DngNG.trap[location+":"+trapid];window.story.state.tmp.args=[who,location,trapid];//mem for called passage
-if(!trap){alert("unknown trap-location "+location+":"+trapid);}else if(trap.who==who){window.story.show("LT_TrapExist");}else if(trap.cardid==""){window.story.show("LT_TrapSetup");}else{window.story.show("LT_TrapTrigger");}};window.gm.removeTrap=function(location,trapid){var s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];trap.cardid="",trap.who="";};window.gm.addTrap=function(who,location,trapid,cardid){var s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];trap.cardid=cardid,trap.who=who;};window.gm.build_DngNG=function(){function addMob(type,pos){//type refers either to a unique char existing in s.chars
+if(!trap){alert("unknown trap-location "+location+":"+trapid);}else if(trap.who==who){window.story.show("LT_TrapExist");}else if(trap.cardid==""){//requires passage like LT_Kitchen_Mixer
+window.story.show(location+"_"+trapid);//("LT_TrapSetup");
+}else{window.story.show("LT_TrapTrigger");}};window.gm.removeTrap=function(location,trapid){var s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];trap.cardid="",trap.who="";};window.gm.addTrap=function(who,location,trapid,cardid){var s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];trap.cardid=cardid,trap.who=who,trap.time=window.gm.getTime();window.story.state.chars[who].Inv.removeItem(cardid);s.DngNG.timeLeft=0;};//for non-player-char
+window.gm.dayAI=function(){var s=window.story.state;//Todo do shopping
+//check schedule of char and go there
+var schedule=window.gm.getScheduleForChar();s.chars[s.DngNG.activeChar].location=schedule.location;//TODO direct confrontation against NPC/player
+//do activity or setup trap
+//window.gm.interactTrap(s.DngNG.activeChar,schedule.location,schedule.activity);
+s.DngNG.timeLeft=0;//AI move complete
+window.story.show("LT_DoneForNow");};//for non-player-char
+window.gm.nightAI=function(){//regenerate stats
+//give new cards and fix hand
+var s=window.story.state,cards=window.gm.dealRandomCards(3,3);cards.forEach(function(x){s.chars[s.DngNG.activeChar].Inv.addItem(x);window.gm.printOutput(x.name+'<br>','#newcards',true);});};window.gm.getScheduleForChar=function(){var info,s=window.story.state,now=window.gm.getTimeStruct().hour*100;//a char has a slot assigned; the slot list for time of day what loacation&activity is preffered 
+var schedules=[[{begin:700,location:"LT_RoomLiving",activity:"TV"},{begin:1000,location:"LT_RoomLiving",activity:"TV"},{begin:1300,location:"LT_RoomLiving",activity:"Bar"},{begin:1600,location:"LT_RoomLiving",activity:"Sofa"},{begin:1900,location:"LT_RoomLiving",activity:"Bar"}]];schedules[0].forEach(function(item){if(item.begin>=now){info=item;}});return info;};window.gm.build_DngNG=function(){function addMob(type,pos){//type refers either to a unique char existing in s.chars
 //or is generic mob, then we have to append idcounter and create instance
 var _id=type;if(!window.story.state.chars[type]){_id=type+IDGenerator.instance().createID();window.story.state.chars[_id]=window.gm.Mobs[type]();}//state = see window.gm.mobAI
 //timerA & B = ; used for mobAI
@@ -3061,8 +3078,12 @@ data.tmp.evtSpawn["DngNG_"+getTilesByVisual("mushroom")[0].room]={mushroom:{tick
 }//addMob("Ruff","G3"),addMob("Slime","I2"),addMob("Slime","G2");
 data.task={},data.rolledTask=[];//active task
 data.tasks={//task list 
-};//{"LT_RoomLiving:Sofa":{cardid:"Boobswell Lvl1",who:"Player"}}
-data.trap={"LT_RoomLiving:":{cardid:"",who:""},"LT_RoomLiving:Sofa":{cardid:"",who:""},"LT_RoomLiving:TV":{cardid:"",who:""}};}//install function to calculate chance of evtLeave
+};///Things for cardgame:
+//{"LT_RoomLiving:Sofa":{cardid:"Boobswell Lvl1",who:"Player",time:window.gm.getTime()}}
+data.trap={"LT_RoomLiving:":{cardid:"",who:"",time:""},"LT_RoomLiving:Sofa":{cardid:"",who:"",time:""},"LT_RoomLiving:TV":{cardid:"",who:"",time:""},"LT_RoomLiving:Bar":{cardid:"",who:"",time:""},"LT_RoomKitchen:Oven":{cardid:"",who:"",time:""},"LT_RoomKitchen:Microwave":{cardid:"",who:"",time:""},"LT_RoomKitchen:Sink":{cardid:"",who:"",time:""}};data.chars=["PlayerRL","Carlia"];//
+data.chars.forEach(function(id){s.chars[id].location="LT_RoomLiving";});data.activeChar=data.chars[0];// active player
+data.timeLeft=1;//if 0, player has no more time
+}//install function to calculate chance of evtLeave
 window.gm.encounterChance=function(evt){var res=100.0,s=window.story.state,dng=window.story.state.DngSY.dng;res*=evt.chance/100.0;if(evt.id==='Trap_Dehair'){//Dehair if nude and hair
 //if(window.gm.player.clothLevel()==='naked') {res*=2;}
 if(window.gm.getDeltaTime(window.gm.getTime(),evt.tick)>200)res*=2;else res=0;}return res;};//TODO cannot save graph due circular neigbours data.tmp.graph = window.gm.gridToGraph(_grid);  //for pathfinding  let path = window.astar.search(data.tmp.graph,"F2","I2",null,{heuristic:(function(a,b){return(1);})})
@@ -4375,7 +4396,7 @@ document.querySelector(&#39;#LinkO&#39;).addEventListener(&#39;click&#39;, funct
 &lt;form&gt;
 &lt;button type=&quot;button&quot; id=&quot;LinkS&quot; onclick=&#39;window.story.show(&quot;InspectPlayer&quot;);&#39;&gt;Status&lt;sup&gt;[s]&lt;/sup&gt;&lt;/button&gt;
 &lt;button type=&quot;button&quot; id=&quot;LinkI&quot; onclick=&#39;window.story.show(&quot;Inventory&quot;);&#39;&gt;Inventory&lt;sup&gt;[i]&lt;/sup&gt;&lt;/button&gt;
-&lt;button type=&quot;button&quot; onclick=&#39;window.story.show(&quot;Contestant&quot;);&#39;&gt;Contestant&lt;sup&gt;[i]&lt;/sup&gt;&lt;/button&gt;
+&lt;button type=&quot;button&quot; onclick=&#39;window.story.show(&quot;LT_ContestantList&quot;);&#39;&gt;Contestant&lt;sup&gt;[i]&lt;/sup&gt;&lt;/button&gt;
 &lt;hr&gt;
 &lt;button type=&quot;button&quot; id=&quot;save&quot; onclick=&#39;window.gm.toggleDialog(&quot;#dialog_save&quot;);&#39; style=&quot;width: 80%&quot;&gt;Save/load&lt;/button&gt;
 &lt;button type=&quot;button&quot; id=&quot;help&quot; onclick=&#39;window.story.show(&quot;Help_Index&quot;);&#39; style=&quot;width: 80%&quot;&gt;Help&lt;/button&gt;
@@ -5112,15 +5133,28 @@ The tunnel is broad enough, you just hope that there are not more of them furthe
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="72" name="LT_Start" tags="" position="700,425" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-[[LT_PostSleep]] TODO Introduction by gamemaster &amp; NGP Shop
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="73" name="LT_PostSleep" tags="" position="350,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+[[LT_NightEnd]] TODO Introduction by gamemaster &amp; NGP Shop
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="73" name="LT_NightStart" tags="_nosave_" position="350,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+show dream
+[[LT_NightEnd]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="74" name="LT_NightEnd" tags="_nosave_" position="475,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+advance time
+[[LT_PostSleepAI]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;
+window.gm.forwardTime(700); //wake 7:00
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="75" name="LT_PostSleepAI" tags="_nosave_" position="600,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&quot;newcards&quot;&gt;&lt;/div&gt;
+TODO run window.gm.nightAI() for each char
+[[LT_PostSleep]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="76" name="LT_PostSleep" tags="_nosave_" position="725,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 Energie und MR regeneriert
 TODO Tutorial Karten
 Some more cards where added to your inentory !
 &lt;br&gt;&lt;div id=&quot;newcards&quot;&gt;&lt;/div&gt;
 &lt;p class=&quot;author&quot;&gt;TODO NPC get cards but just drop them off if there are to many?&lt;/p&gt;
-Mehr Karten als erlaubt?  [[LT_UseCardFromHand]]
+[[LT_UseCardFromHand]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
 &lt;script&gt;
 var cards=window.gm.dealRandomCards(3,3);
@@ -5128,7 +5162,7 @@ cards.forEach(function(x){
    window.gm.player.Inv.addItem(x);
    window.gm.printOutput(x.name+&#39;&lt;br&gt;&#39;,&#39;#newcards&#39;,true);
 })
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="74" name="LT_UseCardFromHand" tags="" position="475,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="77" name="LT_UseCardFromHand" tags="_nosave_" position="850,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 window.gm.useCard(window.game.player,window.game.player.Inv,item.id)
  effect anzeigen, dann zurück zu hier
 &lt;br&gt;&lt;div id=&quot;newcards&quot; hidden&gt;&lt;/div&gt;
@@ -5142,16 +5176,87 @@ cards.forEach(function(x){ i+=1;
 })
 if(i&gt;5) { document.getElementById(&#39;newcards&#39;).removeAttribute(&quot;hidden&quot;); 
 }else { document.getElementById(&#39;next&#39;).removeAttribute(&quot;hidden&quot;);} 
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="75" name="LT_GoSomewhere" tags="" position="600,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="78" name="LT_GoSomewhere" tags="_nosave_" position="975,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+Choose a room where you want to go:&lt;br&gt;
+TODO indicate where the others are
 &lt;p&gt;First Floor:&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_RoomLiving&#39;,{},&#39;Living Room&#39;)%&gt;&lt;/p&gt;
 &lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_RoomKitchen&#39;,{},&#39;Kitchen&#39;)%&gt;&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_RoomShop&#39;,{},&#39;Shop&#39;)%&gt;&lt;/p&gt;
+
 &lt;p&gt;Outside:&lt;/p&gt; Pool, Blumengarten, Garage, Schuppen
 &lt;p&gt;Basement:&lt;/p&gt; Waschküche, Heizungskeller,Gym
-
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="76" name="LT_RoomLiving" tags="" position="700,600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;%=window.gm.printGoto(&#39;LT_RoomShop&#39;,{},&#39;Shop&#39;)%&gt;&lt;/p&gt;
+[[LT_ContestantList]] &lt;br&gt;
+&lt;a0 onclick=&#39;window.story.state.DngNG.timeLeft=0;window.story.show(&quot;LT_DoneForNow&quot;);&#39;&gt;Skip (TODO only for debug )&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="79" name="LT_RoomShop" tags="" position="1100,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+This is the shopping terminal. Unfortunatly it has nothing to offer right now.
+&lt;p&gt;[[LT_GoSomewhere]]&lt;/p&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="80" name="LT_TrapExist" tags="_nosave_" position="1225,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+You remember that this location was already trapped. So better leave that place alone.&lt;br&gt;   
+TODO Upgrade Trap?
+&lt;a0 onclick=&#39;window.story.show(window.gm.player.location);&#39;&gt;Continue&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="81" name="LT_TrapSetup" tags="_nosave_" position="100,1100" size="100,100">Lets see what card you could place here:&lt;br&gt;
+&lt;div id=&quot;cards&quot;&gt;&lt;/div&gt;&lt;br&gt;
+&lt;script&gt;
+var i=0,item,cards=window.gm.player.Inv.getAllIds({withTag:[ [&#39;card&#39;]]}); //write [ [...]] not [[...]]!
+cards.forEach(function(x){
+   item=window.gm.player.Inv.getItem(x);i=window.gm.player.Inv.countItem(x)
+   var msg=window.gm.printLink(i+&quot;x &quot;+item.name,&#39;useTrap(&quot;&#39;+item.id+&#39;&quot;)&#39;);
+   window.gm.printOutput(msg+&#39;&lt;br&gt;&#39;,&#39;#cards&#39;,true);
+})
+function useTrap(itemid){
+   document.getElementById(&quot;Leave&quot;).setAttribute(&quot;hidden&quot;,&quot;&quot;);
+   window.gm.addTrap(window.story.state.tmp.args[0],window.story.state.tmp.args[1],window.story.state.tmp.args[2],itemid);
+   window.gm.printOutput(&#39;You carefully place the trap and memorize the location.&lt;br&gt;&lt;a href=&quot;javascript:void(0)&quot; onclick=&quot;window.story.show(\&#39;LT_DoneForNow\&#39;)&quot;&gt;Finish&lt;/a&gt;&#39;,&quot;#output&quot;);
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="82" name="LT_TrapTrigger" tags="_nosave_" position="225,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+Oh my you triggered a trap.
+TODO flavour depending on who is affected, the card and location 
+&lt;div id=&quot;cards&quot;&gt;&lt;/div&gt;
+&lt;a0 onclick=&#39;window.gm.removeTrap(window.story.state.tmp.args[1],window.story.state.tmp.args[2]);window.story.show(window.gm.player.location);&#39;&gt;Continue&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="83" name="LT_DoneForNow" tags="_nosave_" position="350,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+You shouldnt see this, its just logic. 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;
+var s=window.story.state,now = window.gm.getTimeStruct();
+window.gm.dbgHelper();
+if(s.DngNG.timeLeft&gt;0){ //we can do something else 
+   window.story.show(s.chars[s.DngNG.activeChar].location);
+} else {
+   s.DngNG.timeLeft=1;
+   let p=s.DngNG.chars.indexOf(s.DngNG.activeChar)+1;
+   if(p&lt;(s.DngNG.chars.length)){
+      //pass control to next char.
+      s.DngNG.activeChar=s.DngNG.chars[p];
+      if(s.DngNG.activeChar===window.gm.player.id){
+         window.story.show(&#39;LT_GoSomewhere&#39;);
+      } else {
+         window.gm.dayAI();
+      }
+   } else {
+      s.DngNG.activeChar=s.DngNG.chars[0];
+      if(now.hour&gt;21){
+         //Goto sleep if day passed
+         window.story.show(&#39;LT_NightStart&#39;)
+      } else { //Advance timeslot if all players done.
+         window.gm.addTime(60*3); //5 slots a 3h; between 7:00 and 22:00
+         window.story.show(window.passage.name);
+      }
+   }
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="84" name="LT_ContestantList" tags="_back_" position="475,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+show ranking
+link to details of contestant 
+&lt;div id=&quot;contestant&quot;&gt;&lt;/div&gt;
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="85" name="LT_ContestantDetail" tags="_back_" position="600,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+show former self and current TF
+show stats
+&lt;div id=&quot;contestant&quot;&gt;&lt;/div&gt;
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="86" name="LT_RoomLiving" tags="" position="725,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 
  - Ereignis beim betreten ? -&gt;
@@ -5167,34 +5272,115 @@ if(i&gt;5) { document.getElementById(&#39;newcards&#39;).removeAttribute(&quot;h
 
  Ein Wohnzimmer mit großer Couch und einigen Sesseln vor einem riesigen Fernseher.
  An der Seitenwand steht eine Bar-Theke mit Barhockern davor.
- &lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;Sofa&quot;);&#39;&gt;Sit on the couch&lt;/a&gt;
- &lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;TV&quot;);&#39;&gt;Check on the TV&lt;/a&gt;
- &lt;a0&gt;Sit at the bar&lt;/a&gt;  
-
-&lt;p&gt;[[back|LT_Start]]&lt;/p&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="77" name="LT_TrapExist" tags="_nosave_" position="850,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-You remember that this location was already trapped. So better leave that place alone.&lt;br&gt;   
-&lt;a0 onclick=&#39;window.story.show(window.gm.player.location);&#39;&gt;Continue&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="78" name="LT_TrapSetup" tags="_nosave_" position="975,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-This location looks like a good place to setup a trap.&lt;br&gt;
-Lets see what card you could place here:&lt;br&gt;
-&lt;div id=&quot;cards&quot;&gt;&lt;/div&gt;
-&lt;a0 onclick=&#39;window.story.show(window.gm.player.location);&#39;&gt;Continue&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;Sofa&quot;);&#39;&gt;Sit on the couch&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;TV&quot;);&#39;&gt;Check on the TV&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;Bar&quot;);&#39;&gt;Sit at the bar&lt;/a&gt;  
+TODO only for debug&lt;p&gt;[[LT_GoSomewhere]]&lt;/p&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="87" name="LT_RoomLiving_Sofa" tags="" position="850,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&#39;Leave&#39; &gt;
+&lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#Leave&quot;,&quot;div#choice1a&quot;);action();&#39;&gt;Resting&lt;/a&gt; on the couch would be an option.&lt;br&gt;
+&lt;a0 onclick=&#39;window.story.show(&quot;LT_RoomLiving&quot;)&#39;&gt;Back&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;This location looks like a good place to setup a trap.&lt;br&gt;
+&lt;%=window.story.render(&quot;LT_TrapSetup&quot;)%&gt;
+&lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
+   &lt;p&gt;You flop down on the sofa and think about what you can do next.&lt;p&gt;[[LT_DoneForNow]]
+&lt;/div&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;br&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;script&gt;
-var i=0,item,cards=window.gm.player.Inv.getAllIds({withTag:[ [&#39;card&#39;]]}); //write [ [...]] not [[...]]!
-cards.forEach(function(x){
-   item=window.gm.player.Inv.getItem(x);i=window.gm.player.Inv.countItem(x)
-   var msg=window.gm.printLink(i+&quot;x &quot;+item.name,
-   &#39;window.gm.addTrap(window.story.state.tmp.args[0],window.story.state.tmp.args[1],window.story.state.tmp.args[2],&quot;&#39;+item.id+&#39;&quot;);&#39;);
-   window.gm.printOutput(msg+&#39;&lt;br&gt;&#39;,&#39;#cards&#39;,true);
-})
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="79" name="LT_TrapTrigger" tags="_nosave_" position="1100,975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-Oh my you triggered a trap.
-TODO flavour depending on who is affected, the card and location 
-&lt;div id=&quot;cards&quot;&gt;&lt;/div&gt;
-&lt;a0 onclick=&#39;window.gm.removeTrap(window.story.state.tmp.args[1],window.story.state.tmp.args[2]);window.story.show(window.gm.player.location);&#39;&gt;Continue&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="80" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
+&lt;script&gt;function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="88" name="LT_RoomLiving_TV" tags="" position="975,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&#39;Leave&#39; &gt;
+Maybe &lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#Leave&quot;,&quot;div#choice1a&quot;);action();&#39;&gt;watching&lt;/a&gt; something in the TV is worth your time.&lt;br&gt;
+&lt;a0 onclick=&#39;window.story.show(&quot;LT_RoomLiving&quot;)&#39;&gt;Back&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;This location looks like a good place to setup a trap.&lt;br&gt;
+&lt;%=window.story.render(&quot;LT_TrapSetup&quot;)%&gt;
+&lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
+   &lt;p&gt;Just brainless comercials.&lt;p&gt;[[LT_DoneForNow]]
+&lt;/div&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;br&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="89" name="LT_RoomLiving_Bar" tags="" position="1100,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&#39;Leave&#39; &gt;
+&lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#Leave&quot;,&quot;div#choice1a&quot;);action();&#39;&gt;Sit&lt;/a&gt; at the bar and get a drink.&lt;br&gt;
+&lt;a0 onclick=&#39;window.story.show(&quot;LT_RoomLiving&quot;)&#39;&gt;Back&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;This location looks like a good place to setup a trap.&lt;br&gt;
+&lt;%=window.story.render(&quot;LT_TrapSetup&quot;)%&gt;
+&lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
+   &lt;p&gt;Some bottles have no labels and their content look like urin.&lt;p&gt;[[LT_DoneForNow]]
+&lt;/div&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;br&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="90" name="LT_RoomKitchen" tags="" position="1225,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+Eine Küche mit imposamter Küchenzeile. Herd, Backofen, Geschirrspüler, Küchenmaschine. Und Mikrowelle für den Junkfood-Junkie.
+ &lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;Sink&quot;);&#39;&gt;Check the sink&lt;/a&gt;
+ &lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;Microwave&quot;);&#39;&gt;Open the Microwave&lt;/a&gt;
+ &lt;a0 onclick=&#39;window.gm.interactTrap(window.gm.player.id,window.gm.player.location,&quot;Oven&quot;);&#39;&gt;Inspect the Stove&lt;/a&gt;
+ &lt;br&gt;Sink
+&lt;p&gt;[[LT_GoSomewhere]]&lt;/p&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="91" name="LT_RoomKitchen_Sink" tags="" position="100,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&#39;Leave&#39; &gt;
+&lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#Leave&quot;,&quot;div#choice1a&quot;);action();&#39;&gt;Using&lt;/a&gt; the sink.&lt;br&gt;
+&lt;a0 onclick=&#39;window.story.show(&quot;LT_RoomLiving&quot;)&#39;&gt;Back&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;This location looks like a good place to setup a trap.&lt;br&gt;
+&lt;%=window.story.render(&quot;LT_TrapSetup&quot;)%&gt;
+&lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
+   &lt;p&gt;Tiding some cups and setting them back to the cupboard.&lt;p&gt;[[LT_DoneForNow]]
+&lt;/div&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;br&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="92" name="LT_RoomKitchen_Microwave" tags="" position="225,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&#39;Leave&#39; &gt;
+&lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#Leave&quot;,&quot;div#choice1a&quot;);action();&#39;&gt;Using&lt;/a&gt; the microwave.&lt;br&gt;
+&lt;a0 onclick=&#39;window.story.show(&quot;LT_RoomLiving&quot;)&#39;&gt;Back&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;This location looks like a good place to setup a trap.&lt;br&gt;
+&lt;%=window.story.render(&quot;LT_TrapSetup&quot;)%&gt;
+&lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
+   &lt;p&gt;Look how that microwave popcorn pops.&lt;p&gt;[[LT_DoneForNow]]
+&lt;/div&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;br&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="93" name="LT_RoomKitchen_Oven" tags="" position="350,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&#39;Leave&#39; &gt;
+&lt;a0 onclick=&#39;window.gm.printTalkLink(&quot;div#Leave&quot;,&quot;div#choice1a&quot;);action();&#39;&gt;Using&lt;/a&gt; the stove.&lt;br&gt;
+&lt;a0 onclick=&#39;window.story.show(&quot;LT_RoomLiving&quot;)&#39;&gt;Back&lt;/a&gt;&lt;/p&gt;
+&lt;br&gt;This location looks like a good place to setup a trap.&lt;br&gt;
+&lt;%=window.story.render(&quot;LT_TrapSetup&quot;)%&gt;
+&lt;/div&gt;&lt;div id=&#39;choice1a&#39; hidden&gt;
+   &lt;p&gt;Thinking about putting a roast in the oven.&lt;p&gt;[[LT_DoneForNow]]
+&lt;/div&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;&lt;br&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="94" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 That didnt work out as expected. &lt;/br&gt;
@@ -5221,7 +5407,7 @@ function downgrade_option(elmnt) {
 function downgrade_option2(elmnt) {
     window.gm.onSelect(elmnt,&quot;div#choice table tbody tr td img&quot;,&quot;div#choice table tbody tr td span&quot;);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="81" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="95" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 You selected the icon and flickers up while the others vanish. &lt;/br&gt;
@@ -5232,22 +5418,22 @@ Thankfully you straighten up and timidly glance back at it. &lt;/br&gt;
 Making some steps backward the robot gives you some room but seems still to stare at you.&lt;/br&gt;
 
 [[Better go with them|Home]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="82" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="96" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;lisa_anal_vortex&quot;&gt;Swirling vortex, a black hole that sucks everthing in. Or portal that sends you home?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="83" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="97" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&#39;lisa_armbinder&#39;&gt;That could be a person. Not sure what that V-shape means. Some kind of outfit?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="84" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="98" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_plus&quot; &gt;Symbol for male, thats easy. But what does it stand for and whats the meaning of the cross?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="85" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="99" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_X&quot; &gt;That symbol you saw already. The cross looks different this time.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="86" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="100" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_tongue&quot; &gt;A tongue maybe? Or something ompletely different.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="87" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="101" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_mouth&quot; &gt;Are those lips? A mouth that speaks. I think I get insane if I dont meet someone to speak with soon.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="88" name="Start" tags="" position="200,400" size="100,100">Select a Link:
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="102" name="Start" tags="" position="200,400" size="100,100">Select a Link:
 &lt;ul&gt;
     &lt;li&gt;[[StartPage]]&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="89" name="GenericPassage" tags="_nosave_" position="1100,1100" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="103" name="GenericPassage" tags="_nosave_" position="350,1350" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
 &lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;div id=&#39;panel&#39;&gt;&lt;/div&gt;&lt;!--description is rendered here--&gt;
 &lt;div id=&#39;choice&#39;&gt;&lt;/div&gt; &lt;!--choice is rendered here--&gt;

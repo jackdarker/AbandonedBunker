@@ -125,10 +125,10 @@ window.gm.initGame= function(forceReset,NGP=null){
         ch.faction="Player";
         //ch.Effects.addItem(new skCooking());
         //add some basic inventory
-        ch.Inv.addItem(new Money(),20);
-        ch.Inv.addItem(new LighterDad());
-        ch.Inv.addItem(new FlashBang(),2);
-        ch.Inv.addItem(new CanOfCoffee(),2);
+        //ch.Inv.addItem(new Money(),20);
+        //ch.Inv.addItem(new LighterDad());
+        //ch.Inv.addItem(new FlashBang(),2);
+        //ch.Inv.addItem(new CanOfCoffee(),2);
         ch.Wardrobe.addItem(new Jeans());
         ch.Wardrobe.addItem(new Briefs());
         ch.Wardrobe.addItem(new Sneakers());

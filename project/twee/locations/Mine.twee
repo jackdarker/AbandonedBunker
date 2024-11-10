@@ -16,7 +16,7 @@
 <form>
 <button type="button" id="LinkS" onclick='window.story.show("InspectPlayer");'>Status<sup>[s]</sup></button>
 <button type="button" id="LinkI" onclick='window.story.show("Inventory");'>Inventory<sup>[i]</sup></button>
-<button type="button" onclick='window.story.show("Contestant");'>Contestant<sup>[i]</sup></button>
+<button type="button" onclick='window.story.show("LT_ContestantList");'>Contestant<sup>[i]</sup></button>
 <hr>
 <button type="button" id="save" onclick='window.gm.toggleDialog("#dialog_save");' style="width: 80%">Save/load</button>
 <button type="button" id="help" onclick='window.story.show("Help_Index");' style="width: 80%">Help</button>

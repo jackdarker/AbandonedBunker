@@ -2,10 +2,32 @@
 :: LT_Start {"position":"700,425"} 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
-[[LT_PostSleep]] TODO Introduction by gamemaster & NGP Shop
+[[LT_NightEnd]] TODO Introduction by gamemaster & NGP Shop
 </article><article id="LogPanel"></article></section>
 
-:: LT_PostSleep
+:: LT_NightStart [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+show dream
+[[LT_NightEnd]]
+</article><article id="LogPanel"></article></section>
+
+:: LT_NightEnd [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+advance time
+[[LT_PostSleepAI]]
+</article><article id="LogPanel"></article></section>
+<script>
+window.gm.forwardTime(700); //wake 7:00
+</script>
+
+:: LT_PostSleepAI [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<div id="newcards"></div>
+TODO run window.gm.nightAI() for each char
+[[LT_PostSleep]]
+</article><article id="LogPanel"></article></section>
+
+:: LT_PostSleep [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 Energie und MR regeneriert
@@ -24,7 +46,7 @@ cards.forEach(function(x){
 </script>
 
 
-:: LT_UseCardFromHand
+:: LT_UseCardFromHand [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 window.gm.useCard(window.game.player,window.game.player.Inv,item.id)
  effect anzeigen, dann zurück zu hier
@@ -41,19 +63,114 @@ if(i>5) { document.getElementById('newcards').removeAttribute("hidden");
 }else { document.getElementById('next').removeAttribute("hidden");} 
 </script>
 
-:: LT_GoSomewhere
+:: LT_GoSomewhere [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+Choose a room where you want to go:<br>
+TODO indicate where the others are
 <p>First Floor:</p>
 <p><%=window.gm.printGoto('LT_RoomLiving',{},'Living Room')%></p>
 <p><%=window.gm.printGoto('LT_RoomKitchen',{},'Kitchen')%></p>
-<p><%=window.gm.printGoto('LT_RoomShop',{},'Shop')%></p>
+
 <p>Outside:</p> Pool, Blumengarten, Garage, Schuppen
 <p>Basement:</p> Waschküche, Heizungskeller,Gym
+<hr>
+<p><%=window.gm.printGoto('LT_RoomShop',{},'Shop')%></p>
+[[LT_ContestantList]] <br>
+<a0 onclick='window.story.state.DngNG.timeLeft=0;window.story.show("LT_DoneForNow");'>Skip (TODO only for debug )</a>
+</article><article id="LogPanel"></article></section>
 
+:: LT_RoomShop
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+This is the shopping terminal. Unfortunatly it has nothing to offer right now.
+<p>[[LT_GoSomewhere]]</p>
+</article><article id="LogPanel"></article></section>
+
+:: LT_TrapExist [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+You remember that this location was already trapped. So better leave that place alone.<br>   
+TODO Upgrade Trap?
+<a0 onclick='window.story.show(window.gm.player.location);'>Continue</a>
+</article><article id="LogPanel"></article></section>
+
+:: LT_TrapSetup [_nosave_]
+Lets see what card you could place here:<br>
+<div id="cards"></div><br>
+<script>
+var i=0,item,cards=window.gm.player.Inv.getAllIds({withTag:[ ['card']]}); //write [ [...]] not [[...]]!
+cards.forEach(function(x){
+   item=window.gm.player.Inv.getItem(x);i=window.gm.player.Inv.countItem(x)
+   var msg=window.gm.printLink(i+"x "+item.name,'useTrap("'+item.id+'")');
+   window.gm.printOutput(msg+'<br>','#cards',true);
+})
+function useTrap(itemid){
+   document.getElementById("Leave").setAttribute("hidden","");
+   window.gm.addTrap(window.story.state.tmp.args[0],window.story.state.tmp.args[1],window.story.state.tmp.args[2],itemid);
+   window.gm.printOutput('You carefully place the trap and memorize the location.<br><a href="javascript:void(0)" onclick="window.story.show(\'LT_DoneForNow\')">Finish</a>',"#output");
+}
+</script>
+
+:: LT_TrapTrigger [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+Oh my you triggered a trap.
+TODO flavour depending on who is affected, the card and location 
+<div id="cards"></div>
+<a0 onclick='window.gm.removeTrap(window.story.state.tmp.args[1],window.story.state.tmp.args[2]);window.story.show(window.gm.player.location);'>Continue</a>
 </article><article id="LogPanel"></article></section>
 
 
-:: LT_RoomLiving {"position":"700,600"}
+:: LT_DoneForNow [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+You shouldnt see this, its just logic. 
+</article><article id="LogPanel"></article></section>
+<script>
+var s=window.story.state,now = window.gm.getTimeStruct();
+window.gm.dbgHelper();
+if(s.DngNG.timeLeft>0){ //we can do something else 
+   window.story.show(s.chars[s.DngNG.activeChar].location);
+} else {
+   s.DngNG.timeLeft=1;
+   let p=s.DngNG.chars.indexOf(s.DngNG.activeChar)+1;
+   if(p<(s.DngNG.chars.length)){
+      //pass control to next char.
+      s.DngNG.activeChar=s.DngNG.chars[p];
+      if(s.DngNG.activeChar===window.gm.player.id){
+         window.story.show('LT_GoSomewhere');
+      } else {
+         window.gm.dayAI();
+      }
+   } else {
+      s.DngNG.activeChar=s.DngNG.chars[0];
+      if(now.hour>21){
+         //Goto sleep if day passed
+         window.story.show('LT_NightStart')
+      } else { //Advance timeslot if all players done.
+         window.gm.addTime(60*3); //5 slots a 3h; between 7:00 and 22:00
+         window.story.show(window.passage.name);
+      }
+   }
+}
+</script>
+
+:: LT_ContestantList [_back_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+show ranking
+link to details of contestant 
+<div id="contestant"></div>
+[[Back|_back_]]
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_ContestantDetail [_back_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+show former self and current TF
+show stats
+<div id="contestant"></div>
+[[Back|_back_]]
+</article><article id="LogPanel"></article></section>
+
+
+:: LT_RoomLiving
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 
@@ -70,54 +187,139 @@ if(i>5) { document.getElementById('newcards').removeAttribute("hidden");
 
  Ein Wohnzimmer mit großer Couch und einigen Sesseln vor einem riesigen Fernseher.
  An der Seitenwand steht eine Bar-Theke mit Barhockern davor.
- <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Sofa");'>Sit on the couch</a>
- <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"TV");'>Check on the TV</a>
- <a0>Sit at the bar</a>  
-
-<p>[[LT_GoSomewhere]]</p>
+<a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Sofa");'>Sit on the couch</a>
+<a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"TV");'>Check on the TV</a>
+<a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Bar");'>Sit at the bar</a>  
+TODO only for debug<p>[[LT_GoSomewhere]]</p>
 </article><article id="LogPanel"></article></section>
 
+
+:: LT_RoomLiving_Sofa
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<div id='Leave' >
+<a0 onclick='window.gm.printTalkLink("div#Leave","div#choice1a");action();'>Resting</a> on the couch would be an option.<br>
+<a0 onclick='window.story.show("LT_RoomLiving")'>Back</a></p>
+<br>This location looks like a good place to setup a trap.<br>
+<%=window.story.render("LT_TrapSetup")%>
+</div><div id='choice1a' hidden>
+   <p>You flop down on the sofa and think about what you can do next.<p>[[LT_DoneForNow]]
+</div>
+<div id="output"></div><br>
+</article><article id="LogPanel"></article></section>
+<script>function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+</script>
+
+
+:: LT_RoomLiving_TV
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<div id='Leave' >
+Maybe <a0 onclick='window.gm.printTalkLink("div#Leave","div#choice1a");action();'>watching</a> something in the TV is worth your time.<br>
+<a0 onclick='window.story.show("LT_RoomLiving")'>Back</a></p>
+<br>This location looks like a good place to setup a trap.<br>
+<%=window.story.render("LT_TrapSetup")%>
+</div><div id='choice1a' hidden>
+   <p>Just brainless comercials.<p>[[LT_DoneForNow]]
+</div>
+<div id="output"></div><br>
+</article><article id="LogPanel"></article></section>
+<script>function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+</script>
+
+
+:: LT_RoomLiving_Bar
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<div id='Leave' >
+<a0 onclick='window.gm.printTalkLink("div#Leave","div#choice1a");action();'>Sit</a> at the bar and get a drink.<br>
+<a0 onclick='window.story.show("LT_RoomLiving")'>Back</a></p>
+<br>This location looks like a good place to setup a trap.<br>
+<%=window.story.render("LT_TrapSetup")%>
+</div><div id='choice1a' hidden>
+   <p>Some bottles have no labels and their content look like urin.<p>[[LT_DoneForNow]]
+</div>
+<div id="output"></div><br>
+</article><article id="LogPanel"></article></section>
+<script>function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+</script>
 
 :: LT_RoomKitchen
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
-
 Eine Küche mit imposamter Küchenzeile. Herd, Backofen, Geschirrspüler, Küchenmaschine. Und Mikrowelle für den Junkfood-Junkie.
- <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Dishwasher");'>Check the dishwasher</a>
+ <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Sink");'>Check the sink</a>
  <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Microwave");'>Open the Microwave</a>
-
+ <a0 onclick='window.gm.interactTrap(window.gm.player.id,window.gm.player.location,"Oven");'>Inspect the Stove</a>
+ <br>Sink
 <p>[[LT_GoSomewhere]]</p>
 </article><article id="LogPanel"></article></section>
 
 
-:: LT_TrapExist [_nosave_]
+:: LT_RoomKitchen_Sink
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-You remember that this location was already trapped. So better leave that place alone.<br>   
-<a0 onclick='window.story.show(window.gm.player.location);'>Continue</a>
+<div id='Leave' >
+<a0 onclick='window.gm.printTalkLink("div#Leave","div#choice1a");action();'>Using</a> the sink.<br>
+<a0 onclick='window.story.show("LT_RoomLiving")'>Back</a></p>
+<br>This location looks like a good place to setup a trap.<br>
+<%=window.story.render("LT_TrapSetup")%>
+</div><div id='choice1a' hidden>
+   <p>Tiding some cups and setting them back to the cupboard.<p>[[LT_DoneForNow]]
+</div>
+<div id="output"></div><br>
 </article><article id="LogPanel"></article></section>
-
-:: LT_TrapSetup [_nosave_]
-<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-This location looks like a good place to setup a trap.<br>
-Lets see what card you could place here:<br>
-<div id="cards"></div><br>
-<a0 onclick='window.story.show(window.gm.player.location);'>Leave</a>
-</article><article id="LogPanel"></article></section>
-<script>
-var i=0,item,cards=window.gm.player.Inv.getAllIds({withTag:[ ['card']]}); //write [ [...]] not [[...]]!
-cards.forEach(function(x){
-   item=window.gm.player.Inv.getItem(x);i=window.gm.player.Inv.countItem(x)
-   var msg=window.gm.printLink(i+"x "+item.name,
-   'window.gm.addTrap(window.story.state.tmp.args[0],window.story.state.tmp.args[1],window.story.state.tmp.args[2],"'+item.id+'");'+
-   'window.gm.printOutput("You carefully place the trap and memorize the location.","#cards");');
-   window.gm.printOutput(msg+'<br>','#cards',true);
-})
+<script>function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
 </script>
 
-:: LT_TrapTrigger [_nosave_]
+
+:: LT_RoomKitchen_Microwave
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-Oh my you triggered a trap.
-TODO flavour depending on who is affected, the card and location 
-<div id="cards"></div>
-<a0 onclick='window.gm.removeTrap(window.story.state.tmp.args[1],window.story.state.tmp.args[2]);window.story.show(window.gm.player.location);'>Continue</a>
+<div id='Leave' >
+<a0 onclick='window.gm.printTalkLink("div#Leave","div#choice1a");action();'>Using</a> the microwave.<br>
+<a0 onclick='window.story.show("LT_RoomLiving")'>Back</a></p>
+<br>This location looks like a good place to setup a trap.<br>
+<%=window.story.render("LT_TrapSetup")%>
+</div><div id='choice1a' hidden>
+   <p>Look how that microwave popcorn pops.<p>[[LT_DoneForNow]]
+</div>
+<div id="output"></div><br>
 </article><article id="LogPanel"></article></section>
+<script>function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+</script>
+
+
+:: LT_RoomKitchen_Oven
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<div id='Leave' >
+<a0 onclick='window.gm.printTalkLink("div#Leave","div#choice1a");action();'>Using</a> the stove.<br>
+<a0 onclick='window.story.show("LT_RoomLiving")'>Back</a></p>
+<br>This location looks like a good place to setup a trap.<br>
+<%=window.story.render("LT_TrapSetup")%>
+</div><div id='choice1a' hidden>
+   <p>Thinking about putting a roast in the oven.<p>[[LT_DoneForNow]]
+</div>
+<div id="output"></div><br>
+</article><article id="LogPanel"></article></section>
+<script>function action(){
+   var s=window.story.state;
+   //todo reover AP
+   s.DngNG.timeLeft=0;
+}
+</script>

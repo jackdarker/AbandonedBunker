@@ -16,7 +16,7 @@ class Card extends Item {
             break
         default: throw new Error(this.id +' doesnt know '+style);
         }
-        this.id=this.name=(this.name+' Lv'+this._lvl.toString());
+        this.id=this.name=(this.name+'-Lv'+this._lvl.toString());
     }
     get style(){return this._style;}
     get desc(){ 
@@ -25,7 +25,7 @@ class Card extends Item {
             case 0: 
                 msg ='some strange material';
                 break;
-            default: msg="a mysterious card";//throw new Error(this.id +' doesnt know '+style);
+            default: msg="a mysterious card.";//throw new Error(this.id +' doesnt know '+style);
         }
         return(msg);
     }
@@ -96,13 +96,19 @@ class Gun extends Weapon {
 window.gm.ItemsLib = (function (ItemsLib){
     window.storage.registerConstructor(Card);
     window.storage.registerConstructor(Gun);
-    ItemsLib['Boob-Swell Lv1'] = function(){ let x= new Card();x.style=101;return(x);}
-    ItemsLib['Boob-Shrink Lv1'] = function(){ let x= new Card();x.style=201;return(x);}
+    ItemsLib['Boob-Swell_Lv1'] = function(){ let x= new Card();x.style=101;return(x);}
+    ItemsLib['Boob-Shrink_Lv1'] = function(){ let x= new Card();x.style=201;return(x);}
 return ItemsLib; 
 }(window.gm.ItemsLib || {}));
 
 window.gm.dealRandomCards = function(countmin,countmax){
-    return([new window.gm.ItemsLib['Boob-Swell Lv1'](),new window.gm.ItemsLib['Boob-Swell Lv1']()]);
+    let cards=[],pool=['Boob-Swell_Lv1','Boob-Shrink_Lv1'];
+    for(var i=1;i<=countmax;i++){
+        if(i<=countmin || _.random(0,100)>50){
+            cards.push(new window.gm.ItemsLib[pool[_.random(0,pool.length-1)]]())
+        }
+    }
+    return(cards);
 }
 //try to apply a card to some character
 //Inv is either Char-Inventory or Trap or null
@@ -127,7 +133,8 @@ window.gm.interactTrap = function(who,location,trapid){
     else if(trap.who==who){
         window.story.show("LT_TrapExist");
     } else if(trap.cardid==""){
-        window.story.show("LT_TrapSetup");
+        //requires passage like LT_Kitchen_Mixer
+        window.story.show(location+"_"+trapid);//("LT_TrapSetup");
     } else {
         window.story.show("LT_TrapTrigger");
     }
@@ -138,7 +145,51 @@ window.gm.removeTrap = function(location,trapid){
 }
 window.gm.addTrap = function(who,location,trapid,cardid){
     let s=window.story.state,trap=s.DngNG.trap[location+":"+trapid];
-    trap.cardid=cardid,trap.who=who;
+    trap.cardid=cardid,trap.who=who,trap.time=window.gm.getTime();
+    window.story.state.chars[who].Inv.removeItem(cardid);
+    s.DngNG.timeLeft=0;
+}
+//for non-player-char
+window.gm.dayAI = function(){
+    var s=window.story.state;
+    //Todo do shopping
+
+    //check schedule of char and go there
+    let schedule=window.gm.getScheduleForChar();
+    s.chars[s.DngNG.activeChar].location=schedule.location;
+    //TODO direct confrontation against NPC/player
+    //do activity or setup trap
+    //window.gm.interactTrap(s.DngNG.activeChar,schedule.location,schedule.activity);
+    s.DngNG.timeLeft=0; //AI move complete
+    window.story.show("LT_DoneForNow");
+}
+//for non-player-char
+window.gm.nightAI = function(){
+    //regenerate stats
+    //give new cards and fix hand
+    var s=window.story.state,cards=window.gm.dealRandomCards(3,3);
+    cards.forEach(function(x){
+        s.chars[s.DngNG.activeChar].Inv.addItem(x);
+        window.gm.printOutput(x.name+'<br>','#newcards',true);
+    })
+}
+window.gm.getScheduleForChar=function(){
+    let info,s=window.story.state,now=window.gm.getTimeStruct().hour*100;
+    //a char has a slot assigned; the slot list for time of day what loacation&activity is preffered 
+    let schedules=[
+        [{begin:700, location:"LT_RoomLiving", activity:"TV"},
+        {begin:1000, location:"LT_RoomLiving", activity:"TV"},
+        {begin:1300, location:"LT_RoomLiving", activity:"Bar"},
+        {begin:1600, location:"LT_RoomLiving", activity:"Sofa"},
+        {begin:1900, location:"LT_RoomLiving", activity:"Bar"},
+        ]   
+    ]
+    schedules[0].forEach((item)=>{
+        if(item.begin>=now){
+            info=item;
+        }
+    });
+    return(info)
 }
 window.gm.build_DngNG=function(){
     function addMob(type,pos){
@@ -220,12 +271,24 @@ window.gm.build_DngNG=function(){
         data.task = {},data.rolledTask=[]; //active task
         data.tasks = { //task list 
         };
-        //{"LT_RoomLiving:Sofa":{cardid:"Boobswell Lvl1",who:"Player"}}
+
+        ///Things for cardgame:
+        //{"LT_RoomLiving:Sofa":{cardid:"Boobswell Lvl1",who:"Player",time:window.gm.getTime()}}
         data.trap = {
-            "LT_RoomLiving:":{cardid:"",who:""},
-            "LT_RoomLiving:Sofa":{cardid:"",who:""},
-            "LT_RoomLiving:TV":{cardid:"",who:""}
+            "LT_RoomLiving:":{cardid:"",who:"",time:""},
+            "LT_RoomLiving:Sofa":{cardid:"",who:"",time:""},
+            "LT_RoomLiving:TV":{cardid:"",who:"",time:""},
+            "LT_RoomLiving:Bar":{cardid:"",who:"",time:""},
+            "LT_RoomKitchen:Oven":{cardid:"",who:"",time:""},
+            "LT_RoomKitchen:Microwave":{cardid:"",who:"",time:""},
+            "LT_RoomKitchen:Sink":{cardid:"",who:"",time:""}
         }; 
+        data.chars = ["PlayerRL","Carlia"];   //
+        data.chars.forEach(function(id){
+            s.chars[id].location="LT_RoomLiving";
+        });
+        data.activeChar =data.chars[0]; // active player
+        data.timeLeft = 1; //if 0, player has no more time
     }
     //install function to calculate chance of evtLeave
     window.gm.encounterChance=function(evt){
