@@ -1,6 +1,6 @@
 
 body {
-  background-image:url('../assets/bg_hex.jpg');
+  background-image:url('../assets/bg/bg_hex.jpg');
   color:black;
   padding:0;
   margin:0;
@@ -18,8 +18,12 @@ section {
   grid-template-rows: 80% 20%;
   height:100vh;
   /*width:95vw;*/ /*scrollbars*/  }
-.section_swap {
+
+.log_fullview { /*log is 2.row of flexgrid*/
   grid-template-rows: 2% ;
+}
+.log_hideview {
+  grid-template-rows: 95% ;
 }
 
 section h2 {
@@ -31,12 +35,22 @@ a {
     margin-left:0.25em;
     margin-right:0.25em;
 }
+.link {
+  /*makes a text look like link*/
+  cursor: pointer;
+  color: rgb(140, 180, 255);
+  text-decoration:underline;
+}
+.nolink {
+  /*makes a link look like plain texr*/
+  color: unset;
+  text-decoration:unset;
+}
 a:hover {
     color: #008929;
     text-decoration-color: #008929;
 }
 #sidebar {
-  background-color: #ffede099;
   margin: 0.25em 0.25em;
   padding: 0.25em;
   min-width: 10em;
@@ -64,7 +78,7 @@ tw-story {
   /*width:95vW;*/
   max-width: 60em;
   margin: 0 0/*auto*/; 
-  line-height: 120%;
+  line-height: 100%;
   display: block;
 }
 tgl {
@@ -88,7 +102,7 @@ dialog::backdrop, #backdrop {
   background-color: rgba(0, 0, 0, 0.5);    
 }
 #svgpopup {
-  width: 40px;
+  min-width: 40px;
   padding: 6px;
   background-color: white;
   border-radius: 4px;
@@ -106,6 +120,19 @@ dialog::backdrop, #backdrop {
   top: 6px;
 }
 .done  {text-decoration: line-through;}
+.combateff {
+  line-height:32px;
+}
+.combateff > .combaticon {
+  float: left;
+  margin-right:0.1em;
+}
+
+.combateff > .combaticon > svg {
+  width: 32px;
+  height: 32px;
+  vertical-align: top;
+}
 .popup {
   position: relative;
   display: inline-block;
@@ -211,13 +238,16 @@ background:blue;
     display: block;
 background:red;
 }
-
+/* hint-toggle:
+<label>[hint]<input type="checkbox" style="display: none;">
+     <span role='tooltip'>My tooltip</span>
+</label> */
 input:not(checked) ~ span[role=tooltip] {
   display:none;
   visibility:hidden;
 }
 input:checked ~ span[role=tooltip] {
-	display: inline-block;
+	/*
 	position: relative;
 	bottom: 1em;
 	left: 0em;
@@ -226,9 +256,14 @@ input:checked ~ span[role=tooltip] {
 	z-index: 100;
 	color: #000;
 	background-color: #ffebe6;
-	border: solid 1px #c32e04;
-	border-radius: 0.2em;
+  */
+  display: inline-block; 
   visibility:visible;
+  border: solid 1px #c32e04;
+	border-radius: 0.2em;
+	padding: 8px 8px 8px 8px;
+  text-align: left;
+  margin: 8px 8px 8px 8px;
 }
 [type=checkbox], [type=radio] {
   width:1em;
@@ -244,8 +279,8 @@ button {
 	border-radius: 15px;
 	padding: 8px 8px 8px 8px;
 	box-shadow: 5px 5px 3px Black;
-  	text-align: left;
-  	margin: 8px 8px 8px 8px;
+  text-align: left;
+  margin: 8px 8px 8px 8px;
 }
 .avatar {
 	display: block;

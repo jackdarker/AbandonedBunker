@@ -13,11 +13,15 @@ class IDGenerator {//extends Singleton{
       if(!IDGenerator._instance){return new IDGenerator(); }
       return IDGenerator._instance;
   }
-  createID() {this._idCounter++;return(this._idCounter);}
+  static resetID(useID){ //this should be only called after reload
+    //hack: reloading save causes constructor calls causes calls to createID which would increase counter (the ids are reverted by merging loaded data into the constructed objects)
+    //so we need a way to revert this increase
+    IDGenerator.instance()._idCounter=useID;
+  }
+  static createID() {let x=IDGenerator.instance()._idCounter++;return("_"+x);} //add _ or queryselector() might not work if id starts with number ?!
   toJSON(){return window.storage.Generic_toJSON("IDGenerator", this); }
   static fromJSON(value){return(window.storage.Generic_fromJSON(IDGenerator, value.data));}
 }
-
 // helper for publisher/subscriber-pattern; myObject.ps =PubSub(); myObject.ps.subscribe(...
 // !! warning, dont use for objects that need to be loaded from savegame
 // the reviver calls constructor of nested objects multiple times which lead to multiple registrations with partially incomplete objects in the PubSub;
@@ -163,10 +167,53 @@ window.gm.util.addShortKeyHandler=function(){
     }
   });
 };
+//returns normal distributed random value, mu= mean, 0 by default; sigma= stdev, 1 by default; nsamples= more samples creates better approximation, 3 by default
+window.gm.util.randomNormal=function(mu, sigma, nsamples){ // using central limit
+  if(!nsamples) nsamples = 3
+  if(!sigma) sigma = 1
+  if(!mu) mu=0
+
+  var run_total = 0
+  for(var i=0 ; i<nsamples ; i++){
+     run_total += Math.random()
+  }
+  return sigma*(run_total - nsamples/2)/(nsamples/2) + mu
+}
 window.gm.util.selRandom=function(list){//picks element from []
   let _i=list.length;
   if(_i>0) return(list[_.random(0,_i-1)]);
   else throw new Error("empty list")
+}
+//exchange inner text of ctrl ;connect it with onclick of a link/button. 
+//list = [ ['red','1','classRed'],['green','2','classGreen'] ]  text,datavalue,css-class (notice space between [ [ !)
+//f.e. <p>This is really a <a0 onclick="window.gm.util.swapText(this,[ ['red Color','1','red'],['green color','2','green'] ])">blue</a> game.</p>
+//you will have to query data-value or use the callback to get the choice: document.getElementById('myButton').getAttribute("data-value")
+window.gm.util.swapText=function(ctrl,list,params){
+  let _params=params||{}
+  _params.rnd = (_params.rnd)?? false;  //function to randomize next pick; false to non-random
+  _params.retrys = (_params.retrys)?? -1; //how many times until locked
+  //_params.onchange  callback
+  let _list = [],i;
+  let x=ctrl.getAttribute("data-retrys");
+  x=parseInt(x);
+  if(isNaN(x)) x=0;
+  if(_params.retrys>0 && (_params.retrys-x)<=0)return;
+  x++;
+  list.forEach(function(element,index){
+    _list.push(element[1]);
+    ctrl.classList.remove(element[2]); //remove all formatting
+  });
+  if(_params.rnd===false) {
+    i=_list.indexOf(ctrl.getAttribute("data-value"));
+    if(i==-1 || i==_list.length-1) i=0;
+    else i++;
+  }
+  //Todo changing text removes keyboard links 
+  //Todo need to memorize data- for restorePage
+  ctrl.innerText = list[i][0] +((_params.retrys>0)?(" ◌"+(_params.retrys-x).toString()):"");  //◌= display number of retrys
+  ctrl.setAttribute("data-value",list[i][1]);
+  ctrl.setAttribute("data-retrys",(x).toString());
+  ctrl.classList.add(list[i][2]);
 }
 //create pretty name for passage; requires a tag (replace space with _ !) [name:"My_Room"]
 window.gm.util.printLocationName=function(passage){
@@ -311,11 +358,16 @@ window.gm.initGame= function(forceReset,NGP=null){
       window.gm.quests.setQuestData(s.quests);
       window.gm.quests.pubSub.subscribe("change",function(data){window.gm.toasty.info("Quest "+data.questId+" updated")});
     }
+    if(!s.AiMem || forceReset){ //AI memory database
+      s.AiMem =  new AIMemoryData();
+      window.gm.AI = new AIManager(s.AiMem);
+    }
     if (!s._gm||forceReset){
       s._gm = {
         version : window.gm.getSaveVersion(),
         style: 'default', //css profile to use
         log : [],
+        IDGenBkup:0,
         IDGen: new IDGenerator(),
         passageStack : [], //used for passage [back] functionality
         defferedStack : [], //used for deffered events
@@ -325,6 +377,7 @@ window.gm.initGame= function(forceReset,NGP=null){
         activePlayer : '', //id of the character that the player controls currently
         nosave : false,
         nokeys : false,
+        enablePoise : false, //enables Poise-System
         playerParty: [],  //names of NPC in playerParty 
         debug : false,    //globally enables debug
         dbgShowCombatRoll : false,  //log combat calculation details
@@ -347,12 +400,20 @@ window.gm.initGame= function(forceReset,NGP=null){
         msg: ''   // memorizes a message to display when returning from _back-passage; please clear it when leaving the passage
       }
     }
-    if (!s.GlobalChest||forceReset){  
+    if(!s.chars||forceReset){
+      s.chars={};
+    }
+    if (!s.chars.GlobalChest||forceReset){  
       let ch = new Character();
-      ch.id="GlobalChest";
-      ch.name="GlobalChest";
+      ch.id=ch.name="GlobalChest";
       ch.faction="Player";
-      s.GlobalChest=ch;
+      s.chars.GlobalChest=ch;
+    }
+    if (!s.chars.LocalChest||forceReset){  //
+      let ch = new Character();
+      ch.id=ch.name="LocalChest";
+      ch.faction="Player";
+      s.chars.LocalChest=ch;
     }
     if (!s.combat||forceReset){ //see encounter & combat.js
       s.combat = {
@@ -379,9 +440,15 @@ window.gm.newGamePlus = function(){
 window.gm.rebuildObjects= function(){ 
   var s = window.story.state;
   s._gm.nokeys=false;
+  IDGenerator.resetID(s.IDGenBkup);
   window.styleSwitcher.loadStyle(); //since style is loaded from savegame
   window.gm.quests.setQuestData(s.quests); //necessary for load support
   window.gm.switchPlayer(s._gm.activePlayer);
+}
+//called before data is serialized
+window.gm.preSave=function(){
+  var s = window.story.state;
+  s.IDGenBkup=IDGenerator.instance()._idCounter;
 }
 //--------------- time management --------------
 //returns timestamp since start of game
@@ -476,10 +543,33 @@ window.gm.forwardTime=function(until){
 // use: child._parent = window.gm.util.refToParent(parent);
 window.gm.util.refToParent = function(me){ return function(){return(me);}};  //todo causes problem with replaceState??
 //since there is no builtin function to format numbers here is one: formatNumber(-1002.4353,2) -> 1,002.44  
-window.gm.util.formatNumber = function(n, dp){
-  var s = ''+(Math.floor(n)), d = Math.abs(n % 1), i = s.length, r = '';
+window.gm.util.formatNumber = function(n, dp,sign=false){
+  var out='',s = ''+((dp>0)?((n>0)?Math.floor(n):Math.ceil(n)):Math.round(n)),d = Math.abs(n % 1), i = s.length, r = '';
   while ( (i -= 3) > 0 ){ r = ',' + s.substr(i, 3) + r; }  //todo . & , is hardcoded
-  return s.substr(0, i + 3) + r + (dp>0 ? '.' +(d ? Math.round(d * Math.pow(10, dp || 2)) : '0'.repeat(dp)) : '');
+  out= s.substr(0, i + 3) + r;
+  if(sign){
+    out=((n>=0)?'+':'')+out;
+  }
+  return(out + (dp>0 ? '.' +(d ? Math.round(d * Math.pow(10, dp )) : '0'.repeat(dp)) : ''));
+};
+/** formatInt is meant for formating integer to string; n may be decimal and gets rounded
+ * sign: if true prepend + if positive 
+ * width: if not null prepend 0s to stuff; disables 1000s indicator
+ * <%=window.gm.util.formatInt(-1234.66,true,5)%> -01235</br>
+*  <%=window.gm.util.formatInt(1234.66,true,5)%> +01235</br>
+ */
+window.gm.util.formatInt = function(n,sign=false, width=null){
+  var out='',s = ''+(Math.abs(Math.round(n))), i = s.length, r = '';
+  if(width!=null) {
+    out='0'.repeat(Math.max(0,width-i))+s;
+  } else {
+    while ( (i -= 3) > 0 ){ r = ',' + s.substr(i, 3) + r; }  //1000s marking; todo . & , is hardcoded
+    out= s.substr(0, i + 3) + r;
+  } 
+  if(sign){
+    out=((n>=0)?'+':'-')+out;
+  }
+  return(out);
 };
 //---------------------------------------------------------------------------------
 //TODO 
@@ -587,7 +677,11 @@ window.story.__proto__.show = function(idOrName, noHistory = false){
   let tagsnext,namenext,nextp,namenow;
   clearInterval(KBIntervalID);
   if(idOrName==='') tagsnext=[];
-  else tagsnext = window.story.passage(idOrName).tags;
+  else {
+    nextp = window.story.passage(idOrName);
+    if(nextp) tagsnext = window.story.passage(idOrName).tags;
+    else throw new Error("no such passage: "+idOrName);
+  }
   if(inGame && window.story.state._gm.defferedStack.length>0 && //deffered event if allowed and requested
     //tagsnext.indexOf('_back_')<0 &&
     tagsnext.indexOf('_nosave_')<0 && tagsnext.indexOf('_nodeffered_')<0 ){ 
@@ -641,8 +735,8 @@ window.story.__proto__.show = function(idOrName, noHistory = false){
 	// Search passages for links every x ms, just in case they get updated, and marks them for key clicks
 	//KBIntervalID = setInterval(window.gm.util.updateLinks,1000);  todo do we need this?
 };
-/* when returning from back-passage, restore view by hiding/unhiding programatical modified elements, see printTalkLink
-*/
+
+/* when returning from back-passage, restore view by hiding/unhiding programatical modified elements, see printTalkLink*/
 window.gm.restorePage=function(){
   if(window.story.state.tmp){
     let elmts =Object.keys(window.story.state.tmp.flags);
@@ -661,7 +755,7 @@ window.gm.restorePage=function(){
 //changes the active player and will add him to party!
 window.gm.switchPlayer = function(playername){
   var s = window.story.state;
-  window.gm.player= s[playername];
+  window.gm.player= s.chars[playername];
   s._gm.activePlayer = playername;
   window.gm.addToParty(playername);
 }
@@ -671,7 +765,7 @@ window.gm.removeFromParty= function(name){
   if(i>=0) s._gm.playerParty.splice(i,1);
 }
 //adds the character to the party
-//there has to be a CharacterObject for window.story.state[name]
+//there has to be a CharacterObject for window.story.state.chars[name]
 window.gm.addToParty= function(name){
   var s=window.story.state;
   if(s._gm.playerParty.indexOf(name)<0)
@@ -728,8 +822,11 @@ window.gm.roll=function(n,sides){ //rolls n x dies with sides
   return(rnd); 
 }
 //expects DOM like <section><article>..<div id='output'></div>..</article></section>
-window.gm.printOutput= function(text,where="section article div#output"){
-  document.querySelector(where).innerHTML = text;
+//Tip if you have to setup functions: string should be in '  and use \' and \" consistently 
+//'<button type=\"button\" onclick=\'equip(\"'+y.itmId+'\",\"'+itm2.itmId+'\");\'>'+y.name+'</button>'
+window.gm.printOutput= function(text,where="section article div#output",append=false){
+  let n=document.querySelector(where);
+  n.innerHTML = (append?n.innerHTML:"")+text;
 };
 //connect to onclick to toggle selected-style for element + un-hiding related text
 //the elmnt (f.e.<img>) needs to be inside a parentnode f.e. <div id="choice">
@@ -757,13 +854,12 @@ window.gm.onSelect = function(elmnt,ex_choice,ex_info){
 //call this onclick to make the connected element vanish and to unhide another one (if the passage is revisited the initial state will be restored)
 //unhidethis needs to be jquery-path to a div,span,.. that is initially set to hidden
 //cb can be a function(elmt) that gets called
-//todo: if navigating to a back-page and return, the initial page will be reset to default; how to memorize and restore the hidden-flags
 window.gm.printTalkLink =function(elmt,unhideThis,cb=null){
   $(elmt)[0].setAttribute("hidden","");
   if(cb!==null) cb($(elmt)[0]);
   $(unhideThis)[0].removeAttribute("hidden");
   $(unhideThis)[0].scrollIntoView({behavior: "smooth"});
-  window.story.state.tmp.flags[elmt]='hidden',window.story.state.tmp.flags[unhideThis]='unhide';
+  window.story.state.tmp.flags[elmt]='hidden',window.story.state.tmp.flags[unhideThis]='unhide';  //if navigating to a back-page and return, the initial page will be reset to default-> memorize and restore the hidden-flags (see restorePage)
 }
 //prints the same kind of link like [[Next]] but can be called from code
 window.gm.printPassageLink= function(label,target){
@@ -772,8 +868,9 @@ window.gm.printPassageLink= function(label,target){
 //prints a link where target is a expression called onClick. Use \" instead of " or ' !
 window.gm.printLink= function(label,target,params){
   let _params=params||{}
-  _params.class=(params&&params.class)?params.class:"";
-  return('<a href=\'javascript:void(0)\' class=\''+_params.class+'\' onclick=\''+target+'\'>'+label+'</a>');
+  _params.once = (params&&params.once)?params.once:false; //auto disable  doesnt work if the Link was added to page dynamical as it has no parent??
+  _params.class=(params&&params.class)?params.class:"";  //CSS-class
+  return('<a href=\'javascript:void(0)\' class=\''+_params.class+'\' onclick=\''+target+';'+(_params.once?'this.remove(this);':'')+'\'>'+label+'</a>');
 };
 
 //prints a link that when clicked picksup an item and places it in the inventory, if itemleft is <0, no link appears
@@ -812,11 +909,14 @@ window.gm.printItem= function( id,descr,carrier,useOn=null ){
  * prints a list of items/wardrobe and buttons to transfer them
  * @param {*} from 
  * @param {*} to 
- */
+ */   // see also window.gm.shop.printItemTransfer
 window.gm.printItemTransfer = function(from,to,wardrobe){
   let listFrom,listTo;
-  if(wardrobe) listFrom=from.Wardrobe.getAllIds(), listTo=to.Wardrobe.getAllIds(); 
-  else listFrom=from.Inv.getAllIds(), listTo=to.Inv.getAllIds();
+  if(wardrobe) {
+    listFrom=from.Wardrobe.getAllIds(), listTo=to.Wardrobe.getAllIds(); 
+  } else {
+    listFrom=from.Inv.getAllIds(), listTo=to.Inv.getAllIds();
+  }
   let allIds = new Map();
   for(let n of listTo){
     allIds.set(n,{name:wardrobe?to.Wardrobe.getItem(n).name:to.Inv.getItem(n).name});
@@ -858,7 +958,7 @@ window.gm.printItemTransfer = function(from,to,wardrobe){
     g.href='javascript:void(0)',g.textContent='take all';
     g.addEventListener("click",give.bind(null,id,count,to,from));
     if(count>0) entry.appendChild(g)
-    $("div#choice")[0].appendChild(entry);      // <- requires this node in html
+    document.getElementById('choice').appendChild(entry);      // <- requires this node in html
   }
 }
 //prints an equipment with description; used in wardrobe
@@ -960,17 +1060,17 @@ window.gm.printEffectSummary= function(who='player',what){
   _what.showskill =(what&&what.showskill)?what.showskill:false;
   let elmt='', s= window.story.state, result ='';
   result+='<table>';
-  let ids =window.story.state[who].Stats.getAllIds();
+  let ids =window.story.state.chars[who].Stats.getAllIds();
   ids.sort(); //Todo better sort
   for(var k=0;k<ids.length;k++){
-      var data = window.story.state[who].Stats.get(ids[k])
+      var data = window.story.state.chars[who].Stats.get(ids[k])
       let isFetish = (data.id.slice(0,2)==='ft'), isSkill=(data.id.slice(0,3)==='sk_'); //Fetish starts with ft
       let isResistance = (data.id.slice(0,4)==='rst_')||(data.id.slice(0,4)==='arm_'); //
       if(data.hidden!==4){
         if(isFetish && _what.showfetish && !(data.id.slice(-4,-2)==='_M') ){
           //expects names of fetish like ftXXX and limits ftXXX_Min ftXXX_Max
-          let min = window.story.state[who].Stats.get(ids[k]+"_Min");
-          let max = window.story.state[who].Stats.get(ids[k]+"_Max");
+          let min = window.story.state.chars[who].Stats.get(ids[k]+"_Min");
+          let max = window.story.state.chars[who].Stats.get(ids[k]+"_Max");
           result+='<tr><td>'+((data.hidden & 0x1)?'???':data.id)+':</td><td>'+((data.hidden & 0x2)?'???':data.value)+'</td>';
           result+='<td>'+((data.hidden & 0x2)?'???':'('+(min.value+' to '+max.value))+')</td></tr>';
         }
@@ -982,10 +1082,10 @@ window.gm.printEffectSummary= function(who='player',what){
   }
   result+='</table>';
   result+='</br>Active Effects:<table>'
-  ids = window.story.state[who].Effects.getAllIds();
+  ids = window.story.state.chars[who].Effects.getAllIds();
   ids.sort(); //Todo better sort
   for(var i=0;i<ids.length;i++){
-      var data = window.story.state[who].Effects.get(ids[i]);
+      var data = window.story.state.chars[who].Effects.get(ids[i]);
       if(data.hidden!==4){
       result+='<tr><td>'+((data.hidden & 0x1)?'???':data.name)+':</td><td>'+((data.hidden & 0x1)?'???':data.desc)+'</td><td>'+((data.hidden & 0x2)?'???':data.data.duration)+'h left</td></tr>';
       }

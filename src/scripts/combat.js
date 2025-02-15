@@ -53,12 +53,13 @@ initCombat(){
   s.combat.enemyParty = this.EnemyFunc();
   s.combat.playerParty = [];
   for(let n of s._gm.playerParty){
-    s.combat.playerParty.push(s[n]);
+    s.combat.playerParty.push(s.chars[n]);
   }
   s.combat.turnStack = [];
   s.combat.actor = s.combat.target = s.combat.action = null;
   s.combat.location = this.location;
   s.combat.scenePic = this.scenePic;
+  s.combat.sceneDecoy = (this.sceneDecoy)?this.sceneDecoy:{fg:[],bg:[]};//{fg:['fg_fog'],bg:[]}  
   s.combat.playerFleeing = false;
   s.combat.playerSubmitting = false;
   s.combat.inCombat=true;
@@ -125,12 +126,12 @@ hideCombatOption(){
 }
 //renders background & combatants to #canvas
 renderCombatScene(){
-  let width=600,height=300;
+  let width=600,height=300,pos,_pic,node,s=window.story.state;
   let holder,draw = document.querySelector("#canvas svg");
   if(!draw){
     draw = SVG().addTo('#canvas').size(width, height);
     draw.rect(width, height).attr({ fill: '#303030'});
-    draw.image(window.story.state.combat.scenePic);
+    draw.image(s.combat.scenePic);
   }
   else {
     draw = SVG(draw);//recover svg document instead appending new one
@@ -145,15 +146,21 @@ renderCombatScene(){
       list.push(list2[i]);
     }
   }
+  if(s.combat.sceneDecoy.bg) {
+    for(i=s.combat.sceneDecoy.bg.length-1;i>=0;i--){ //add background
+      _pic = window.gm.images[s.combat.sceneDecoy.bg[i]]();
+      node = SVG(_pic);node.addTo(holder);
+    }
+  }
   let _pos =[[0.25,0.60,1],[0.75,0.50,1],[0.50,0.40,1]];//sprite position & scale in % x,y,z
   if(list.length<=1){ //1 large centered sprite
     _pos =[[0.50,0.50,1]];
   } 
-  for(i=list.length-1;i>=0;i--){
+  for(i=list.length-1;i>=0;i--){ //add sprites
     if(!list[i].isKnockedOut()){ //todo show deathsprite
-      var pos = _pos.pop();
-      var _pic = window.gm.images[list[i].pic]();
-      var node = SVG(_pic);
+      pos = _pos.pop();
+      _pic = window.gm.images[list[i].pic]();
+      node = SVG(_pic);
       //sprites should be scattered evenly and scaled down to fit into scene (with respect of offset in scene)
       var scaleW2,scaleH2,scaleW = node.width()/(width*(1-Math.abs(0.5-pos[0])*2)), scaleH=node.height()/(height*(1-Math.abs(0.5-pos[1])*2));
       if(scaleW>0.9 || scaleH>0.9 ){
@@ -161,7 +168,7 @@ renderCombatScene(){
         else node.height(node.height()/(1.2*scaleH));
       }
       node.center(pos[0]*width,pos[1]*height);//reposit. AFTER scaling !
-      if(window.story.state.Settings.showNSFWPictures){
+      if(s.Settings.showNSFWPictures){
         //hide parts of sprite
         var penis=(list[i].getPenis()!==null),vagina=(list[i].getVagina()!==null),arousal=list[i].arousal().value;
         subnodes= node.find('[data-male]');
@@ -178,8 +185,13 @@ renderCombatScene(){
       node.addTo(holder);
     }
     if(_pos.length<=0) break;
+  } 
+  if(s.combat.sceneDecoy.fg){
+    for(i=s.combat.sceneDecoy.fg.length-1;i>=0;i--){ //add foreground
+      _pic = window.gm.images[s.combat.sceneDecoy.fg[i]]();
+      node = SVG(_pic);node.addTo(holder);
+    }
   }
-  
   return;
 }
 //creates a list of active effects for combat display
@@ -192,18 +204,18 @@ printCombatEffects(char){
     for(let i=effects.length-1; i>=0; i--){
       let effect = char.Effects.get(effects[i]);
       if(effect.onCombatEnd!==null && effect.onCombatEnd!==undefined){
-        list.push(effect.shortDesc);
+        list.push(effect.iconTooltip);//'<div class="combateff"><div class="combaticon">'+effect.icon+'</div>'+ effect.shortDesc+'</div>');
       }
     }
   }
-  return(list.reduce((sum, current) => sum + current +', ', ''));
+  return((list.reduce((sum, current) => sum + current, '')));//(list.reduce((sum, current) => sum + current +', ', '')).slice(0,-2));
 }
 statsline(whom,mark){
   let msg='',bargraph=window.gm.util.bargraph;
   if(mark) msg = "<td style=\"border-style:dotted;border-color:darkorchid;border-width:0.3em;\">";
   else msg = "<td>";
   msg+=whom.name+" Lv"+whom.level+"</td><td>"+bargraph(whom.health().value,whom.health().max,"lightcoral")
-    +"</td><td>"+bargraph(whom.Stats.get("poise").value,whom.Stats.get("poiseMax").value,"darkgrey")+bargraph(whom.Stats.get("arousal").value,whom.Stats.get("arousalMax").value,"lightpink")
+    +"</td><td>"+((window.story.state._gm.enablePoise)?bargraph(whom.Stats.get("poise").value,whom.Stats.get("poiseMax").value,"darkgrey"):"")+bargraph(whom.Stats.get("arousal").value,whom.Stats.get("arousalMax").value,"lightpink")
     +"</td><td>"+bargraph(whom.energy().value,whom.energy().max,"lightyellow")+bargraph(whom.Stats.get("will").value,whom.Stats.get("willMax").value,"lightblue")
     +"</td>";
   return(msg);
@@ -220,7 +232,7 @@ printStats(){
       player2 50/100  10/20      Ork2  20/20   10/100
   */
  let elmt = '<table id=\"combatstats\"><tbody>';
-  elmt += "<tr><th>Player</th><th>Health</th><th>Poise</br>Arousal</th><th>Energy</br>Will</th><th>   </th><th>Enemys</th><th>Health</th><th>Poise</br>Arousal</th><th>Energy</br>Will</th></tr>";
+  elmt += "<tr><th>Player</th><th>Health</th><th>"+((s._gm.enablePoise)?"Poise</br>":"")+"Arousal</th><th>Energy</br>Will</th><th>   </th><th>Enemys</th><th>Health</th><th>"+((s._gm.enablePoise)?"Poise</br>":"")+"Arousal</th><th>Energy</br>Will</th></tr>";
   for(let i=0;(i<players.length || i<enemys.length);i++){
     elmt += "<tr>";
     if(i<players.length){
@@ -235,12 +247,12 @@ printStats(){
     }
     elmt += "</tr><tr>";
     if(i<players.length){ //effects as additional row
-      elmt += "<td></td><td colspan='3' style=\"font-size:smaller\">"+players[i].Stance.id+" "+window.gm.Encounter.printCombatEffects(players[i])+"</td>";
+      elmt += "<td></td><td colspan='3' style=\"font-size:smaller\">"+((s._gm.enablePoise)?players[i].Stance.id:"")+" "+window.gm.Encounter.printCombatEffects(players[i])+"</td>";
     } else {
       elmt += "<td></td><td></td><td></td><td></td>";
     }
     if(i<enemys.length){
-      elmt += "<td></td><td></td><td colspan='3' style=\"font-size:smaller\">"+enemys[i].Stance.id+" "+window.gm.Encounter.printCombatEffects(enemys[i])+"</td>";
+      elmt += "<td></td><td></td><td colspan='3' style=\"font-size:smaller\">"+((s._gm.enablePoise)?enemys[i].Stance.id:"")+" "+window.gm.Encounter.printCombatEffects(enemys[i])+"</td>";
     } else {
       elmt += "<td></td><td></td><td></td><td></td><td></td>";
     }
@@ -596,7 +608,7 @@ selectMove(){
       result.OK=false;
     } else {
       this.printSkillList();
-      result.OK=true, result.msg=stateDesc.msg+"</br>Choose action for "+s.combat.actor.name+"!</br>";
+      result.OK=true, result.msg=stateDesc.msg+"</br></br>Choose action for "+s.combat.actor.name+"!</br>";
     }
   }
   return(result);
@@ -765,12 +777,12 @@ window.gm.combat.calcAbsorb=function(attacker,defender, attack){
   let result = {OK:true,msg:''}
   let rnd = _.random(1,100);
   if(attack.mod.onCrit.length>0 && ((rnd<attack.mod.critChance) || attack.crit===true)){  //is critical
-    attack.crit=true, result.msg = '</br>'+defender.name +' got critical hit by '+attacker.name+" "+attack.mod.msg+'. ';
+    attack.crit=true, result.msg = '</br>'+defender.name +' got critical hit by '+attacker.name+" "+attack.mod.msg+'.</br>';
     for(var n of attack.mod.onCrit){
         attack.effects.push( {target:n.target, eff:n.eff}); //n.eff is []
     }
   } else {
-    result.msg = '</br>'+defender.name +' got hit by '+attacker.name+" "+attack.mod.msg+'. ';
+    result.msg = '</br>'+defender.name +' got hit by '+attacker.name+" "+attack.mod.msg+'.</br>';
     for(var n of attack.mod.onHit){
         attack.effects.push( {target:n.target, eff:n.eff});
     }

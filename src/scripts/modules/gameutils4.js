@@ -25,32 +25,36 @@ window.gm.printDo=function(doThat,cost,alias){
 class Player { //fake class
     constructor() {
       this.location='';
+      this.id=this.name="Player";
     }
   }
-  /* bundles some utility operations*/
-  window.gm.getSaveVersion= function(){   return([0,1,0]); };
-  // reimplement to setup the game
-  //_origInitGame = window.gm.initGame;
-  window.gm.initGame= function(forceReset,NGP=null) {
-    _origInitGame(forceReset,NGP);
-      var s = window.story.state;
-      window.gm.images = imagesBattlers(window.gm.images||{});
-      window.gm.images = imagesMaps(window.gm.images);
-      window.gm.images = imagesEquip(window.gm.images);
-      window.gm.images = imagesIcons(window.gm.images);
-      window.gm.images = imagesScenes(window.gm.images);
-      s._gm.timeRL= s._gm.timeVR = s._gm.time;
-      s._gm.dayRL= s._gm.dayVR = s._gm.day;
-      //TODO set debug to 0 for distribution !
-      s._gm.debug = 1,   
-      s._gm.dbgShowCombatRoll= true,
-      s._gm.dbgShowQuestInfo= true;
-      s._gm.dbgShowMoreInfo=true;
-      if(!s.player || forceReset) {
-        s.player=window.gm.player=new Player();
-      }
-      window.gm.initGameFlags(forceReset,NGP);
-  }
+/* bundles some utility operations*/
+window.gm.getSaveVersion= function(){   return([0,1,0]); };
+
+// reimplement to setup the game
+//_origInitGame = window.gm.initGame;
+window.gm.initGame= function(forceReset,NGP=null) {
+_origInitGame(forceReset,NGP);
+    var s = window.story.state;
+    window.gm.images = imagesBattlers(window.gm.images||{});
+    window.gm.images = imagesMaps(window.gm.images);
+    window.gm.images = imagesEquip(window.gm.images);
+    window.gm.images = imagesIcons(window.gm.images);
+    window.gm.images = imagesScenes(window.gm.images);
+    s._gm.timeRL= s._gm.timeVR = s._gm.time;
+    s._gm.dayRL= s._gm.dayVR = s._gm.day;
+    //TODO set debug to 0 for distribution !
+    s._gm.debug = 1,   
+    s._gm.dbgShowCombatRoll= true,
+    s._gm.dbgShowQuestInfo= true;
+    s._gm.dbgShowMoreInfo=true;
+    if(!s.chars.player || forceReset) {
+        window.gm.player=new Player();
+        s.chars[window.gm.player.id]=window.gm.player;
+    }
+    window.gm.initGameFlags(forceReset,NGP);
+    window.gm.switchPlayer(window.gm.player.id);
+}
 //stuff for AB
 window.gm.initGameFlags = function(forceReset,NGP=null) {
     let s= window.story.state;
@@ -95,9 +99,9 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
           qFoeH4:100 //Boss
           };
     }
-    if(!s.player || forceReset) {
+    /*if(!s.player || forceReset) {
       s.player=window.gm.player=new Player();
-    }
+    }*/
     let DngSY = {
         visitedTiles: [],mapReveal: [],
         dng:'', //current dungeon name
