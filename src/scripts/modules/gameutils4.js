@@ -1,5 +1,90 @@
 "use strict";
 //special stuff for AB
+//call to navigate from current room to target
+//either you just walk move to target or some event happens; after the event continue to target or return to current 
+window.gm.triggerExploreEvt=function(targetLocation){
+    let s=window.story.state,currentLocation=window.gm.player.location;
+    let cnt=s.vars.WM_Lv1.Explored[currentLocation]||0,lstEncounter=s.vars.WM_Lv1.rollEncounter;
+    let _Enc,_Encs=[
+        {id:"WM_Lv1_VineSnare",roll:"Strength",min:60},
+        {id:"WM_Lv1_VineGrab",roll:"Agility",min:60},
+        {id:"WM_Lv1_Barrel",roll:"Strength",min:60}
+    ]
+    let possLocation=[],loc,rnd2,rnd;
+    if(targetLocation=='WM_Lv1_A1'){    
+        possLocation = ['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4'].filter((x)=>{return(!s.vars.WM_Lv1.Explored[x]>0);})
+    } else if(targetLocation=='WM_Lv1_B1'){    
+        possLocation = ['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4'].filter((x)=>{return(!s.vars.WM_Lv1.Explored[x]>0);})
+    }
+    //pick encounter according location
+    rnd2=_.random(0,_Encs.length-1);
+    _Enc=_Encs[rnd2];
+
+    switch(_Enc.roll){
+        case "Strength":  rnd=s.vars.qStrength;
+            break;
+        case "Intelect":  rnd=s.vars.qWisdom;
+            break;
+        //case "Agility":
+        default: rnd=s.vars.qAgility; 
+            break;
+    }
+    //do a roll and check roll+stat
+    rnd+=_.random(0,50);
+    if(_Enc.min>rnd){   //encounter if roll+stat < d100
+        window.story.state.tmp.args=[null,"Rolling failed due to "+_Enc.roll+" of "+ rnd + "."]
+        s.vars.WM_Lv1.rollEncounter=_Enc;
+        window.story.show(_Enc.id);
+    }else{
+        if(possLocation.length<=0){
+            window.story.show("WM_Lv1_ExploredAll");
+        } else if((rnd+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
+            rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];
+            s.vars.WM_Lv1.Explored[loc]=1+(s.vars.WM_Lv1.Explored[loc]||0);
+            s.vars.WM_Lv1.Explored[currentLocation]=1+(s.vars.WM_Lv1.Explored[currentLocation]||0);
+            window.story.show(loc)
+        } else { //bad luck -  return
+            window.story.show("WM_Lv1_ExploreFail");
+        }
+    }   
+}
+window.gm.printUseItem=function(what){
+    window.story.state.tmp.args=[null,1];
+    window.story.show("WM_Lv1_Use_"+what)
+}
+window.gm.printRemoveItem=function(what){
+    let Inv=window.story.state.vars.Inv;
+    for(var i=Inv.length-1;i>=0;i--){
+        if(Inv[i]==what) { Inv[i]='';break}
+    }
+}
+window.gm.printPickup=function(){
+    let s=window.story.state,item=s.vars.WM_Lv1.qLocItems[window.passage.name];
+    let Text=""
+    if(item=="HealthUp"){
+        Text="There is a healthpotion stashed away.";
+        if(s.vars.Inv.length>=4){
+            Text+="Unfortunatly your inventory is already full."
+        } else {
+            Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>'
+        }
+    }
+    if(item=="Tshirt"){//,"","Shorts","Adrenalin
+        Text="There is a Tshirt stashed away.";
+        if(s.vars.Inv.length>=4){
+            Text+="Unfortunatly your inventory is already full."
+        } else {
+            Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>'
+        }
+    }
+    return("<p>"+Text+"</p>");
+}
+window.gm.pickupItem=function(what,where){
+    let s=window.story.state;
+    s.vars.Inv.push(what);
+    s.vars.WM_Lv1.qLocItems[where]="";
+    window.story.show(window.passage.name )
+}
 //prints link to other passage
 window.gm.printGoto=function(location,cost,alias){
     let msg='',res={OK:true,msg:''};
@@ -71,48 +156,34 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
     };
     if (!s.vars||forceReset) { // storage of variables that doesnt fit player
         s.vars = {
-        activePlayer : 'Lisa', //id of the character that the player controls currently
+        activePlayer : '', //id of the character that the player controls currently
         qSanity:100,
-        qCoverallHP:100,
-        qLingeryHP:100,
-        qBattery:50,
-        qBabble:0
-        }; 
-        s.vars.mine= {
-          mapReveal:0,
-          visited:[],
-          qFoundPlantPod:0,
-          qHasSprayer:0,
-          qSprayerCharge:0,
-          qHasCrowbar:0,
-          qHasCrank:0,
-          qHasExtinguisher:0,
-          qHasLighter:0,
-          qHasPatchkit:0,
-          qHasRope:0,
-          qDoorH2:0,
-          qDoorF2:0,
-          qDoorH5:0,
-          qFoeG2:100,//Worms
-          qFoeI2:100,//Tentacle
-          qFoeH3:100,//Pod
-          qFoeH4:100 //Boss
-          };
+        qSanityMax:100,
+        qArousal:0,
+        qArousalMax:40,
+        qAgility:40,
+        qAgilityMax:40,
+        qStrength:40,
+        qStrengthMax:40,
+        qWisdom:40,
+        qWisdomMax:40,
+        qUpperWear:1,
+        qLowerWear:1,
+        qNextLocation:""
+        };
+        s.vars.Inv=[]; //Inventory
+        s.vars.U={  //Unlockables
+            ShowRooms:1,
+            ShowRoll:1,
+        }
+        s.vars.WM_Lv1= {  };
     }
-    /*if(!s.player || forceReset) {
-      s.player=window.gm.player=new Player();
-    }*/
     let DngSY = {
         visitedTiles: [],mapReveal: [],
         dng:'', //current dungeon name
         prevLocation:'', nextLocation:'', //used for nav-logic
         dngMap:{} //dungeon map info
     };
-    if(!NGP) { //init if missing
-        NGP={token:0,tokenUsed:0}
-    }else{ //grant NGP-options; window.gm.player is not valid yet!
-        //if(!!NGP.ProteinBars) window.story.state.PlayerVR.Inv.addItem(window.gm.ItemsLib["SnackBar"](),12);
-    }
     if(!window.gm.achievements){//||forceReset) { 
         window.gm.resetAchievements();
     }

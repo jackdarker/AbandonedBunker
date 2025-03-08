@@ -402,7 +402,7 @@ window.gm.initGame= function(forceReset,NGP=null){
     }
     if(!s.chars||forceReset){
       s.chars={};
-    }
+    }/* not needed
     if (!s.chars.GlobalChest||forceReset){  
       let ch = new Character();
       ch.id=ch.name="GlobalChest";
@@ -426,7 +426,7 @@ window.gm.initGame= function(forceReset,NGP=null){
         turnCount: 0,
         scenePic : 'assets/bg_park.png'
       }
-    }
+    }*/
   }
 //reimplement for your game !
 window.gm.newGamePlus = function(){

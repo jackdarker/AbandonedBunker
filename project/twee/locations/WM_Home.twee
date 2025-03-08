@@ -1,0 +1,66 @@
+:: WM_Home
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>You need to prep before you have to go on adventure again.</p>
+<p><b>There are x hours daytime left that you should use wisely.</b></p>
+<p>[[Fix your shield|WM_Forge_Shield]] [[Sharpen your blade|WM_Forge_Blade]]</p>
+<p>[[Weave some wards|WM_Craft_Ward]] [[Meditate to recover mana |WM_Craft_Spell]] </p>
+<p>[[Sleep until morning|WM_Rest]]</p>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Respawn
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>Damn,you lost most of your loot:</p>
+<p><%=window.gm.printGoto('WM_Home',{},'Return to the village')%></p>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Rest
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>After some restful sleep, you awake next morning.</p>
+<p>[[Depart to adventure|WM_Dungeon_Selection]]</p>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Dungeon_Selection
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>You have no choice then to enter the dungeon again:</p>
+<p><a0 onclick='enterMine()'>The abandoned mine'</a></p>
+</article><article id="LogPanel"></article></section>
+<script>function enterMine(){
+    let _i,s=window.story.state;
+    s.vars.WM_Lv1= {
+          mapReveal:0,
+          visited:[],
+          rollEncounter:"",    //
+          Explored:{}, //{WM_Lv1_A1:1}
+          qKey1:0,  //found the key
+          qLocItems:{},
+          qLocKey1:"" , //which room has key
+          qLocExit:"", //which room has exit
+          qFoundExit:0, //found the exit
+          qBossState:0,
+          qBossType:0
+          };
+    let _rooms=["WM_Lv1_A3","WM_Lv1_B3","WM_Lv1_C1","WM_Lv1_B5"]    //consumables
+    let _items=["HealthUp","Tshirt","Shorts","Adrenalin"]
+    _items.forEach((x)=>{   //qLocItems["WM_Lv1_A3"]="Healthup"
+        _i=_.random(0,_rooms.length-1)
+        s.vars.WM_Lv1.qLocItems[_rooms[_i]]=x;
+        _rooms.splice(_i,1)
+    })
+    s.vars.WM_Lv1.qLocItems["WM_Lv1_A1"]="Tshirt";
+    _rooms=["WM_Lv1_B4","WM_Lv1_B5"]    //quest-items
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv1.qLocKey1=_rooms[_i];
+    _rooms.splice(_i,1);
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv1.qLocExit="WM_Lv1_A2" //_rooms[_i];
+    _rooms.splice(_i,1);
+    window.story.show("WM_Lv1_Entry");
+}
+</script>
