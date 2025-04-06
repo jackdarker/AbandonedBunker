@@ -188,8 +188,6 @@ window.gm.initGameFlags = function(forceReset,NGP=null){
       remainingNights: 0,
       dngLevel: 1, //tracks the mainquest you have finished
       dngOW: false, //if this flag is set while in dng, player is here for some freeplay (no quest)  
-      dildo:0, //1 small oraltraining,
-      pussy:0,
       //////////////////////////
       visitedTiles: [],mapReveal: [],
       dng:'', //current dungeon name

@@ -13,16 +13,42 @@
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p>Damn,you lost most of your loot:</p>
-<p><%=window.gm.printGoto('WM_Home',{},'Return to the village')%></p>
+<p>[[WM_Home]]</p>
 </article><article id="LogPanel"></article></section>
 
 
 :: WM_Rest
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
+<%window.story.state.vars.qArousal=0;window.story.state.vars.qSanity=window.story.state.vars.qSanityMax%>
 <p>After some restful sleep, you awake next morning.</p>
 <p>[[Depart to adventure|WM_Dungeon_Selection]]</p>
 </article><article id="LogPanel"></article></section>
+
+
+:: WM_Traits    [TODO]
+dripping
+fertile
+
+(text-colour: "red")[Aroused] - Your previous orgasms have left you constantly aroused. You find your resistance is dropping faster than it normally should. //(Increased Resistance Damage)//](if: "Eager" is in $Orgasm)[
+(text-colour: "red")[Eager] - Your previous orgasms have left you eager for more excitement. Trouble has a much easier time of finding you. //(Increased Encounter Chance)//](if: "Insatiable" is in $Orgasm)[
+(text-colour: "red")[Insatiable] - Your previous orgasms have left you insatiable and wanting more. You have have an almost irresistable urge to feel yourself up at every opportunity. //(Chance to Masturbate instead of Move/Investigate)//](if: "Horny" is in $Orgasm)[
+(text-colour: "red")[Horny] - Your previous orgasms have left you horny. Your mind is cloudy and you find it difficult to summon the willpower to resist arousing encounters. //(-20 Willpower)//](if: "Distracted" is in $Orgasm)[
+(text-colour: "red")[Distracted] - Your previous orgasms have left you distracted. You can't focus as much on the finer details and investigating areas is proving more challenging. //(-20 Intellect)//](if: "Frail" is in $Orgasm)[
+(text-colour: "red")[Frail] - Your previous orgasms have left you frail. You can't seem to put as much strength into your muscles, best to avoid a fight. //(-20 Strength)//](if: "Sluggish" is in $Orgasm)[
+(text-colour: "red")[Sluggish] - Your previous orgasms have left you sluggish. Your reflexes don't react as fast as they used to, you hope there are no surprises around the next corner. //(-20 Agility)//]]
+
+Acceptance Traits Discovered:
+(text-colour: "Pink")[(if: "Satiable" is in $Events)[Satiable - the insatiable status no longer stops movement and does not hit resistance if you're at or less than half your total](else:)[Reach 4 Acceptance to discover this trait]
+(if: "Inexhaustable" is in $Events)[Inexhaustable - the exhausted effect now causes -3 resistance instead of -1 health if caused by an orgasm](else:)[Reach 8 Acceptance to discover this trait]
+(if: "Satisfied" is in $Events)[Satisfied - vibrators now heal an additional resistance and cure the aroused status](else:)[Reach 12 Acceptance to discover this trait]
+(if: "Nymphomaniac" is in $Events)[Nymphomaniac - unlocks "Nymphomaniac Mode"](else:)[Reach 17 Acceptance to discover this trait]]
+
+Defiance Traits Discovered:
+(text-colour: "Red")[(if: "Resiliant" is in $Events)[Resiliant - completing the first test in a run restores +2 health and all resistance](else:)[Reach 4 Defiance to discover this trait]
+(if: "Prudish" is in $Events)[Prudish - clothes now restore +1 resistance when worn](else:)[Reach 8 Defiance to discover this trait]
+(if: "Respite" is in $Events)[Respite - occassionally dodge random encounters](else:)[Reach 12 Defiance to discover this trait]
+(if: "Zealot" is in $Events)[Zealot - unlocks "Zealot Mode"](else:)[Reach 17 Defiance to discover this trait]]
 
 
 :: WM_Dungeon_Selection
@@ -30,37 +56,108 @@
 <%window.gm.player.location=window.passage.name;%>
 <p>You have no choice then to enter the dungeon again:</p>
 <p><a0 onclick='enterMine()'>The abandoned mine'</a></p>
+<p><a0 onclick='enterHospital()'>The hospital'</a></p>
 </article><article id="LogPanel"></article></section>
-<script>function enterMine(){
+<script>
+function init(){
     let _i,s=window.story.state;
-    s.vars.WM_Lv1= {
-          mapReveal:0,
-          visited:[],
-          rollEncounter:"",    //
-          Explored:{}, //{WM_Lv1_A1:1}
-          qKey1:0,  //found the key
-          qLocItems:{},
-          qLocKey1:"" , //which room has key
-          qLocExit:"", //which room has exit
-          qFoundExit:0, //found the exit
-          qBossState:0,
-          qBossType:0
-          };
-    let _rooms=["WM_Lv1_A3","WM_Lv1_B3","WM_Lv1_C1","WM_Lv1_B5"]    //consumables
+    s.vars.qSanity=s.vars.qSanityMax,
+    s.vars.qArousal=0
+    s.vars.qAgility=s.vars.qAgilityMax,
+    s.vars.qStrength=s.vars.qStrengthMax,
+    s.vars.qWisdom=s.vars.qWisdomMax,
+    s.vars.qUpperWear=1,
+    s.vars.qLowerWear=1;
+    s.vars.Inv=["","","",""];
+}
+function enterMine(){
+    let _i,s=window.story.state;
+    init();
+    s.vars.WM_Lv= {
+        qDng: "WM_Lv1",
+        mapReveal:0,
+        visited:[],
+        rollEncounter:"",    //
+        Explored:{}, //{WM_Lv1_A1:1}
+        qKey1:0,  //found the key
+        qLocItems:{},
+        qEffects:{},    //Horny,Distracted,Frail,Sluggish   Aroused,Eager,insatiable,
+        qLocKey1:"" , //which room has key
+        qLocExit:"", //which room has exit
+        qFoundExit:0, //found the exit
+        qBossState:0,
+        qBossType:0
+    };
+    let _rooms=["WM_Lv1_A2","WM_Lv1_A3","WM_Lv1_B4","WM_Lv1_B3","WM_Lv1_B1","WM_Lv1_C5","WM_Lv1_C3","WM_Lv1_D2","WM_Lv1_D4"]    //consumables
+    let _items=["HealthUp","Tshirt","Shorts","HealthUp","Tshirt","Shorts","Adrenalin","Vibrator","Vibrator"]
+    _items.forEach((x)=>{   //qLocItems["WM_Lv1_A3"]="Healthup"
+        _i=_.random(0,_rooms.length-1)
+        s.vars.WM_Lv.qLocItems[_rooms[_i]]=x;
+        _rooms.splice(_i,1)
+    })
+    s.vars.WM_Lv.qLocItems["WM_Lv1_A1"]="Tshirt";
+    _rooms=["WM_Lv1_B4","WM_Lv1_D5"]    //key
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv.qLocKey1=_rooms[_i];
+    _rooms.splice(_i,1);
+    _rooms=["WM_Lv1_A4","WM_Lv1_C3"]    //exit
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv.qLocExit=_rooms[_i];
+    _rooms.splice(_i,1);
+    window.story.show("WM_Lv1_Entry");
+}
+function enterHospital(){
+    let _i,s=window.story.state;
+    init();
+    s.vars.WM_Lv= {
+        qDng: "WM_Lv2",
+        mapReveal:0,
+        visited:[],
+        rollEncounter:"",    //
+        Explored:{}, //{WM_Lv1_A1:1}
+        qKey1:0,  //found the Key 
+        qKey2:0,  //found the Passcode
+        qKey3:0,  //found the USBDrive
+        qLocItems:{},
+        qLocKey1:"" , //which room has key
+        qLocKey2:"" , //which room has key
+        qLocKey3:"" , //which room has key
+        qLocExit:"", //which room has exit
+        qBossState:0,
+        qBossType:0,
+        qRestrainWrist:0,   //Restraints on body 
+        qRestrainAncle:0,
+        qRestrainTorso:0,
+        qRestrainMouth:0,
+        qLocUnlocks:{},
+        qLocUnlock:"",  //where can remove restrain
+    };
+    let _rooms=["WM_Lv2_A3","WM_Lv2_B3","WM_Lv2_C1","WM_Lv2_B5"]    //consumables
     let _items=["HealthUp","Tshirt","Shorts","Adrenalin"]
     _items.forEach((x)=>{   //qLocItems["WM_Lv1_A3"]="Healthup"
         _i=_.random(0,_rooms.length-1)
-        s.vars.WM_Lv1.qLocItems[_rooms[_i]]=x;
+        s.vars.WM_Lv.qLocItems[_rooms[_i]]=x;
         _rooms.splice(_i,1)
     })
-    s.vars.WM_Lv1.qLocItems["WM_Lv1_A1"]="Tshirt";
-    _rooms=["WM_Lv1_B4","WM_Lv1_B5"]    //quest-items
+    _rooms=["WM_Lv2_A1","WM_Lv2_B1","WM_Lv2_C1"];    //location of unlock tools
+    _rooms.forEach((x)=>{   //qLocItems["WM_Lv1_A3"]=1
+        _i=_.random(0,_rooms.length-1)
+        s.vars.WM_Lv.qLocUnlocks[_rooms[_i]]=1;
+        s.vars.WM_Lv.qLocUnlock=_rooms[_i];
+    })
+    //quest-items qKey3
+    _rooms=["WM_Lv2_C2"]    
     _i=_.random(0,_rooms.length-1)
-    s.vars.WM_Lv1.qLocKey1=_rooms[_i];
-    _rooms.splice(_i,1);
+    s.vars.WM_Lv.qLocKey3=_rooms[_i];
+    //quest-items qKey2
+    _rooms=["WM_Lv2_N2"]    
     _i=_.random(0,_rooms.length-1)
-    s.vars.WM_Lv1.qLocExit="WM_Lv1_A2" //_rooms[_i];
-    _rooms.splice(_i,1);
-    window.story.show("WM_Lv1_Entry");
+    s.vars.WM_Lv.qLocKey2=_rooms[_i];
+    //quest-items qKey1
+    _rooms=["WM_Lv2_F2"]    
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv.qLocKey1=_rooms[_i];
+    s.vars.WM_Lv.qLocExit="WM_Lv2_A2"
+    window.story.show("WM_Lv2_Entry");
 }
 </script>

@@ -698,7 +698,10 @@ n=document.querySelector("#Link"+e.key.toUpperCase());if(n){e.preventDefault();n
         }
       }*/}});};//returns normal distributed random value, mu= mean, 0 by default; sigma= stdev, 1 by default; nsamples= more samples creates better approximation, 3 by default
 window.gm.util.randomNormal=function(mu,sigma,nsamples){// using central limit
-if(!nsamples)nsamples=3;if(!sigma)sigma=1;if(!mu)mu=0;var run_total=0;for(var i=0;i<nsamples;i++){run_total+=Math.random();}return sigma*(run_total-nsamples/2)/(nsamples/2)+mu;};window.gm.util.selRandom=function(list){//picks element from []
+if(!nsamples)nsamples=3;//how many throws f.e. 3dies
+if(!mu)mu=0;//mean of all throws  2dies=2..12-> 7
+if(!sigma)sigma=1;//  span from mean to max value 5
+var run_total=0;for(var i=0;i<nsamples;i++){run_total+=Math.random();}return sigma*(run_total-nsamples/2)/(nsamples/2)+mu;};window.gm.util.selRandom=function(list){//picks element from []
 var _i=list.length;if(_i>0)return list[_.random(0,_i-1)];else throw new Error("empty list");};//exchange inner text of ctrl ;connect it with onclick of a link/button. 
 //list = [ ['red','1','classRed'],['green','2','classGreen'] ]  text,datavalue,css-class (notice space between [ [ !)
 //f.e. <p>This is really a <a0 onclick="window.gm.util.swapText(this,[ ['red Color','1','red'],['green color','2','green'] ])">blue</a> game.</p>
@@ -2652,8 +2655,7 @@ window.gm.initGameFlags=function(forceReset){var NGP=arguments.length>1&&argumen
 };if(!window.gm.achievements){//||forceReset) { 
 window.gm.resetAchievements();}window.storage.loadAchivementsFromBrowser();var DngSY={remainingNights:0,dngLevel:1,//tracks the mainquest you have finished
 dngOW:false,//if this flag is set while in dng, player is here for some freeplay (no quest)  
-dildo:0,//1 small oraltraining,
-pussy:0,//////////////////////////
+//////////////////////////
 visitedTiles:[],mapReveal:[],dng:'',//current dungeon name
 prevLocation:'',nextLocation:'',//used for nav-logic
 dngMap:{}//dungeon map info
@@ -2878,14 +2880,20 @@ window.gm.encounterChance=function(evt){var res=100.0,s=window.story.state,dng=w
 if(window.gm.getDeltaTime(window.gm.getTime(),evt.tick)>200)res*=2;else res=0;}return res;};return{map:map,data:data};};"use strict";//special stuff for AB
 //call to navigate from current room to target
 //either you just walk move to target or some event happens; after the event continue to target or return to current 
-window.gm.triggerExploreEvt=function(targetLocation){var s=window.story.state,currentLocation=window.gm.player.location;var cnt=s.vars.WM_Lv1.Explored[currentLocation]||0,lstEncounter=s.vars.WM_Lv1.rollEncounter;var _Enc,_Encs=[{id:"WM_Lv1_VineSnare",roll:"Strength",min:60},{id:"WM_Lv1_VineGrab",roll:"Agility",min:60},{id:"WM_Lv1_Barrel",roll:"Strength",min:60}];var possLocation=[],loc,rnd2,rnd;if(targetLocation=='WM_Lv1_A1'){possLocation=['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4'].filter(function(x){return!s.vars.WM_Lv1.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_B1'){possLocation=['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4'].filter(function(x){return!s.vars.WM_Lv1.Explored[x]>0;});}//pick encounter according location
-rnd2=_.random(0,_Encs.length-1);_Enc=_Encs[rnd2];switch(_Enc.roll){case"Strength":rnd=s.vars.qStrength;break;case"Intelect":rnd=s.vars.qWisdom;break;//case "Agility":
-default:rnd=s.vars.qAgility;break;}//do a roll and check roll+stat
-rnd+=_.random(0,50);if(_Enc.min>rnd){//encounter if roll+stat < d100
-window.story.state.tmp.args=[null,"Rolling failed due to "+_Enc.roll+" of "+rnd+"."];s.vars.WM_Lv1.rollEncounter=_Enc;window.story.show(_Enc.id);}else{if(possLocation.length<=0){window.story.show("WM_Lv1_ExploredAll");}else if(rnd+cnt*10.0>80){//if rolled high enough move on //the more you have explored here the more likely to succeed
-rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];s.vars.WM_Lv1.Explored[loc]=1+(s.vars.WM_Lv1.Explored[loc]||0);s.vars.WM_Lv1.Explored[currentLocation]=1+(s.vars.WM_Lv1.Explored[currentLocation]||0);window.story.show(loc);}else{//bad luck -  return
-window.story.show("WM_Lv1_ExploreFail");}}};window.gm.printUseItem=function(what){window.story.state.tmp.args=[null,1];window.story.show("WM_Lv1_Use_"+what);};window.gm.printRemoveItem=function(what){var Inv=window.story.state.vars.Inv;for(var i=Inv.length-1;i>=0;i--){if(Inv[i]==what){Inv[i]='';break;}}};window.gm.printPickup=function(){var s=window.story.state,item=s.vars.WM_Lv1.qLocItems[window.passage.name];var Text="";if(item=="HealthUp"){Text="There is a healthpotion stashed away.";if(s.vars.Inv.length>=4){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>';}}if(item=="Tshirt"){//,"","Shorts","Adrenalin
-Text="There is a Tshirt stashed away.";if(s.vars.Inv.length>=4){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>';}}return"<p>"+Text+"</p>";};window.gm.pickupItem=function(what,where){var s=window.story.state;s.vars.Inv.push(what);s.vars.WM_Lv1.qLocItems[where]="";window.story.show(window.passage.name);};//prints link to other passage
+window.gm.triggerExploreEvt=function(targetLocation){var s=window.story.state,currentLocation=window.gm.player.location;var cnt=s.vars.WM_Lv.Explored[currentLocation]||0,cnt2=s.vars.WM_Lv.Explored[targetLocation]||0;var _Enc,_Encs,msg="";switch(s.vars.WM_Lv.qDng){//define Encounters
+case'WM_Lv1':_Encs=[{id:"WM_Lv1_VineSnare",roll:"Strength",min:40},{id:"WM_Lv1_VineGrab",roll:"Agility",min:40},{id:"WM_Lv1_VineFlower",roll:"Intelect",min:40},{id:"WM_Lv1_SlugsDrop",roll:"Agility",min:40},{id:"WM_Lv1_ExploreFail",roll:"Rnd",min:10}];break;case'WM_Lv2':_Encs=[{id:"WM_Lv2_VixenNurse",roll:"Strength",min:40},{id:"WM_Lv2_Orderly",roll:"Agility",min:40},{id:"WM_Lv2_DrunkDoctor",roll:"Intelect",min:40}];break;default:break;}var possLocation=[targetLocation],loc,rnd2,rnd,bonus;//either we walk from RoomA to targetLocation or we search inside targetLocation
+if(targetLocation=='WM_Lv1_A1'){possLocation=['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4','WM_Lv1_A5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_B1'){possLocation=['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4','WM_Lv1_B5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_C1'){possLocation=['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_C1'){possLocation=['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_D1'){possLocation=['WM_Lv1_D2','WM_Lv1_D3','WM_Lv1_D4','WM_Lv1_D5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv2_C1'){possLocation=['WM_Lv2_C2','WM_Lv2_C3'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}//pick encounter according location
+rnd2=_.random(0,_Encs.length-1);_Enc=_Encs[rnd2];switch(_Enc.roll){case"Strength":rnd=s.vars.qStrength;break;case"Intelect":rnd=s.vars.qWisdom;break;case"Agility":rnd=s.vars.qAgility;break;default:rnd=0;break;}//do a roll and check roll+stat
+rnd+=Math.round(window.gm.util.randomNormal(0,40,3));//    rnd+=_.random(0,50);
+bonus=possLocation[0]==targetLocation?5:0;//reduce enc chance if visiting known location
+window.gm.pushLog('rolled '+rnd+' + bonus '+bonus+' against '+_Enc.min);if(_Enc.min>rnd+bonus){//encounter if roll+stat < d100
+window.story.state.tmp.args=[null,"Rolling failed due to "+_Enc.roll+" of "+rnd+".",1];//1 used as seen mark
+s.vars.WM_Lv.rollEncounter=_Enc;window.story.show(_Enc.id);}else{//Todo if horny roll if masturbation interception
+if(possLocation.length<=0){window.story.show("WM_Lv1_ExploredAll");}else{//if((rnd+bonus+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
+rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];s.vars.WM_Lv.Explored[loc]=1+(s.vars.WM_Lv.Explored[loc]||0);s.vars.WM_Lv.Explored[currentLocation]=1+(s.vars.WM_Lv.Explored[currentLocation]||0);window.story.show(loc);}//else { //bad luck -  return
+//  window.story.show("WM_Lv1_ExploreFail");
+//}
+}};window.gm.printUseItem=function(what){window.story.state.tmp.args=[null,1];window.story.show("WM_Lv1_Use_"+what);};window.gm.printRemoveItem=function(what){var Inv=window.story.state.vars.Inv;for(var i=Inv.length-1;i>=0;i--){if(Inv[i]==what){Inv[i]='';break;}}};window.gm.printPickup=function(){var s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];var Text="",freeSlot=false;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){freeSlot=true;break;}}if(item==undefined||item=="")return"";if(item=="HealthUp"){Text="There is a healthpotion stashed away.";}else if(item=="Tshirt"){Text="There is a Tshirt stashed away.";}else if(item=="Shorts"){Text="Some cotton pants are stored here.";}else if(item=="Adrenalin"){Text="A syringe filled with a hormon cocktail to normalize your status ailments.";}else if(item=="Vibrator"){Text="Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";};if(freeSlot==false){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>';}return"<p>"+Text+"</p>";};window.gm.pickupItem=function(what,where){var s=window.story.state;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){s.vars.Inv[i]=what;s.vars.WM_Lv.qLocItems[where]="";break;}}window.story.show(window.passage.name);};//prints link to other passage
 window.gm.printGoto=function(location,cost,alias){var msg='',res={OK:true,msg:''};msg=window.gm.printDo("window.story.show(\""+location+"\");",cost,alias);return msg;};//prints link that executes doThat f.e. "window.story.show(\"NewGame\")";
 window.gm.printDo=function(doThat,cost,alias){var k='',msg='',res={OK:true,msg:''};var _cost=cost||{};//cost={time:30,energy:-10,will:-10,difficult:hard}  easy, average, hard
 _cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energy:0,_cost.will=cost&&cost.will?cost.will:0;_cost.difficult=cost&&cost.difficult?cost.difficult:'';k=(_cost.time>0?' '+_cost.time+'min':'')+(_cost.energy!==0?' '+_cost.energy+'E':'')+(_cost.will!==0?' '+_cost.will+'W':'')+(_cost.difficult?' <b>'+_cost.difficult+'</b>':'');if(k!=='')k=" ("+k+")";msg=window.gm.printLink((alias===''?location:alias)+k,"(function(){let v=window.story.state.vars;if(!(("+_cost.energy+"<0 && v.qBattery<"+-1*_cost.energy+")||("+_cost.will+"<0 && v.qSanity<"+-1*_cost.will+"))){"+"v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+"}else{alert(\"Cant do it!\")}}())",{class:!(_cost.energy<0&&window.story.state.vars.qBattery<-1*_cost.energy||_cost.will<0&&window.story.state.vars.qSanity<-1*_cost.will)?"":"done"});//TODO replace alert with ??
@@ -2896,9 +2904,11 @@ window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]
 s._gm.debug=1,s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.chars.player||forceReset){window.gm.player=new Player();s.chars[window.gm.player.id]=window.gm.player;}window.gm.initGameFlags(forceReset,NGP);window.gm.switchPlayer(window.gm.player.id);};//stuff for AB
 window.gm.initGameFlags=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;var s=window.story.state;function dataPrototype(){return{visitedTiles:[],mapReveal:[],tmp:{},version:0};}if(forceReset){s.NGP=s.Settings=s.DngSY=null;s.Lab=s.Known=null;}var Settings={autoSave:true,showCombatPictures:true,showNSFWPictures:true,showDungeonMap:true};if(!s.vars||forceReset){// storage of variables that doesnt fit player
 s.vars={activePlayer:'',//id of the character that the player controls currently
-qSanity:100,qSanityMax:100,qArousal:0,qArousalMax:40,qAgility:40,qAgilityMax:40,qStrength:40,qStrengthMax:40,qWisdom:40,qWisdomMax:40,qUpperWear:1,qLowerWear:1,qNextLocation:""};s.vars.Inv=[];//Inventory
+qSanity:100,qSanityMax:100,qArousal:0,qArousalMax:50,qAgility:40,qAgilityMax:40,qStrength:40,qStrengthMax:40,qWisdom:40,qWisdomMax:40,qUpperWear:1,qLowerWear:1,qUnusedSP:0,qCoin:0};s.vars.Inv=[];//Inventory
 s.vars.U={//Unlockables
-ShowRooms:1,ShowRoll:1};s.vars.WM_Lv1={};}var DngSY={visitedTiles:[],mapReveal:[],dng:'',//current dungeon name
+ShowRooms:1,ShowRoll:1};s.vars.WM_Lv={};//flags of the current dungeon
+s.vars.WM_Lv1={};//persitent data between playthrough
+s.vars.WM_Lv2={};}var DngSY={visitedTiles:[],mapReveal:[],dng:'',//current dungeon name
 prevLocation:'',nextLocation:'',//used for nav-logic
 dngMap:{}//dungeon map info
 };if(!window.gm.achievements){//||forceReset) { 
@@ -3945,7 +3955,7 @@ Which was very difficult since you are far to large - you know?&lt;/br&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;
 &lt;/section&gt;</tw-passagedata><tw-passagedata pid="7" name="sidebar" tags="" position="850,100" size="100,100">&lt;h3&gt;&lt;%=window.story.name%&gt; V&lt;%=window.gm.getSaveVersion().toString().replaceAll(&quot;,&quot;,&quot;.&quot;)%&gt;&lt;/h3&gt;
 &lt;img src=&#39;&lt;%=window.gm.getSidebarPic()%&gt;&#39; width=&quot;256&quot; height=&quot;256&quot;&gt;
-&lt;div&gt;&lt;%=window.story.state.vars.qLoc%&gt;&lt;/br&gt;&lt;%=window.gm.getTimeString()%&gt;&lt;/br&gt;&lt;%=window.gm.getDateString()%&gt;&lt;/br&gt;&lt;/div&gt;&lt;hr&gt;
+&lt;div&gt;&lt;%=window.gm.util.printLocationName(window.gm.player.location)%&gt;&lt;/br&gt;&lt;%=window.gm.getTimeString()%&gt;&lt;/br&gt;&lt;%=window.gm.getDateString()%&gt;&lt;/br&gt;&lt;/div&gt;&lt;hr&gt;
 &lt;div&gt;&lt;%=window.gm.player.name%&gt;&lt;/br&gt;
 &lt;%=window.gm.util.bargraph(window.story.state.vars.qSanity,window.story.state.vars.qSanityMax,&quot;cornflowerblue&quot;,&quot;Sanity: &quot;)%&gt; 
 &lt;%=window.gm.util.bargraph(window.story.state.vars.qArousal,window.story.state.vars.qArousalMax,&quot;darkorange&quot;,&quot;Arousal: &quot;)%&gt; 
@@ -4833,73 +4843,361 @@ Now Inside Hull.
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="83" name="WM_Respawn" tags="" position="350,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;Damn,you lost most of your loot:&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;WM_Home&#39;,{},&#39;Return to the village&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;[[WM_Home]]&lt;/p&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="84" name="WM_Rest" tags="" position="475,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;%window.story.state.vars.qArousal=0;window.story.state.vars.qSanity=window.story.state.vars.qSanityMax%&gt;
 &lt;p&gt;After some restful sleep, you awake next morning.&lt;/p&gt;
 &lt;p&gt;[[Depart to adventure|WM_Dungeon_Selection]]&lt;/p&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="85" name="WM_Dungeon_Selection" tags="" position="600,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="85" name="WM_Traits" tags="TODO" position="600,1100" size="100,100">dripping
+fertile
+
+(text-colour: &quot;red&quot;)[Aroused] - Your previous orgasms have left you constantly aroused. You find your resistance is dropping faster than it normally should. //(Increased Resistance Damage)//](if: &quot;Eager&quot; is in $Orgasm)[
+(text-colour: &quot;red&quot;)[Eager] - Your previous orgasms have left you eager for more excitement. Trouble has a much easier time of finding you. //(Increased Encounter Chance)//](if: &quot;Insatiable&quot; is in $Orgasm)[
+(text-colour: &quot;red&quot;)[Insatiable] - Your previous orgasms have left you insatiable and wanting more. You have have an almost irresistable urge to feel yourself up at every opportunity. //(Chance to Masturbate instead of Move/Investigate)//](if: &quot;Horny&quot; is in $Orgasm)[
+(text-colour: &quot;red&quot;)[Horny] - Your previous orgasms have left you horny. Your mind is cloudy and you find it difficult to summon the willpower to resist arousing encounters. //(-20 Willpower)//](if: &quot;Distracted&quot; is in $Orgasm)[
+(text-colour: &quot;red&quot;)[Distracted] - Your previous orgasms have left you distracted. You can&#39;t focus as much on the finer details and investigating areas is proving more challenging. //(-20 Intellect)//](if: &quot;Frail&quot; is in $Orgasm)[
+(text-colour: &quot;red&quot;)[Frail] - Your previous orgasms have left you frail. You can&#39;t seem to put as much strength into your muscles, best to avoid a fight. //(-20 Strength)//](if: &quot;Sluggish&quot; is in $Orgasm)[
+(text-colour: &quot;red&quot;)[Sluggish] - Your previous orgasms have left you sluggish. Your reflexes don&#39;t react as fast as they used to, you hope there are no surprises around the next corner. //(-20 Agility)//]]
+
+Acceptance Traits Discovered:
+(text-colour: &quot;Pink&quot;)[(if: &quot;Satiable&quot; is in $Events)[Satiable - the insatiable status no longer stops movement and does not hit resistance if you&#39;re at or less than half your total](else:)[Reach 4 Acceptance to discover this trait]
+(if: &quot;Inexhaustable&quot; is in $Events)[Inexhaustable - the exhausted effect now causes -3 resistance instead of -1 health if caused by an orgasm](else:)[Reach 8 Acceptance to discover this trait]
+(if: &quot;Satisfied&quot; is in $Events)[Satisfied - vibrators now heal an additional resistance and cure the aroused status](else:)[Reach 12 Acceptance to discover this trait]
+(if: &quot;Nymphomaniac&quot; is in $Events)[Nymphomaniac - unlocks &quot;Nymphomaniac Mode&quot;](else:)[Reach 17 Acceptance to discover this trait]]
+
+Defiance Traits Discovered:
+(text-colour: &quot;Red&quot;)[(if: &quot;Resiliant&quot; is in $Events)[Resiliant - completing the first test in a run restores +2 health and all resistance](else:)[Reach 4 Defiance to discover this trait]
+(if: &quot;Prudish&quot; is in $Events)[Prudish - clothes now restore +1 resistance when worn](else:)[Reach 8 Defiance to discover this trait]
+(if: &quot;Respite&quot; is in $Events)[Respite - occassionally dodge random encounters](else:)[Reach 12 Defiance to discover this trait]
+(if: &quot;Zealot&quot; is in $Events)[Zealot - unlocks &quot;Zealot Mode&quot;](else:)[Reach 17 Defiance to discover this trait]]</tw-passagedata><tw-passagedata pid="86" name="WM_Dungeon_Selection" tags="" position="725,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;You have no choice then to enter the dungeon again:&lt;/p&gt;
 &lt;p&gt;&lt;a0 onclick=&#39;enterMine()&#39;&gt;The abandoned mine&#39;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a0 onclick=&#39;enterHospital()&#39;&gt;The hospital&#39;&lt;/a&gt;&lt;/p&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;script&gt;function enterMine(){
+&lt;script&gt;
+function init(){
     let _i,s=window.story.state;
-    s.vars.WM_Lv1= {
-          mapReveal:0,
-          visited:[],
-          rollEncounter:&quot;&quot;,    //
-          Explored:{}, //{WM_Lv1_A1:1}
-          qKey1:0,  //found the key
-          qLocItems:{},
-          qLocKey1:&quot;&quot; , //which room has key
-          qLocExit:&quot;&quot;, //which room has exit
-          qFoundExit:0, //found the exit
-          qBossState:0,
-          qBossType:0
-          };
-    let _rooms=[&quot;WM_Lv1_A3&quot;,&quot;WM_Lv1_B3&quot;,&quot;WM_Lv1_C1&quot;,&quot;WM_Lv1_B5&quot;]    //consumables
-    let _items=[&quot;HealthUp&quot;,&quot;Tshirt&quot;,&quot;Shorts&quot;,&quot;Adrenalin&quot;]
+    s.vars.qSanity=s.vars.qSanityMax,
+    s.vars.qArousal=0
+    s.vars.qAgility=s.vars.qAgilityMax,
+    s.vars.qStrength=s.vars.qStrengthMax,
+    s.vars.qWisdom=s.vars.qWisdomMax,
+    s.vars.qUpperWear=1,
+    s.vars.qLowerWear=1;
+    s.vars.Inv=[&quot;&quot;,&quot;&quot;,&quot;&quot;,&quot;&quot;];
+}
+function enterMine(){
+    let _i,s=window.story.state;
+    init();
+    s.vars.WM_Lv= {
+        qDng: &quot;WM_Lv1&quot;,
+        mapReveal:0,
+        visited:[],
+        rollEncounter:&quot;&quot;,    //
+        Explored:{}, //{WM_Lv1_A1:1}
+        qKey1:0,  //found the key
+        qLocItems:{},
+        qEffects:{},    //Horny,Distracted,Frail,Sluggish   Aroused,Eager,insatiable,
+        qLocKey1:&quot;&quot; , //which room has key
+        qLocExit:&quot;&quot;, //which room has exit
+        qFoundExit:0, //found the exit
+        qBossState:0,
+        qBossType:0
+    };
+    let _rooms=[&quot;WM_Lv1_A2&quot;,&quot;WM_Lv1_A3&quot;,&quot;WM_Lv1_B4&quot;,&quot;WM_Lv1_B3&quot;,&quot;WM_Lv1_B1&quot;,&quot;WM_Lv1_C5&quot;,&quot;WM_Lv1_C3&quot;,&quot;WM_Lv1_D2&quot;,&quot;WM_Lv1_D4&quot;]    //consumables
+    let _items=[&quot;HealthUp&quot;,&quot;Tshirt&quot;,&quot;Shorts&quot;,&quot;HealthUp&quot;,&quot;Tshirt&quot;,&quot;Shorts&quot;,&quot;Adrenalin&quot;,&quot;Vibrator&quot;,&quot;Vibrator&quot;]
     _items.forEach((x)=&gt;{   //qLocItems[&quot;WM_Lv1_A3&quot;]=&quot;Healthup&quot;
         _i=_.random(0,_rooms.length-1)
-        s.vars.WM_Lv1.qLocItems[_rooms[_i]]=x;
+        s.vars.WM_Lv.qLocItems[_rooms[_i]]=x;
         _rooms.splice(_i,1)
     })
-    s.vars.WM_Lv1.qLocItems[&quot;WM_Lv1_A1&quot;]=&quot;Tshirt&quot;;
-    _rooms=[&quot;WM_Lv1_B4&quot;,&quot;WM_Lv1_B5&quot;]    //quest-items
+    s.vars.WM_Lv.qLocItems[&quot;WM_Lv1_A1&quot;]=&quot;Tshirt&quot;;
+    _rooms=[&quot;WM_Lv1_B4&quot;,&quot;WM_Lv1_D5&quot;]    //key
     _i=_.random(0,_rooms.length-1)
-    s.vars.WM_Lv1.qLocKey1=_rooms[_i];
+    s.vars.WM_Lv.qLocKey1=_rooms[_i];
     _rooms.splice(_i,1);
+    _rooms=[&quot;WM_Lv1_A4&quot;,&quot;WM_Lv1_C3&quot;]    //exit
     _i=_.random(0,_rooms.length-1)
-    s.vars.WM_Lv1.qLocExit=&quot;WM_Lv1_A2&quot; //_rooms[_i];
+    s.vars.WM_Lv.qLocExit=_rooms[_i];
     _rooms.splice(_i,1);
     window.story.show(&quot;WM_Lv1_Entry&quot;);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="86" name="WM_Lv1_MAP" tags="_back_" position="725,1100" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
-&lt;!--&lt;script&gt; window.gm.printMap(&quot;AM_Lv2&quot;,window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);&lt;/script&gt;--&gt;</tw-passagedata><tw-passagedata pid="87" name="InspectPlayer" tags="_back_ _nodeffered_" position="850,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
+function enterHospital(){
+    let _i,s=window.story.state;
+    init();
+    s.vars.WM_Lv= {
+        qDng: &quot;WM_Lv2&quot;,
+        mapReveal:0,
+        visited:[],
+        rollEncounter:&quot;&quot;,    //
+        Explored:{}, //{WM_Lv1_A1:1}
+        qKey1:0,  //found the Key 
+        qKey2:0,  //found the Passcode
+        qKey3:0,  //found the USBDrive
+        qLocItems:{},
+        qLocKey1:&quot;&quot; , //which room has key
+        qLocKey2:&quot;&quot; , //which room has key
+        qLocKey3:&quot;&quot; , //which room has key
+        qLocExit:&quot;&quot;, //which room has exit
+        qBossState:0,
+        qBossType:0,
+        qRestrainWrist:0,   //Restraints on body 
+        qRestrainAncle:0,
+        qRestrainTorso:0,
+        qRestrainMouth:0,
+        qLocUnlocks:{},
+        qLocUnlock:&quot;&quot;,  //where can remove restrain
+    };
+    let _rooms=[&quot;WM_Lv2_A3&quot;,&quot;WM_Lv2_B3&quot;,&quot;WM_Lv2_C1&quot;,&quot;WM_Lv2_B5&quot;]    //consumables
+    let _items=[&quot;HealthUp&quot;,&quot;Tshirt&quot;,&quot;Shorts&quot;,&quot;Adrenalin&quot;]
+    _items.forEach((x)=&gt;{   //qLocItems[&quot;WM_Lv1_A3&quot;]=&quot;Healthup&quot;
+        _i=_.random(0,_rooms.length-1)
+        s.vars.WM_Lv.qLocItems[_rooms[_i]]=x;
+        _rooms.splice(_i,1)
+    })
+    _rooms=[&quot;WM_Lv2_A1&quot;,&quot;WM_Lv2_B1&quot;,&quot;WM_Lv2_C1&quot;];    //location of unlock tools
+    _rooms.forEach((x)=&gt;{   //qLocItems[&quot;WM_Lv1_A3&quot;]=1
+        _i=_.random(0,_rooms.length-1)
+        s.vars.WM_Lv.qLocUnlocks[_rooms[_i]]=1;
+        s.vars.WM_Lv.qLocUnlock=_rooms[_i];
+    })
+    //quest-items qKey3
+    _rooms=[&quot;WM_Lv2_C2&quot;]    
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv.qLocKey3=_rooms[_i];
+    //quest-items qKey2
+    _rooms=[&quot;WM_Lv2_N2&quot;]    
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv.qLocKey2=_rooms[_i];
+    //quest-items qKey1
+    _rooms=[&quot;WM_Lv2_F2&quot;]    
+    _i=_.random(0,_rooms.length-1)
+    s.vars.WM_Lv.qLocKey1=_rooms[_i];
+    s.vars.WM_Lv.qLocExit=&quot;WM_Lv2_A2&quot;
+    window.story.show(&quot;WM_Lv2_Entry&quot;);
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="87" name="WM_Lv2_Pickups" tags="" position="850,1100" size="100,100">&lt;%=window.gm.printPickup()%&gt;
+&lt;%if(window.story.state.vars.WM_Lv.qLocUnlock==window.passage.name){%&gt;
+    &lt;p&gt;Some sharp knife is stashed away that would possibly useful to cut your restraints.&lt;/p&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qRestrainWrist&gt;=2){%&gt;
+    &lt;a0 onclick=&#39;window.story.state.tmp.args[1]=&quot;qRestrainWrist&quot;;window.story.show(&quot;WM_Lv2_RemoveRestrain&quot;)&#39;&gt;Cut your wrist restriants&lt;/a&gt;
+    &lt;%}%&gt;
+&lt;%}%&gt;
+&lt;%if(window.story.state.vars.WM_Lv.qLocKey1==window.passage.name){%&gt;
+    &lt;p&gt;There is a clipboard lying on the desk with some report attached to it. &lt;/p&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qKey1==0){%&gt;
+    &lt;div id=&#39;selectidx&#39; &gt; This seems to be one of the clue you were looking for.
+    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#selectidx&quot;)[0],&quot;div#choiceidxa&quot;),window.story.state.vars.WM_Lv.qKey1=1&#39;&gt;Take it&lt;/a&gt;
+    &lt;/div&gt;&lt;div id=&#39;choiceidxa&#39; hidden&gt;
+    &lt;/div&gt;
+    &lt;%}%&gt;
+&lt;%}else if(window.story.state.vars.WM_Lv.qLocKey2==window.passage.name){%&gt;
+    &lt;p&gt;A PC is seated on a office desk.  &lt;/p&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qKey2==0){%&gt;
+    &lt;div id=&#39;selectidx&#39; &gt; 
+    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#selectidx&quot;)[0],&quot;div#choiceidxa&quot;),window.story.state.vars.WM_Lv.qKey2=1&#39;&gt;Copy the confidental files to the USB-drive.&lt;/a&gt;
+    &lt;/div&gt;&lt;div id=&#39;choiceidxa&#39; hidden&gt;
+    &lt;/div&gt;
+    &lt;%}%&gt;
+&lt;%}else if(window.story.state.vars.WM_Lv.qLocKey3==window.passage.name){%&gt;
+    &lt;p&gt;On the side of a cabinet a sticky note catches your eye. Something like a passcode is scribbled down on it.&lt;/p&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qKey3==0){%&gt;
+    &lt;div id=&#39;selectidx&#39; &gt; 
+    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#selectidx&quot;)[0],&quot;div#choiceidxa&quot;),window.story.state.vars.WM_Lv.qKey3=1&#39;&gt;Memorize the code.&lt;/a&gt;
+    &lt;/div&gt;&lt;div id=&#39;choiceidxa&#39; hidden&gt;
+    &lt;/div&gt;
+    &lt;%}%&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="88" name="WM_Lv2_MAP" tags="_back_" position="975,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+TODO
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="89" name="WM_Lv2_VixenNurse" tags="" position="1100,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
+&lt;p&gt;A scantyly clad nurse is crossing your path.&lt;/p&gt;
+&lt;%if(window.story.state.vars.qLowerWear&gt;0){ %&gt;
+&lt;p&gt;&quot;Hey baby, everything fine with you?&quot; she asks.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;Grinning at your sight of your nude crotch she says &quot;I see you are in dire need of attention..&quot; and quickly grabs you by your wrist.&lt;/p&gt;
+&lt;p&gt;...&lt;/p&gt;
+&lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
+&lt;%}%&gt;
+&lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="90" name="WM_Lv2_Orderly" tags="" position="1225,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
+&lt;p&gt;Just as you pass a corner you run into a orderly.&lt;/p&gt;
+&lt;%if(window.story.state.vars.qUpperWear&lt;=0 &amp;&amp; window.story.state.vars.WM_Lv.qRestrainWrist&lt;=0){ window.story.state.vars.WM_Lv.qRestrainWrist=2;%&gt;
+&lt;p&gt;He fits some wrist/harness/collar on you. Find a way to remove them before you are bound completely &lt;/p&gt;
+&lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
+&lt;%}else if(window.story.state.vars.qLowerWear&lt;=0 &amp;&amp; window.story.state.vars.WM_Lv.qRestrainAncle&lt;=0){ window.story.state.vars.WM_Lv.qRestrainAncle=2; %&gt;
+&lt;p&gt;He fits some ancles/legbinder on you. Find a way to remove them before you are bound completely &lt;/p&gt;
+&lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
+&lt;%}else if(window.story.state.vars.qUpperWear==1){ window.story.state.vars.qUpperWear=0;%&gt;
+&lt;p&gt;He rips off your top!&lt;/p&gt;
+&lt;%}else if(window.story.state.vars.qLowerWear==1){window.story.state.vars.qLowerWear=0;%&gt;
+&lt;p&gt;He strips your bottoms!&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;&quot;Lets have some fun you and me.&quot; he growls.&lt;/p&gt;
+&lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
+&lt;%}%&gt;
+&lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="91" name="WM_Lv2_DrunkDoctor" tags="" position="100,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
+&lt;p&gt;Drunk Doctor&lt;/p&gt;
+&lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="92" name="WM_Lv2_RemoveRestrain" tags="" position="225,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;p&gt;With the sharp tool you try to remove one of your retraints. &lt;/p&gt;
+&lt;%window.story.state.vars.WM_Lv[window.story.state.tmp.args[1]]=0;%&gt;
+&lt;p&gt;Unfortunatly the tool is now rendered useless.&lt;/p&gt;
+&lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function foo(){
+    let s=window.story.state,_rooms;
+    if(window.story.state.tmp.args[1]==&quot;&quot;) return;
+    s.vars.WM_Lv[window.story.state.tmp.args[1]]=0;
+    _rooms=Object.keys(s.vars.WM_Lv.qLocUnlocks);
+    qLocUnlock=_rooms[_.random(0,_rooms.length-1)]; //teleport tool to other location
+}
+foo();
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="93" name="WM_Lv2_Entry" tags="" position="350,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;Something odd is going on in the hospital. Look around and search for clues. If you have found 3 of them, leave the place through the lobby.&lt;/p&gt;
+[[Walk into the hospital|WM_Lv2_A1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="94" name="WM_Lv2_Exit" tags="" position="475,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;Lets see what you found so far:&lt;/p&gt;
+&lt;p&gt;[[Next|WM_Home]]&lt;/p&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="95" name="WM_Lv2_A1" tags="name:Lobby" position="600,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;This is the lobby of the hospital.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=3){%&gt;
+&lt;p&gt;You explored all corners of this area.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;There are still some corners that you could &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;take a peek&lt;/a&gt; into. &lt;p&gt;
+&lt;%}%&gt;
+&lt;%if((window.story.state.vars.WM_Lv.qKey1==0)||(window.story.state.vars.WM_Lv.qKey2==0)||(window.story.state.vars.WM_Lv.qKey3==0)){%&gt;
+&lt;p&gt;As you still have not discovered enough clues you may not leave this place.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;You have discovered enough clues and may [[leave this place|WM_Lv2_Exit]].&lt;/p&gt;
+&lt;%}%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+&lt;a0 onclick=&#39;window.gm.triggerExploreEvt(&quot;WM_Lv2_B1&quot;)&#39;&gt;go to Mensa&lt;/a&gt; &lt;a0 onclick=&#39;window.gm.triggerExploreEvt(&quot;WM_Lv2_N1&quot;)&#39;&gt;descend stairs&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="96" name="WM_Lv2_B1" tags="name:Mensa" position="725,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;The mensa of the hospital. Only a few people are around and you arent sure if they are patient or employees.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=3){%&gt;
+&lt;p&gt;You explored all corners of this area.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;There are still some corners that you could &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;take a peek&lt;/a&gt; into. &lt;p&gt;
+&lt;%}%&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+&lt;a0 onclick=&#39;window.gm.triggerExploreEvt(&quot;WM_Lv2_B2&quot;)&#39;&gt;Inspect the desk close to the windows&lt;/a&gt; 
+&lt;a0 onclick=&#39;window.gm.triggerExploreEvt(&quot;WM_Lv2_A1&quot;)&#39;&gt;to Lobby&lt;/a&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="97" name="WM_Lv2_B2" tags="" position="850,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;Desks at the windows&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv2_B1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="98" name="WM_Lv2_C1" tags="name:Treatment_Rooms" position="975,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;The corridor is lined with several doors. Most of them lead to rooms there patient receives treatments by the medical personal.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=3){%&gt;
+&lt;p&gt;You explored all corners of this area.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;There are still some corners that you could &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;take a peek&lt;/a&gt; into. &lt;p&gt;
+&lt;%}%&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+&lt;a0 onclick=&#39;window.gm.triggerExploreEvt(&quot;WM_Lv2_B1&quot;)&#39;&gt;to Mensa&lt;/a&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="99" name="WM_Lv2_C2" tags="" position="1100,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A mostly empty room with a desk and a stool behind and in front of it.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv2_C1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="100" name="WM_Lv2_C3" tags="" position="1225,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A room with a empty bed.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv2_C1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="101" name="WM_Lv2_F1" tags="name:Patient_Rooms" position="100,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;Another Corridor with a lot of doors. Those seem to be the sleeping rooms for the patients.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=3){%&gt;
+&lt;p&gt;You explored all corners of this area.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;There are still some corners that you could &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;take a peek&lt;/a&gt; into. &lt;p&gt;
+&lt;%}%&gt;
+&lt;%=window.story.render(&quot;WM_Lv2_Pickups&quot;)%&gt;
+&lt;a0 onclick=&#39;window.gm.triggerExploreEvt(&quot;WM_Lv2_C1&quot;)&#39;&gt;to Treatment area&lt;/a&gt; 
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="102" name="WM_Lv1_MAP" tags="_back_" position="225,1350" size="100,100">&lt;hr&gt;&lt;p&gt;Map:&lt;/p&gt;&lt;div id=&#39;canvas&#39;&gt;&lt;/div&gt;&lt;/br&gt;
+&lt;!--&lt;script&gt; window.gm.printMap(&quot;AM_Lv2&quot;,window.gm.player.location,window.story.state.vars.mine.mapReveal,window.story.state.vars.mine.visited);&lt;/script&gt;--&gt;</tw-passagedata><tw-passagedata pid="103" name="InspectPlayer" tags="_back_ _nodeffered_" position="350,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
 TODO: what are you wearing, are you restrained, are you feeling healthy
-&lt;div id=&#39;output&#39;&gt;&lt;/div&gt;&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="88" name="Inv_Hud" tags="" position="975,1100" size="100,100">&lt;hr&gt;&lt;%if(true||window.story.state.vars.mine){%&gt;
+&lt;%if(s.vars.qLowerWear==0 &amp;&amp; s.vars.qUpperWear==0){ %&gt; &lt;p&gt;You are completely naked and feel vulnerable!&lt;/p&gt;
+&lt;%}else if(s.vars.qLowerWear==0){%&gt;&lt;p&gt;Your lower half is nude.&lt;/p&gt;
+&lt;%}else if(s.vars.qUpperWear==0){%&gt;&lt;p&gt;You lost your top but at least your privates are covered.&lt;/p&gt;
+&lt;%}else{%&gt;&lt;p&gt;You wear some plain shirt and cargo pants&lt;/p&gt;
+&lt;%}%&gt;
+&lt;%if(s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]){%&gt; &lt;p&gt;Distracted: You have a hard time to concentrate. (Intelect damaged)&lt;/p&gt;&lt;%}%&gt;
+&lt;div id=&#39;output&#39;&gt;&lt;/div&gt;&lt;/br&gt;[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="104" name="Inv_Hud" tags="" position="475,1350" size="100,100">&lt;hr&gt;&lt;%if(true||window.story.state.vars.mine){%&gt;
 &lt;p&gt;Inventory:&lt;/p&gt;
 &lt;a0 onclick=&#39;window.gm.printUseItem(window.story.state.vars.Inv[0])&#39; &lt;%=(window.story.state.vars.Inv[0])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[0]%&gt;&lt;/a&gt;&lt;/br&gt;
-&lt;span &lt;%=(window.story.state.vars.Inv[1])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[1]%&gt;&lt;/span&gt;&lt;/br&gt;
-&lt;span &lt;%=(window.story.state.vars.Inv[2])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[2]%&gt;&lt;/span&gt;&lt;/br&gt;
-&lt;span &lt;%=(window.story.state.vars.Inv[3])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[3]%&gt;&lt;/span&gt;&lt;/br&gt;
-&lt;span &lt;%=(window.story.state.vars.WM_Lv1.qKey1!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Metal Crank&lt;/span&gt;&lt;span &lt;%=(window.story.state.vars.WM_Lv1.qFoundExit!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;(You found the exit but cant remember were it was exactly.)&lt;/span&gt;&lt;/br&gt;
+&lt;a0 onclick=&#39;window.gm.printUseItem(window.story.state.vars.Inv[1])&#39; &lt;%=(window.story.state.vars.Inv[1])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[1]%&gt;&lt;/a&gt;&lt;/br&gt;
+&lt;a0 onclick=&#39;window.gm.printUseItem(window.story.state.vars.Inv[2])&#39; &lt;%=(window.story.state.vars.Inv[2])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[2]%&gt;&lt;/a&gt;&lt;/br&gt;
+&lt;a0 onclick=&#39;window.gm.printUseItem(window.story.state.vars.Inv[3])&#39; &lt;%=(window.story.state.vars.Inv[3])?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;&lt;%=window.story.state.vars.Inv[3]%&gt;&lt;/a&gt;&lt;/br&gt;
+&lt;span &lt;%=(window.story.state.vars.WM_Lv.qKey1!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Metal Crank&lt;/span&gt;&lt;span &lt;%=(window.story.state.vars.WM_Lv.qFoundExit!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;(You found the exit but cant remember were it was exactly.)&lt;/span&gt;&lt;/br&gt;
 &lt;span &lt;%=false?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Whetstone&lt;/span&gt;&lt;/br&gt;
-&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="89" name="WM_Lv1_Use_Tshirt" tags="_back_" position="1100,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="105" name="WM_Lv1_Use_Tshirt" tags="_back_" position="600,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%if(window.story.state.vars.qUpperWear&gt;0){%&gt;
 &lt;p&gt;As you already wear something, you place the item back in your pack.&lt;/p&gt;
-&lt;%}else if(window.story.state.tmp.args[1]&gt;0){ window.gm.printRemoveItem(&quot;Tshirt&quot;)%&gt;
+&lt;%}else if(window.story.state.tmp.args[1]&gt;0){ window.gm.printRemoveItem(&quot;Tshirt&quot;),window.story.state.vars.qUpperWear=1;%&gt;
 &lt;p&gt;This is a simple Tshirt. It covers up your upper body and gives some physical protection.&lt;/p&gt;
 &lt;%}%&gt;
 [[Back|_back_]]
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="90" name="WM_Lv1_Encounters" tags="" position="1225,1100" size="100,100">&lt;script&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="106" name="WM_Lv1_Use_Shorts" tags="_back_" position="725,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%if(window.story.state.vars.qLowerWear&gt;0){%&gt;
+&lt;p&gt;As you already wear something, you place the item back in your pack.&lt;/p&gt;
+&lt;%}else if(window.story.state.tmp.args[1]&gt;0){ window.gm.printRemoveItem(&quot;Shorts&quot;),window.story.state.vars.qLowerWear=1;%&gt;
+&lt;p&gt;Some plain shorts covering your hips and legs.&lt;/p&gt;
+&lt;%}%&gt;
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="107" name="WM_Lv1_Use_HealthUp" tags="_back_" position="850,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%if(window.story.state.vars.qSanity&gt;=window.story.state.vars.qSanityMax){%&gt;
+&lt;p&gt;You feel quite healthy and should keep that for later.&lt;/p&gt;
+&lt;%}else if(window.story.state.tmp.args[1]&gt;0){ window.gm.printRemoveItem(&quot;HealthUp&quot;),window.story.state.vars.qSanity+=1;%&gt;
+&lt;p&gt;Popping the pill into your mouth and swallowing it, after only a short time you feel already better.&lt;/p&gt;
+&lt;%}%&gt;
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="108" name="WM_Lv1_Use_Adrenalin" tags="_back_" position="975,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%if(false){%&gt; TODO
+&lt;p&gt;You dont have any ailment that could be helped with that.&lt;/p&gt;
+&lt;%}else if(window.story.state.tmp.args[1]&gt;0){ window.gm.printRemoveItem(&quot;Adrenalin&quot;),
+s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]=0;%&gt;
+&lt;p&gt;Injecting yourself with the syringe should help you removing some nasty ailments.&lt;/p&gt;
+&lt;%}%&gt;
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="109" name="WM_Lv1_Use_Vibrator" tags="_back_" position="1100,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%if(s.vars.qArousal&lt;=10){%&gt;
+&lt;p&gt;Right now you arent in the mood for some selfplay.&lt;/p&gt;
+&lt;%}else if(window.story.state.tmp.args[1]&gt;0){ window.gm.printRemoveItem(&quot;Vibrator&quot;),
+s.vars.qArousal=Math.max(0,s.vars.qArousal-s.vars.qArousalMax/2); %&gt;
+&lt;p&gt;Injecting yourself with the syringe should help you removing some nasty ailments.&lt;/p&gt;
+&lt;%}%&gt;
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="110" name="WM_Lv1_Encounters" tags="" position="1225,1350" size="100,100">&lt;script&gt;
 function onEnter(){  //check Health damage
 let state=0;
     if(window.story.state.vars.qArousal&gt;=window.story.state.vars.qArousalMax){
-        window.story.state.vars.qArousal=0;window.story.state.vars.qSanity-25;
+        window.story.state.vars.qArousal=0;window.story.state.vars.qSanity-=25;
         window.story.show(&quot;WM_Lv1_ArousalKill&quot;);return;
     }
     if(window.story.state.vars.qSanity&lt;=0){
@@ -4907,137 +5205,293 @@ let state=0;
     }
 }
 onEnter();
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="91" name="WM_Lv1_RollDebug" tags="" position="100,1225" size="100,100">&lt;%if(window.story.state.vars.U.ShowRoll){%&gt;
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="111" name="WM_Lv1_ArousalKill" tags="_back_" position="100,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+Orgasm...
+[[Back|_back_]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="112" name="WM_Lv1_SanityKill" tags="_back_" position="225,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+Giving up resistance...
+[[You loose|WM_Lv1_Exit]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="113" name="WM_Lv1_RollDebug" tags="" position="350,1475" size="100,100">&lt;%if(window.story.state.vars.U.ShowRoll){%&gt;
 &lt;p class=&quot;dev&quot;&gt;&lt;%=window.story.state.tmp.args[1]%&gt;&lt;/p&gt;
-&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="92" name="WM_Lv1_Debug" tags="" position="225,1225" size="100,100">&lt;%if(window.story.state.vars.U.ShowRooms){%&gt;
-&lt;p&gt;Rooms explored:&lt;%=Object.keys(window.story.state.vars.WM_Lv1.Explored).toString()%&gt;&lt;/p&gt;
-&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="93" name="WM_Lv1_Pickups" tags="" position="350,1225" size="100,100">&lt;%=window.gm.printPickup()%&gt;
-&lt;%if(window.story.state.vars.WM_Lv1.qLocKey1==window.passage.name){%&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="114" name="WM_Lv1_Debug" tags="" position="475,1475" size="100,100">&lt;%if(window.story.state.vars.U.ShowRooms){%&gt;
+&lt;!--&lt;p&gt;Rooms explored:&lt;%=Object.keys(window.story.state.vars.WM_Lv.Explored).toString()%&gt;&lt;/p&gt;--&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="115" name="WM_Lv1_Navigation" tags="" position="600,1475" size="100,100">&lt;%function nav(Loc){ return(&#39;&lt;a href=\&quot;javascript:void(0)\&quot; onclick=\&#39;window.gm.triggerExploreEvt(\&quot;&#39;+Loc+&#39;\&quot;)\&#39; &#39; +((window.story.state.vars.WM_Lv.Explored[Loc])?&quot;&quot;:&quot;hidden&quot;)+&#39;&gt;&#39;+window.gm.util.printLocationName(Loc)+&#39;&lt;/a&gt;&#39;);}%&gt;
+&lt;%if(window.passage.name==&quot;WM_Lv1_A1&quot;){%&gt;
+&lt;%=nav(&quot;WM_Lv1_A2&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_A3&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_A4&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_A5&quot;)%&gt;
+&lt;%}%&gt;&lt;%if(window.passage.name==&quot;WM_Lv1_B1&quot;){%&gt;
+&lt;%=nav(&quot;WM_Lv1_B2&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_B3&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_B4&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_B5&quot;)%&gt;
+&lt;%}%&gt;&lt;%if(window.passage.name==&quot;WM_Lv1_C1&quot;){%&gt;
+&lt;%=nav(&quot;WM_Lv1_C2&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_C3&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_C4&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_C5&quot;)%&gt;
+&lt;%}%&gt;&lt;%if(window.passage.name==&quot;WM_Lv1_D1&quot;){%&gt;
+&lt;%=nav(&quot;WM_Lv1_D2&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_D3&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_D4&quot;)%&gt;
+&lt;%=nav(&quot;WM_Lv1_D5&quot;)%&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="116" name="WM_Lv1_Pickups" tags="" position="725,1475" size="100,100">&lt;%=window.gm.printPickup()%&gt;
+&lt;%if(window.story.state.vars.WM_Lv.qLocKey1==window.passage.name){%&gt;
 &lt;p&gt;This seems to be a storage room but most of the crates and barrels are broken and empty. &lt;/p&gt;
-    &lt;%if(window.story.state.vars.WM_Lv1.qKey1==0){%&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qKey1==0){%&gt;
     &lt;div id=&#39;selectidx&#39; &gt; But some kind of &lt;b&gt;crank&lt;/b&gt; is dangling on a hook mounted at the wall. Maybe its useful to operate some gear.
-    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#selectidx&quot;)[0],&quot;div#choiceidxa&quot;),window.story.state.vars.WM_Lv1.qKey1=1&#39;&gt;Take it&lt;/a&gt;
+    &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#selectidx&quot;)[0],&quot;div#choiceidxa&quot;),window.story.state.vars.WM_Lv.qKey1=1&#39;&gt;Take it&lt;/a&gt;
     &lt;/div&gt;&lt;div id=&#39;choiceidxa&#39; hidden&gt;
     &lt;/div&gt;
     &lt;%}%&gt;
-&lt;%}else if(window.story.state.vars.WM_Lv1.qLocExit==window.passage.name){%&gt;
+&lt;%}else if(window.story.state.vars.WM_Lv.qLocExit==window.passage.name){%&gt;
     &lt;p&gt;There is a emergency hatch that should make for an &lt;b&gt;EXIT&lt;/b&gt;. But it is closed. There is a winch next to it that should open the hatch. But it appears the manual crank is missing. Lets hope you can find it somewhere around. &lt;/p&gt;
-    &lt;%if(window.story.state.vars.WM_Lv1.qFoundExit==0){window.story.state.vars.WM_Lv1.qFoundExit=1%&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qFoundExit==0){window.story.state.vars.WM_Lv.qFoundExit=1%&gt;
     &lt;div id=&#39;selectidx&#39; &gt;
     &lt;a0 onclick=&#39;window.gm.printTalkLink($(&quot;div#selectidx&quot;)[0],&quot;div#choiceidxa&quot;)&#39;&gt;Memorize the location&lt;/a&gt;
     &lt;/div&gt;&lt;div id=&#39;choiceidxa&#39; hidden&gt; &lt;/div&gt;
     &lt;%}%&gt;
-    &lt;%if(window.story.state.vars.WM_Lv1.qKey1==1){%&gt;
+    &lt;%if(window.story.state.vars.WM_Lv.qKey1==1){%&gt;
     &lt;p&gt;As you have the crank you might try your luck to open the hatch and [[LEAVE|WM_Lv1_Exit]] this place.&lt;/p&gt;
     &lt;%}%&gt;
-&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="94" name="WM_Lv1_Entry" tags="" position="475,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%}%&gt;</tw-passagedata><tw-passagedata pid="117" name="WM_Lv1_Entry" tags="" position="850,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;The task that you were given is to find some mysterious crystals.&lt;/p&gt;
 &lt;p&gt;Unfortunatly the way you enterd is blocked by a rockslide. There should be an emergency exit in the lower floors of this excavation.&lt;/p&gt;
 &lt;!--There is a control terminal next to the door. All lights are of except the &lt;tgl id=&#39;lamp&#39; value=&#39;blue&#39; onclick=&#39;var x=this.attributes[&quot;value&quot;].nodeValue;switch(x){case &quot;blue&quot;:x=&quot;red&quot;;break;default:x=&quot;blue&quot;}this.attributes[&quot;value&quot;].nodeValue=this.style.color=this.textContent=x;&#39;&gt;blue&lt;/tgl&gt; one.--&gt;
 [[Walk down the tunnel|WM_Lv1_A1]]
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;script&gt;&lt;/script&gt;</tw-passagedata><tw-passagedata pid="95" name="WM_Lv1_Exit" tags="" position="600,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="118" name="WM_Lv1_Exit" tags="" position="975,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;Lets see what you found so far:&lt;/p&gt;
-&lt;p&gt;&lt;%=window.gm.printGoto(&#39;WM_Home&#39;,{},&#39;Return to the village&#39;)%&gt;&lt;/p&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="96" name="WM_Lv1_VineSnare" tags="" position="725,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;div id=&quot;output&quot;&gt;&lt;/div&gt;
+&lt;br&gt;
+&lt;a0 onclick=&#39;foo(true);window.story.show(&quot;WM_Home&quot;)&#39;&gt;Return Home&lt;/a&gt;
+&lt;p&gt;[[WM_Home]]&lt;/p&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;script&gt;function foo(checkout){
+    let msg=&quot;&quot;,x,SP=0,Coin=0;
+    x=Object.keys(window.story.state.vars.WM_Lv.Explored).length;
+    SP+=Math.floor(x/8);
+    msg+=&quot;&lt;p&gt;Rooms explored: &quot;+x.toString()+&quot; = &quot;+SP.toString()+&quot;SP&lt;/p&gt;&quot;;
+    if(window.story.state.vars.WM_Lv.qKey1 &amp;&amp; window.story.state.vars.WM_Lv.qFoundExit){ 
+        SP+=1;
+        msg+=&#39;&lt;p&gt;Found the Key and Exit =  +1 SP&lt;/p&gt;&#39;;
+    }
+    if(window.story.state.vars.WM_Lv.qBossState==3){
+        SP+=1;
+        msg+=&#39;&lt;p&gt;Escaped through the exit   =  +1 SP&lt;/p&gt;&#39;
+    }
+    Coin=SP*20;
+    msg+=&#39;&lt;p&gt;Cash earned: &#39;+Coin+&#39;&lt;/p&gt;&#39;
+    if(checkout){
+        window.story.state.vars.qUnusedSP+=SP;
+        window.story.state.vars.qCoin+=Coin;
+    } else  window.gm.printOutput(msg)
+}
+foo(false)
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="119" name="WM_Lv1_VineSnare" tags="" position="1100,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
 Some WM_Lv1_VineSnare
-&lt;%if(window.story.state.vars.qLowerWear&gt;0){window.story.state.vars.qLowerWear=0; %&gt;
-&lt;p&gt;Makeing a dodge roll you try to evade the tentacles gripping your legs but you just stumble. They grip your shirt and rip it off.
+&lt;%if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qLowerWear&gt;0){window.story.state.vars.qLowerWear=0; %&gt;
+&lt;p&gt;Makeing a dodge roll you try to evade the tentacles gripping your legs but you just stumble. They grip your shorts and rip them off.
 Now your lower body is &lt;b&gt;NAKED&lt;/b&gt;. &lt;/p&gt;
-&lt;%}else{%&gt;
+&lt;%}else if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qLowerWear==0){%&gt;
 &lt;p&gt;Quickly the tentacle entwine your legs. With quite some effort you make your escape but somehow their touch on your bare skin felt so nice.&lt;/p&gt;
 &lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
 &lt;%}%&gt;
+&lt;%window.story.state.tmp.args[2]=0;%&gt; 
 &lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="97" name="WM_Lv1_VineGrab" tags="" position="850,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="120" name="WM_Lv1_VineGrab" tags="" position="1225,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
-&lt;%if(window.story.state.vars.qUpperWear&gt;0){window.story.state.vars.qUpperWear=0; %&gt;
+&lt;%if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qUpperWear&gt;0){window.story.state.vars.qUpperWear=0; %&gt;
 &lt;p&gt;Makeing a dodge roll you try to evade the tentacles gripping your arms but you just stumble. They grip your shirt and rip it off.
 Now your upper body is &lt;b&gt;NAKED&lt;/b&gt;. &lt;/p&gt;
-&lt;%}else{%&gt;
+&lt;%}else if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qUpperWear==0){%&gt;
 &lt;p&gt;Quickly the tentacle entwine your arms and neck. With quite some effort you make your escape but somehow their touch on your bare skin felt so nice.&lt;/p&gt;
 &lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
 &lt;%}%&gt;
+&lt;%window.story.state.tmp.args[2]=0;%&gt; 
 &lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&gt;</tw-passagedata><tw-passagedata pid="98" name="WM_Lv1_Barrel" tags="" position="975,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="121" name="WM_Lv1_VineFlower" tags="" position="100,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
-Some Barrel
+&lt;p&gt;A purple flower emanates a strong scent.&lt;/p&gt;
+&lt;%if(window.story.state.tmp.args[2]==1){%&gt;
+&lt;p&gt;Arousal +25&lt;/p&gt;&lt;p&gt;Intelect -5&lt;/p&gt;
+&lt;%window.story.state.vars.qArousal+=25; 
+window.story.state.vars.WM_Lv.qEffects[&quot;Distracted&quot;]=1;
+window.story.state.vars.qWisdom-=5;
+%&gt;
+&lt;p&gt;Somehow the fumes in the air makes it hard to think. &lt;i&gt;Intelect reduced !&lt;/i&gt;&lt;/p&gt;
+&lt;%}%&gt;
+&lt;%window.story.state.tmp.args[2]=0;%&gt; 
 &lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="99" name="WM_Lv1_ExploreFail" tags="" position="1100,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="122" name="WM_Lv1_SlugsDrop" tags="" position="225,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
+&lt;p&gt;Something is dripping down on your back. At first you think its just some waterdrops. But water wouldn&#39;t squirm that way.&lt;/p&gt;
+&lt;%if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qUpperWear&gt;0){window.story.state.vars.qUpperWear=0; %&gt;
+&lt;p&gt;You quickly pull your T-shirt over your head to see what hit you. You quickly pull your T-shirt over your head to see what has hit you. You discover a few slimy, finger-sized slugs squirming on your T-shirt and drop it. You won&#39;t be wearing that again.  
+Now your upper body is &lt;b&gt;NAKED&lt;/b&gt;. &lt;/p&gt;
+&lt;%}else if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qUpperWear==0){%&gt;
+&lt;p&gt;Something sticks to your back and moves. You shake yourself and try to reach for it with your hands. Several of these purple slugs fall off on their own and you catch the rest with your hands.&lt;/p&gt;
+&lt;p&gt;Arousal +25&lt;/p&gt;&lt;%window.story.state.vars.qArousal+=25;%&gt;
+&lt;%}%&gt;
+&lt;%window.story.state.tmp.args[2]=0;%&gt; 
+&lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="123" name="WM_Lv1_ExploreFail" tags="" position="350,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 After a while you give up exploring this area and return where you came from.
 &lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="100" name="WM_Lv1_ExploredAll" tags="" position="1225,1225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="124" name="WM_Lv1_ExploredAll" tags="" position="475,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 It seems you explored everything around here but there might still be something hidden in the other floors.
 &lt;a0 onclick=&#39;window.story.show(window.gm.player.location)&#39;&gt;Next&lt;/a&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="101" name="WM_Lv1_A1" tags="" position="100,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="125" name="WM_Lv1_A1" tags="name:Mine_Entrance" position="600,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;You find yourself in a cavernous space.&lt;/p&gt;
-&lt;%if(window.story.state.vars.WM_Lv1.Explored[window.passage.name]&gt;=3){%&gt;
-&lt;p&gt;You explored all corners of this area and might now decend &lt;%=window.gm.printGoto(&#39;WM_Lv1_B1&#39;,{},&#39;down the stairs&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;This is the entry of the digging site.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=3){%&gt;
+&lt;p&gt;You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_B1]]&lt;/p&gt;
 &lt;%}else{%&gt;
 &lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; to find a way deeper into the mine.&lt;p&gt;
 &lt;%}%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="102" name="WM_Lv1_A2" tags="" position="225,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="126" name="WM_Lv1_A2" tags="name:Mine_Trench" position="725,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;Muddy Path.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_A1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="103" name="WM_Lv1_A3" tags="" position="350,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="127" name="WM_Lv1_A3" tags="name:Mine_Elevator" position="850,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;Muddy Path.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_A1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="104" name="WM_Lv1_A4" tags="" position="475,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="128" name="WM_Lv1_A4" tags="name:Chain_Room" position="975,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;Chains dangle from above, their purpose long forgotten, but they clink softly when no one&#39;s near.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_A1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="129" name="WM_Lv1_A5" tags="name:Utility_Cabinet" position="1100,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;Muddy Path.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_A1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="105" name="WM_Lv1_B1" tags="" position="600,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="130" name="WM_Lv1_B1" tags="name:Elevator_1.floor" position="1225,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;You find yourself in a cavernous space.&lt;/p&gt;
-&lt;%if(window.story.state.vars.WM_Lv1.Explored[window.passage.name]&gt;=5){%&gt;
-&lt;p&gt;You explored all corners of this area and might now decend &lt;%=window.gm.printGoto(&#39;WM_Lv1_C1&#39;,{},&#39;down the stairs&#39;)%&gt;&lt;/p&gt;
+&lt;p&gt;The second level of the mine has the same large tunnels carved into the rock like in the entry area.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=4){%&gt;
+&lt;p&gt;You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_C1]].&lt;/p&gt;
 &lt;%}else{%&gt;
 &lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; to find a way deeper into the mine.&lt;p&gt;
 &lt;%}%&gt;
+&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_A1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="106" name="WM_Lv1_B2" tags="" position="725,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="131" name="WM_Lv1_B2" tags="name:Mine_Storeroom" position="100,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;Muddy Path.&lt;/p&gt;
+&lt;p&gt;A storage room with upturned crates and shelves; strange, unidentifiable artifacts remain tucked into dusty corners&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_B1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="107" name="WM_Lv1_B3" tags="" position="850,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="132" name="WM_Lv1_B3" tags="name:Ventilation_Shaft" position="225,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;Muddy Path.&lt;/p&gt;
+&lt;p&gt;A Narrow passage with the remains of ventilation fans, their blades motionless and covered in grime.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_B1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="108" name="WM_Lv1_B4" tags="" position="975,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="133" name="WM_Lv1_B4" tags="name:Minecart_Rail" position="350,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;Muddy Path.&lt;/p&gt;
+&lt;p&gt;Winding tracks stretch into the depths, interrupted by broken or rotting minecarts covered in rust and grime.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_B1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="109" name="WM_Lv1_B5" tags="" position="1100,1350" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="134" name="WM_Lv1_B5" tags="name:Pump_Room" position="475,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;Muddy Path.&lt;/p&gt;
+&lt;p&gt;Rusting machinery and overturned carts rest in shadows. Pipes go in different directions but the pumps aren&#39;t running.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_B1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="110" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="135" name="WM_Lv1_C1" tags="name:Cave_Labyrinth" position="600,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;The third level seems to be some natural caves. Several passages led into different directions.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=5){%&gt;
+&lt;p&gt;You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_C1]].&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; to find a way deeper into the mine.&lt;p&gt;
+&lt;%}%&gt;
+&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_B1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="136" name="WM_Lv1_C2" tags="name:Collapsed_Passageway" position="725,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A narrow corridor filled with jagged debris and a faint draft of cold, stale air whispering through the cracks.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_C1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="137" name="WM_Lv1_C3" tags="name:Echoing_Hall" position="850,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A vast, empty cavern where your footsteps reverberate endlessly, as if something is mimicking you.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_C1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="138" name="WM_Lv1_C4" tags="name:Crystal_Cavern" position="975,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A small chamber where jagged crystals jut from the walls, refracting what little light penetrates from above.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_C1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="139" name="WM_Lv1_C5" tags="name:Flooded_Tunnel" position="1100,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;This is a long passageway with ankle-deep, murky water rippling, obscuring what lies beneath the surface.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_C1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="140" name="WM_Lv1_D1" tags="name:Deep_Caves" position="1225,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;The deepest level of the digsite consists of cavernous caves and dense rock crevices.&lt;/p&gt;
+&lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=5){%&gt;
+&lt;p&gt;You explored all corners of this area maybe you missed out something in the upper floors.&lt;/p&gt;
+&lt;%}else{%&gt;
+&lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; here.&lt;p&gt;
+&lt;%}%&gt;
+&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_C1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="141" name="WM_Lv1_D2" tags="name:Chasm_Chamber" position="100,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A massive chamber split by a deep chasm, the only way across being a precarious, rotted wooden bridge.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_D1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="142" name="WM_Lv1_D3" tags="name:Underground_Lake" position="225,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A vast, still body of water shrouded in eerie bioluminescent fungi that glow faintly on the cavern walls.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_D1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="143" name="WM_Lv1_D4" tags="name:Archaic_Paintings" position="350,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;The caves smooth walls a scrawled with lines the might be the remains of some archaic painting. The light is to dim and the lines are washed out to identify what is painted exactly.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_D1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="144" name="WM_Lv1_D5" tags="name:Subterranean_Garden" position="475,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;p&gt;A surprising patch of vibrant mushrooms and moss, faintly luminescent and unnervingly alive.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[Back where you came from|WM_Lv1_D1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="145" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 That didnt work out as expected. &lt;/br&gt;
@@ -5064,7 +5518,7 @@ function downgrade_option(elmnt) {
 function downgrade_option2(elmnt) {
     window.gm.onSelect(elmnt,&quot;div#choice table tbody tr td img&quot;,&quot;div#choice table tbody tr td span&quot;);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="111" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="146" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 You selected the icon and flickers up while the others vanish. &lt;/br&gt;
@@ -5075,22 +5529,22 @@ Thankfully you straighten up and timidly glance back at it. &lt;/br&gt;
 Making some steps backward the robot gives you some room but seems still to stare at you.&lt;/br&gt;
 
 [[Better go with them|Home]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="112" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="147" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;lisa_anal_vortex&quot;&gt;Swirling vortex, a black hole that sucks everthing in. Or portal that sends you home?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="113" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="148" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&#39;lisa_armbinder&#39;&gt;That could be a person. Not sure what that V-shape means. Some kind of outfit?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="114" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="149" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_plus&quot; &gt;Symbol for male, thats easy. But what does it stand for and whats the meaning of the cross?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="115" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="150" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_X&quot; &gt;That symbol you saw already. The cross looks different this time.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="116" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="151" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_tongue&quot; &gt;A tongue maybe? Or something ompletely different.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="117" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="152" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_mouth&quot; &gt;Are those lips? A mouth that speaks. I think I get insane if I dont meet someone to speak with soon.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="118" name="Start" tags="" position="200,400" size="100,100">Select a Link:
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="153" name="Start" tags="" position="200,400" size="100,100">Select a Link:
 &lt;ul&gt;
     &lt;li&gt;[[StartPage]]&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="119" name="GenericPassage" tags="_nosave_" position="1100,1475" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="154" name="GenericPassage" tags="_nosave_" position="475,1975" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
 &lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;div id=&#39;panel&#39;&gt;&lt;/div&gt;&lt;!--description is rendered here--&gt;
 &lt;div id=&#39;choice&#39;&gt;&lt;/div&gt; &lt;!--choice is rendered here--&gt;

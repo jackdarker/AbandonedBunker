@@ -1,0 +1,214 @@
+:: WM_Lv2_Pickups
+<%=window.gm.printPickup()%>
+<%if(window.story.state.vars.WM_Lv.qLocUnlock==window.passage.name){%>
+    <p>Some sharp knife is stashed away that would possibly useful to cut your restraints.</p>
+    <%if(window.story.state.vars.WM_Lv.qRestrainWrist>=2){%>
+    <a0 onclick='window.story.state.tmp.args[1]="qRestrainWrist";window.story.show("WM_Lv2_RemoveRestrain")'>Cut your wrist restriants</a>
+    <%}%>
+<%}%>
+<%if(window.story.state.vars.WM_Lv.qLocKey1==window.passage.name){%>
+    <p>There is a clipboard lying on the desk with some report attached to it. </p>
+    <%if(window.story.state.vars.WM_Lv.qKey1==0){%>
+    <div id='selectidx' > This seems to be one of the clue you were looking for.
+    <a0 onclick='window.gm.printTalkLink($("div#selectidx")[0],"div#choiceidxa"),window.story.state.vars.WM_Lv.qKey1=1'>Take it</a>
+    </div><div id='choiceidxa' hidden>
+    </div>
+    <%}%>
+<%}else if(window.story.state.vars.WM_Lv.qLocKey2==window.passage.name){%>
+    <p>A PC is seated on a office desk.  </p>
+    <%if(window.story.state.vars.WM_Lv.qKey2==0){%>
+    <div id='selectidx' > 
+    <a0 onclick='window.gm.printTalkLink($("div#selectidx")[0],"div#choiceidxa"),window.story.state.vars.WM_Lv.qKey2=1'>Copy the confidental files to the USB-drive.</a>
+    </div><div id='choiceidxa' hidden>
+    </div>
+    <%}%>
+<%}else if(window.story.state.vars.WM_Lv.qLocKey3==window.passage.name){%>
+    <p>On the side of a cabinet a sticky note catches your eye. Something like a passcode is scribbled down on it.</p>
+    <%if(window.story.state.vars.WM_Lv.qKey3==0){%>
+    <div id='selectidx' > 
+    <a0 onclick='window.gm.printTalkLink($("div#selectidx")[0],"div#choiceidxa"),window.story.state.vars.WM_Lv.qKey3=1'>Memorize the code.</a>
+    </div><div id='choiceidxa' hidden>
+    </div>
+    <%}%>
+<%}%>
+
+:: WM_Lv2_MAP [_back_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+TODO
+[[Back|_back_]]
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+:: WM_Lv2_VixenNurse
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%=window.story.render("WM_Lv1_RollDebug")%>
+<p>A scantyly clad nurse is crossing your path.</p>
+<%if(window.story.state.vars.qLowerWear>0){ %>
+<p>"Hey baby, everything fine with you?" she asks.</p>
+<%}else{%>
+<p>Grinning at your sight of your nude crotch she says "I see you are in dire need of attention.." and quickly grabs you by your wrist.</p>
+<p>...</p>
+<p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
+<%}%>
+<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Lv2_Orderly
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%=window.story.render("WM_Lv1_RollDebug")%>
+<p>Just as you pass a corner you run into a orderly.</p>
+<%if(window.story.state.vars.qUpperWear<=0 && window.story.state.vars.WM_Lv.qRestrainWrist<=0){ window.story.state.vars.WM_Lv.qRestrainWrist=2;%>
+<p>He fits some wrist/harness/collar on you. Find a way to remove them before you are bound completely </p>
+<p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
+<%}else if(window.story.state.vars.qLowerWear<=0 && window.story.state.vars.WM_Lv.qRestrainAncle<=0){ window.story.state.vars.WM_Lv.qRestrainAncle=2; %>
+<p>He fits some ancles/legbinder on you. Find a way to remove them before you are bound completely </p>
+<p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
+<%}else if(window.story.state.vars.qUpperWear==1){ window.story.state.vars.qUpperWear=0;%>
+<p>He rips off your top!</p>
+<%}else if(window.story.state.vars.qLowerWear==1){window.story.state.vars.qLowerWear=0;%>
+<p>He strips your bottoms!</p>
+<%}else{%>
+<p>"Lets have some fun you and me." he growls.</p>
+<p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
+<%}%>
+<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Lv2_DrunkDoctor
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%=window.story.render("WM_Lv1_RollDebug")%>
+<p>Drunk Doctor</p>
+<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Lv2_RemoveRestrain
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<p>With the sharp tool you try to remove one of your retraints. </p>
+<%window.story.state.vars.WM_Lv[window.story.state.tmp.args[1]]=0;%>
+<p>Unfortunatly the tool is now rendered useless.</p>
+<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+</article><article id="LogPanel"></article></section>
+<script>function foo(){
+    let s=window.story.state,_rooms;
+    if(window.story.state.tmp.args[1]=="") return;
+    s.vars.WM_Lv[window.story.state.tmp.args[1]]=0;
+    _rooms=Object.keys(s.vars.WM_Lv.qLocUnlocks);
+    qLocUnlock=_rooms[_.random(0,_rooms.length-1)]; //teleport tool to other location
+}
+foo();
+</script>
+
+
+:: WM_Lv2_Entry
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>Something odd is going on in the hospital. Look around and search for clues. If you have found 3 of them, leave the place through the lobby.</p>
+[[Walk into the hospital|WM_Lv2_A1]]
+</article><article id="LogPanel"></article></section>
+
+:: WM_Lv2_Exit
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>Lets see what you found so far:</p>
+<p>[[Next|WM_Home]]</p>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Lv2_A1 [name:Lobby]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>This is the lobby of the hospital.</p>
+<%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=3){%>
+<p>You explored all corners of this area.</p>
+<%}else{%>
+<p>There are still some corners that you could <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">take a peek</a> into. <p>
+<%}%>
+<%if((window.story.state.vars.WM_Lv.qKey1==0)||(window.story.state.vars.WM_Lv.qKey2==0)||(window.story.state.vars.WM_Lv.qKey3==0)){%>
+<p>As you still have not discovered enough clues you may not leave this place.</p>
+<%}else{%>
+<p>You have discovered enough clues and may [[leave this place|WM_Lv2_Exit]].</p>
+<%}%>
+<%=window.story.render("WM_Lv1_Debug")%>
+<%=window.story.render("WM_Lv2_Pickups")%>
+<a0 onclick='window.gm.triggerExploreEvt("WM_Lv2_B1")'>go to Mensa</a> <a0 onclick='window.gm.triggerExploreEvt("WM_Lv2_N1")'>descend stairs</a>
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+
+:: WM_Lv2_B1 [name:Mensa]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>The mensa of the hospital. Only a few people are around and you arent sure if they are patient or employees.</p>
+<%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=3){%>
+<p>You explored all corners of this area.</p>
+<%}else{%>
+<p>There are still some corners that you could <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">take a peek</a> into. <p>
+<%}%>
+<%=window.story.render("WM_Lv2_Pickups")%>
+<a0 onclick='window.gm.triggerExploreEvt("WM_Lv2_B2")'>Inspect the desk close to the windows</a> 
+<a0 onclick='window.gm.triggerExploreEvt("WM_Lv2_A1")'>to Lobby</a> 
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+
+:: WM_Lv2_B2
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>Desks at the windows</p>
+<%=window.story.render("WM_Lv2_Pickups")%>
+[[Back where you came from|WM_Lv2_B1]]
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+
+:: WM_Lv2_C1 [name:Treatment_Rooms]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>The corridor is lined with several doors. Most of them lead to rooms there patient receives treatments by the medical personal.</p>
+<%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=3){%>
+<p>You explored all corners of this area.</p>
+<%}else{%>
+<p>There are still some corners that you could <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">take a peek</a> into. <p>
+<%}%>
+<%=window.story.render("WM_Lv2_Pickups")%>
+<a0 onclick='window.gm.triggerExploreEvt("WM_Lv2_B1")'>to Mensa</a> 
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+
+:: WM_Lv2_C2
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>A mostly empty room with a desk and a stool behind and in front of it.</p>
+<%=window.story.render("WM_Lv2_Pickups")%>
+[[Back where you came from|WM_Lv2_C1]]
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+
+:: WM_Lv2_C3
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>A room with a empty bed.</p>
+<%=window.story.render("WM_Lv2_Pickups")%>
+[[Back where you came from|WM_Lv2_C1]]
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+
+
+:: WM_Lv2_F1 [name:Patient_Rooms]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<p>Another Corridor with a lot of doors. Those seem to be the sleeping rooms for the patients.</p>
+<%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=3){%>
+<p>You explored all corners of this area.</p>
+<%}else{%>
+<p>There are still some corners that you could <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">take a peek</a> into. <p>
+<%}%>
+<%=window.story.render("WM_Lv2_Pickups")%>
+<a0 onclick='window.gm.triggerExploreEvt("WM_Lv2_C1")'>to Treatment area</a> 
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>

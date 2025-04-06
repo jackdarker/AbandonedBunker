@@ -4,17 +4,41 @@
 //either you just walk move to target or some event happens; after the event continue to target or return to current 
 window.gm.triggerExploreEvt=function(targetLocation){
     let s=window.story.state,currentLocation=window.gm.player.location;
-    let cnt=s.vars.WM_Lv1.Explored[currentLocation]||0,lstEncounter=s.vars.WM_Lv1.rollEncounter;
-    let _Enc,_Encs=[
-        {id:"WM_Lv1_VineSnare",roll:"Strength",min:60},
-        {id:"WM_Lv1_VineGrab",roll:"Agility",min:60},
-        {id:"WM_Lv1_Barrel",roll:"Strength",min:60}
-    ]
-    let possLocation=[],loc,rnd2,rnd;
-    if(targetLocation=='WM_Lv1_A1'){    
-        possLocation = ['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4'].filter((x)=>{return(!s.vars.WM_Lv1.Explored[x]>0);})
+    let cnt=s.vars.WM_Lv.Explored[currentLocation]||0,cnt2=s.vars.WM_Lv.Explored[targetLocation]||0;
+    let _Enc,_Encs,msg="";
+    switch(s.vars.WM_Lv.qDng){  //define Encounters
+        case 'WM_Lv1':
+            _Encs=[
+            {id:"WM_Lv1_VineSnare",roll:"Strength",min:40},
+            {id:"WM_Lv1_VineGrab",roll:"Agility",min:40},
+            {id:"WM_Lv1_VineFlower",roll:"Intelect",min:40},
+            {id:"WM_Lv1_SlugsDrop",roll:"Agility",min:40},
+            {id:"WM_Lv1_ExploreFail",roll:"Rnd",min:10}
+            ]
+        break;
+        case 'WM_Lv2':
+            _Encs=[
+            {id:"WM_Lv2_VixenNurse",roll:"Strength",min:40},
+            {id:"WM_Lv2_Orderly",roll:"Agility",min:40},
+            {id:"WM_Lv2_DrunkDoctor",roll:"Intelect",min:40}
+            ]
+        break;
+        default:break;
+    }
+    let possLocation=[targetLocation],loc,rnd2,rnd,bonus;
+    //either we walk from RoomA to targetLocation or we search inside targetLocation
+    if(targetLocation=='WM_Lv1_A1'){   
+        possLocation = ['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4','WM_Lv1_A5'].filter((x)=>{return(!s.vars.WM_Lv.Explored[x]>0);})
     } else if(targetLocation=='WM_Lv1_B1'){    
-        possLocation = ['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4'].filter((x)=>{return(!s.vars.WM_Lv1.Explored[x]>0);})
+        possLocation = ['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4','WM_Lv1_B5'].filter((x)=>{return(!s.vars.WM_Lv.Explored[x]>0);})
+    } else if(targetLocation=='WM_Lv1_C1'){    
+            possLocation = ['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter((x)=>{return(!s.vars.WM_Lv.Explored[x]>0);})
+    } else if(targetLocation=='WM_Lv1_C1'){    
+            possLocation = ['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter((x)=>{return(!s.vars.WM_Lv.Explored[x]>0);})
+    } else if(targetLocation=='WM_Lv1_D1'){    
+        possLocation = ['WM_Lv1_D2','WM_Lv1_D3','WM_Lv1_D4','WM_Lv1_D5'].filter((x)=>{return(!s.vars.WM_Lv.Explored[x]>0);})
+    } else if(targetLocation=='WM_Lv2_C1'){
+        possLocation = ['WM_Lv2_C2','WM_Lv2_C3'].filter((x)=>{return(!s.vars.WM_Lv.Explored[x]>0);})
     }
     //pick encounter according location
     rnd2=_.random(0,_Encs.length-1);
@@ -25,27 +49,31 @@ window.gm.triggerExploreEvt=function(targetLocation){
             break;
         case "Intelect":  rnd=s.vars.qWisdom;
             break;
-        //case "Agility":
-        default: rnd=s.vars.qAgility; 
+        case "Agility":  rnd=s.vars.qAgility; 
+            break;
+        default: rnd=0;     
             break;
     }
     //do a roll and check roll+stat
-    rnd+=_.random(0,50);
-    if(_Enc.min>rnd){   //encounter if roll+stat < d100
-        window.story.state.tmp.args=[null,"Rolling failed due to "+_Enc.roll+" of "+ rnd + "."]
-        s.vars.WM_Lv1.rollEncounter=_Enc;
+    rnd+=Math.round(window.gm.util.randomNormal(0,40,3))   //    rnd+=_.random(0,50);
+    bonus=(possLocation[0]==targetLocation)?5:0; //reduce enc chance if visiting known location
+    window.gm.pushLog('rolled '+rnd+' + bonus '+bonus+' against '+ _Enc.min);
+    if(_Enc.min>(rnd+bonus)){   //encounter if roll+stat < d100
+        window.story.state.tmp.args=[null,"Rolling failed due to "+_Enc.roll+" of "+ rnd + ".",1]; //1 used as seen mark
+        s.vars.WM_Lv.rollEncounter=_Enc;
         window.story.show(_Enc.id);
     }else{
+        //Todo if horny roll if masturbation interception
         if(possLocation.length<=0){
             window.story.show("WM_Lv1_ExploredAll");
-        } else if((rnd+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
+        } else {//if((rnd+bonus+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
             rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];
-            s.vars.WM_Lv1.Explored[loc]=1+(s.vars.WM_Lv1.Explored[loc]||0);
-            s.vars.WM_Lv1.Explored[currentLocation]=1+(s.vars.WM_Lv1.Explored[currentLocation]||0);
+            s.vars.WM_Lv.Explored[loc]=1+(s.vars.WM_Lv.Explored[loc]||0);
+            s.vars.WM_Lv.Explored[currentLocation]=1+(s.vars.WM_Lv.Explored[currentLocation]||0);
             window.story.show(loc)
-        } else { //bad luck -  return
-            window.story.show("WM_Lv1_ExploreFail");
-        }
+        } //else { //bad luck -  return
+          //  window.story.show("WM_Lv1_ExploreFail");
+        //}
     }   
 }
 window.gm.printUseItem=function(what){
@@ -59,30 +87,40 @@ window.gm.printRemoveItem=function(what){
     }
 }
 window.gm.printPickup=function(){
-    let s=window.story.state,item=s.vars.WM_Lv1.qLocItems[window.passage.name];
-    let Text=""
+    let s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];
+    let Text="",freeSlot=false;
+    for(var i=s.vars.Inv.length-1;i>=0;i--){
+        if(s.vars.Inv[i]=="") { freeSlot=true;break}
+    }
+    if(item==undefined || item=="") return("");
     if(item=="HealthUp"){
         Text="There is a healthpotion stashed away.";
-        if(s.vars.Inv.length>=4){
-            Text+="Unfortunatly your inventory is already full."
-        } else {
-            Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>'
-        }
-    }
-    if(item=="Tshirt"){//,"","Shorts","Adrenalin
+    } else if(item=="Tshirt"){
         Text="There is a Tshirt stashed away.";
-        if(s.vars.Inv.length>=4){
-            Text+="Unfortunatly your inventory is already full."
-        } else {
-            Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>'
-        }
+    } else if(item=="Shorts"){
+        Text="Some cotton pants are stored here.";
+    } else if(item=="Adrenalin"){
+        Text="A syringe filled with a hormon cocktail to normalize your status ailments.";
+    } else if(item=="Vibrator"){
+        Text="Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";
+    };
+    if(freeSlot==false){
+        Text+="Unfortunatly your inventory is already full."
+    } else {
+        Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>'
     }
+
     return("<p>"+Text+"</p>");
 }
 window.gm.pickupItem=function(what,where){
     let s=window.story.state;
-    s.vars.Inv.push(what);
-    s.vars.WM_Lv1.qLocItems[where]="";
+    for(var i=s.vars.Inv.length-1;i>=0;i--){
+        if(s.vars.Inv[i]=="") { 
+            s.vars.Inv[i]=what;
+            s.vars.WM_Lv.qLocItems[where]="";
+            break
+        }
+    }
     window.story.show(window.passage.name )
 }
 //prints link to other passage
@@ -160,7 +198,7 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
         qSanity:100,
         qSanityMax:100,
         qArousal:0,
-        qArousalMax:40,
+        qArousalMax:50,
         qAgility:40,
         qAgilityMax:40,
         qStrength:40,
@@ -169,14 +207,17 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
         qWisdomMax:40,
         qUpperWear:1,
         qLowerWear:1,
-        qNextLocation:""
+        qUnusedSP:0,
+        qCoin:0,
         };
         s.vars.Inv=[]; //Inventory
         s.vars.U={  //Unlockables
             ShowRooms:1,
             ShowRoll:1,
         }
-        s.vars.WM_Lv1= {  };
+        s.vars.WM_Lv= {}; //flags of the current dungeon
+        s.vars.WM_Lv1= {  }; //persitent data between playthrough
+        s.vars.WM_Lv2= {  };
     }
     let DngSY = {
         visitedTiles: [],mapReveal: [],

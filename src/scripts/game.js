@@ -169,9 +169,9 @@ window.gm.util.addShortKeyHandler=function(){
 };
 //returns normal distributed random value, mu= mean, 0 by default; sigma= stdev, 1 by default; nsamples= more samples creates better approximation, 3 by default
 window.gm.util.randomNormal=function(mu, sigma, nsamples){ // using central limit
-  if(!nsamples) nsamples = 3
-  if(!sigma) sigma = 1
-  if(!mu) mu=0
+  if(!nsamples) nsamples = 3; //how many throws f.e. 3dies
+  if(!mu) mu=0;   //mean of all throws  2dies=2..12-> 7
+  if(!sigma) sigma = 1; //  span from mean to max value 5
 
   var run_total = 0
   for(var i=0 ; i<nsamples ; i++){
