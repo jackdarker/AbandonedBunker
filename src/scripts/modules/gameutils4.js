@@ -4,16 +4,15 @@
 //either you just walk move to target or some event happens; after the event continue to target or return to current 
 window.gm.triggerExploreEvt=function(targetLocation){
     let s=window.story.state,currentLocation=window.gm.player.location;
-    let cnt=s.vars.WM_Lv.Explored[currentLocation]||0,cnt2=s.vars.WM_Lv.Explored[targetLocation]||0;
     let _Enc,_Encs,msg="";
     switch(s.vars.WM_Lv.qDng){  //define Encounters
         case 'WM_Lv1':
             _Encs=[
-            {id:"WM_Lv1_VineSnare",roll:"Strength",min:40},
-            {id:"WM_Lv1_VineGrab",roll:"Agility",min:40},
-            {id:"WM_Lv1_VineFlower",roll:"Intelect",min:40},
-            {id:"WM_Lv1_SlugsDrop",roll:"Agility",min:40},
-            {id:"WM_Lv1_ExploreFail",roll:"Rnd",min:10}
+            {id:"WM_Lv1_VineSnare",Agility:40,Strength:40,Intelect:40,Rnd:10},
+             {id:"WM_Lv1_VineGrab",Agility:40,Strength:40,Intelect:40,Rnd:10},
+            {id:"WM_Lv1_VineFlower",Agility:40,Strength:40,Intelect:40,Rnd:10},
+            {id:"WM_Lv1_SlugsDrop",Agility:40,Strength:40,Intelect:40,Rnd:10},
+            {id:"WM_Lv1_ExploreFail",Rnd:10}
             ]
         break;
         case 'WM_Lv2':
@@ -43,8 +42,33 @@ window.gm.triggerExploreEvt=function(targetLocation){
     //pick encounter according location
     rnd2=_.random(0,_Encs.length-1);
     _Enc=_Encs[rnd2];
+    rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];
+    s.DngSY.nextLocation=loc;
+    //do a roll and check roll+stat
+    rnd=Math.round(window.gm.util.randomNormal(0,40,3))  
+    bonus=(possLocation[0]==targetLocation)?5:0; //reduce enc chance if visiting known location
 
-    switch(_Enc.roll){
+    if(rnd<0){   //encounter 
+        s.vars.WM_Lv.rollEncounter=_Enc;
+        window.story.show(_Enc.id);
+    }else{
+        //Todo if horny roll if masturbation interception
+        if(possLocation.length<=0){
+            window.story.show("WM_Lv1_ExploredAll");
+        } else {//if((rnd+bonus+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
+            s.vars.WM_Lv.Explored[loc]=1+(s.vars.WM_Lv.Explored[loc]||0);
+            s.vars.WM_Lv.Explored[currentLocation]=1+(s.vars.WM_Lv.Explored[currentLocation]||0);
+            window.story.show(loc)
+        }
+    }   
+}
+//choice is "Strength",...
+window.gm.trialExploreEvt=function(choice){
+    let s=window.story.state;
+    let _Enc=s.vars.WM_Lv.rollEncounter,loc=s.DngSY.nextLocation; //was set in triggerExploreEvt
+    let rnd,bonus=0;
+    
+    switch(choice){
         case "Strength":  rnd=s.vars.qStrength;
             break;
         case "Intelect":  rnd=s.vars.qWisdom;
@@ -56,25 +80,14 @@ window.gm.triggerExploreEvt=function(targetLocation){
     }
     //do a roll and check roll+stat
     rnd+=Math.round(window.gm.util.randomNormal(0,40,3))   //    rnd+=_.random(0,50);
-    bonus=(possLocation[0]==targetLocation)?5:0; //reduce enc chance if visiting known location
-    window.gm.pushLog('rolled '+rnd+' + bonus '+bonus+' against '+ _Enc.min);
-    if(_Enc.min>(rnd+bonus)){   //encounter if roll+stat < d100
-        window.story.state.tmp.args=[null,"Rolling failed due to "+_Enc.roll+" of "+ rnd + ".",1]; //1 used as seen mark
-        s.vars.WM_Lv.rollEncounter=_Enc;
-        window.story.show(_Enc.id);
-    }else{
-        //Todo if horny roll if masturbation interception
-        if(possLocation.length<=0){
-            window.story.show("WM_Lv1_ExploredAll");
-        } else {//if((rnd+bonus+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
-            rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];
-            s.vars.WM_Lv.Explored[loc]=1+(s.vars.WM_Lv.Explored[loc]||0);
-            s.vars.WM_Lv.Explored[currentLocation]=1+(s.vars.WM_Lv.Explored[currentLocation]||0);
-            window.story.show(loc)
-        } //else { //bad luck -  return
-          //  window.story.show("WM_Lv1_ExploreFail");
-        //}
-    }   
+    window.gm.pushLog('rolled '+rnd+' '+choice+' + bonus '+bonus+' against '+ _Enc[choice]);
+    if(_Enc[choice]>(rnd+bonus)){   //encounter fail
+        s.DngSY.nextLocation=window.gm.player.location; //back to origin
+        window.story.state.tmp.args=[null,choice+" roll failed.",1,choice]; //1 used as seen mark
+    }else{ // pass
+        window.story.state.tmp.args=[null,"",2,choice];
+    } 
+    window.story.show(_Enc.id+"_Roll");  
 }
 window.gm.printUseItem=function(what){
     window.story.state.tmp.args=[null,1];

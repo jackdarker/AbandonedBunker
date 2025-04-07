@@ -41,21 +41,14 @@ TODO: what are you wearing, are you restrained, are you feeling healthy
 :: Inventory [_back_ _nodeffered_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs") %>
 [[Back|_back_]]</br>
-<%=window.story.render("Inv_Hud") %>
-<div id='output'></div></br>
-</article><article id="LogPanel"></article></section>
-
-
-:: Inv_Hud
-<hr><%if(true||window.story.state.vars.mine){%>
-<p>Inventory:</p>
-<a0 onclick='window.gm.printUseItem(window.story.state.vars.Inv[0])' <%=(window.story.state.vars.Inv[0])?'':'hidden=""'%>><%=window.story.state.vars.Inv[0]%></a></br>
-<a0 onclick='window.gm.printUseItem(window.story.state.vars.Inv[1])' <%=(window.story.state.vars.Inv[1])?'':'hidden=""'%>><%=window.story.state.vars.Inv[1]%></a></br>
-<a0 onclick='window.gm.printUseItem(window.story.state.vars.Inv[2])' <%=(window.story.state.vars.Inv[2])?'':'hidden=""'%>><%=window.story.state.vars.Inv[2]%></a></br>
-<a0 onclick='window.gm.printUseItem(window.story.state.vars.Inv[3])' <%=(window.story.state.vars.Inv[3])?'':'hidden=""'%>><%=window.story.state.vars.Inv[3]%></a></br>
+<%function use(slot){ return('<a href=\"javascript:void(0)\" onclick=\'window.gm.printUseItem(window.story.state.vars.Inv['+slot+'])\' ' +((window.story.state.vars.Inv[slot])?"":"hidden")+'>use '+window.story.state.vars.Inv[slot]+'</a>'+
+ '<a href=\"javascript:void(0)\" onclick=\'window.gm.printRemoveItem(window.story.state.vars.Inv['+slot+']);window.gm.refreshAllPanel();\' ' +((window.story.state.vars.Inv[slot])?"":"hidden")+'>discard '+window.story.state.vars.Inv[slot]+'</a><br>');}%>
+<hr><p>Inventory:</p>
+<%=use(0)%><%=use(1)%><%=use(2)%><%=use(3)%>
 <span <%=(window.story.state.vars.WM_Lv.qKey1!=0)?'':'hidden=""'%>>Metal Crank</span><span <%=(window.story.state.vars.WM_Lv.qFoundExit!=0)?'':'hidden=""'%>>(You found the exit but cant remember were it was exactly.)</span></br>
 <span <%=false?'':'hidden=""'%>>Whetstone</span></br>
-<%}%>
+</article><article id="LogPanel"></article></section>
+
 
 :: WM_Lv1_Use_Tshirt [_back_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
@@ -83,7 +76,7 @@ TODO: what are you wearing, are you restrained, are you feeling healthy
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%if(window.story.state.vars.qSanity>=window.story.state.vars.qSanityMax){%>
 <p>You feel quite healthy and should keep that for later.</p>
-<%}else if(window.story.state.tmp.args[1]>0){ window.gm.printRemoveItem("HealthUp"),window.story.state.vars.qSanity+=1;%>
+<%}else if(window.story.state.tmp.args[1]>0){ window.gm.printRemoveItem("HealthUp"),window.story.state.vars.qSanity+=25;%>
 <p>Popping the pill into your mouth and swallowing it, after only a short time you feel already better.</p>
 <%}%>
 [[Back|_back_]]
@@ -93,8 +86,8 @@ TODO: what are you wearing, are you restrained, are you feeling healthy
 :: WM_Lv1_Use_Adrenalin [_back_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%if(false){%> TODO
-<p>You dont have any ailment that could be helped with that.</p>
-<%}else if(window.story.state.tmp.args[1]>0){ window.gm.printRemoveItem("Adrenalin"),
+<p>You dont have any ailment that could be helped with this drug.</p>
+<%}else if(window.story.state.tmp.args[1]>0){ window.gm.printRemoveItem("Adrenalin");
 if(s.vars.WM_Lv.qEffects["Distracted"]>=1) {window.story.state.vars.qWisdom+=5*s.vars.WM_Lv.qEffects["Distracted"];s.vars.WM_Lv.qEffects["Distracted"]=0;}
 %>
 <p>Injecting yourself with the syringe should help you removing some nasty ailments.</p>
@@ -145,7 +138,7 @@ Giving up resistance...
 
 
 :: WM_Lv1_RollDebug
-<%if(window.story.state.vars.U.ShowRoll){%>
+<%if(window.story.state.vars.U.ShowRoll && window.story.state.tmp.args[1]!=""){%>
 <p class="dev"><%=window.story.state.tmp.args[1]%></p>
 <%}%>
 
@@ -221,7 +214,6 @@ Giving up resistance...
 <div id="output"></div>
 <br>
 <a0 onclick='foo(true);window.story.show("WM_Home")'>Return Home</a>
-<p>[[WM_Home]]</p>
 </article><article id="LogPanel"></article></section>
 <script>function foo(checkout){
     let msg="",x,SP=0,Coin=0;
@@ -246,24 +238,43 @@ Giving up resistance...
 foo(false)
 </script>
 
-:: WM_Lv1_VineSnare
+
+:: WM_Lv1_VineSnare [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%=window.story.render("WM_Lv1_RollDebug")%>
-Some WM_Lv1_VineSnare
-<%if(window.story.state.tmp.args[2]==1 && window.story.state.vars.qLowerWear>0){window.story.state.vars.qLowerWear=0; %>
-<p>Makeing a dodge roll you try to evade the tentacles gripping your legs but you just stumble. They grip your shorts and rip them off.
-Now your lower body is <b>NAKED</b>. </p>
-<%}else if(window.story.state.tmp.args[2]==1 && window.story.state.vars.qLowerWear==0){%>
-<p>Quickly the tentacle entwine your legs. With quite some effort you make your escape but somehow their touch on your bare skin felt so nice.</p>
-<p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
-<%}%>
-<%window.story.state.tmp.args[2]=0;%> 
-<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+<p>As you walk along, some tentacle push from the ground beneath you.</p>
+<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away</a>
+<a0 onclick='window.gm.trialExploreEvt("Strength")'>Stand still</a>
 </article><article id="LogPanel"></article></section>
 
 
+:: WM_Lv1_VineSnare_Roll [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%=window.story.render("WM_Lv1_RollDebug")%>
+<%if(s.tmp.args[2]==1 && s.vars.qLowerWear>0){s.vars.qLowerWear=0; %>
+<p>Makeing a dodge roll you try to evade the tentacles gripping your legs but you just stumble. They grip your shorts and rip them off.
+Now your lower body is <b>NAKED</b>. </p>
+<%}else if(s.tmp.args[2]==1 && s.vars.qLowerWear==0){%>
+<p>Quickly the tentacle entwine your legs. With quite some effort you make your escape but somehow their touch on your bare skin felt so nice.</p>
+<p>Arousal +25</p><%s.vars.qArousal+=25;%>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Agility"){%>
+<p>You quickly jump away from the vines and hurry on.</p>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Strength"){%>
+<p>As the sprouts start to entwine your legs, you pull with all your might to rip them off.</p>
+<%}%>
+<%s.tmp.args[2]=0;%> 
+<a0 onclick='window.story.show(window.story.state.DngSY.nextLocation)'>Next</a>
+</article><article id="LogPanel"></article></section>
 
-:: WM_Lv1_VineGrab
+
+:: WM_Lv1_VineGrab [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<p>As you walk along, some tentacle push from the walls above you.</p>
+<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away</a>
+<a0 onclick='window.gm.trialExploreEvt("Strength")'>Stand still</a>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Lv1_VineGrab_Roll [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%=window.story.render("WM_Lv1_RollDebug")%>
 <%if(window.story.state.tmp.args[2]==1 && window.story.state.vars.qUpperWear>0){window.story.state.vars.qUpperWear=0; %>
@@ -272,14 +283,23 @@ Now your upper body is <b>NAKED</b>. </p>
 <%}else if(window.story.state.tmp.args[2]==1 && window.story.state.vars.qUpperWear==0){%>
 <p>Quickly the tentacle entwine your arms and neck. With quite some effort you make your escape but somehow their touch on your bare skin felt so nice.</p>
 <p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Agility"){%>
+<p>You quickly jump away from the vines and hurry on.</p>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Strength"){%>
+<p>As the sprouts start to entwine your legs, you pull with all your might to rip them off.</p>
 <%}%>
 <%window.story.state.tmp.args[2]=0;%> 
-<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+<a0 onclick='window.story.show(window.story.state.DngSY.nextLocation)'>Next</a>
 </article><article id="LogPanel"></article></section>
 
 
+:: WM_Lv1_VineFlower [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+</article><article id="LogPanel"></article></section>
+<script>window.gm.trialExploreEvt("Intelect")</script>
 
-:: WM_Lv1_VineFlower
+
+:: WM_Lv1_VineFlower_Roll [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%=window.story.render("WM_Lv1_RollDebug")%>
 <p>A purple flower emanates a strong scent.</p>
@@ -293,25 +313,38 @@ if(s.vars.WM_Lv.qEffects["Distracted"]==0 || s.vars.WM_Lv.qEffects["Distracted"]
     window.story.state.vars.qWisdom-=5;}
 %>
 <p>Somehow the fumes in the air makes it hard to think. <i>Intelect reduced !</i></p>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Intelect"){%>
+<p>Being careful you hold your breath and move on.</p>
 <%}%>
 <%window.story.state.tmp.args[2]=0;%> 
-<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+<a0 onclick='window.story.show(window.story.state.DngSY.nextLocation)'>Next</a>
 </article><article id="LogPanel"></article></section>
 
 
-:: WM_Lv1_SlugsDrop
+:: WM_Lv1_SlugsDrop [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<p>Something is dripping down on your back. At first you think its just some waterdrops. But water wouldn't squirm that way.</p>
+<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away</a>
+<a0 onclick='window.gm.trialExploreEvt("Rnd")'>Stand still</a>
+</article><article id="LogPanel"></article></section>
+
+
+:: WM_Lv1_SlugsDrop_Roll [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%=window.story.render("WM_Lv1_RollDebug")%>
-<p>Something is dripping down on your back. At first you think its just some waterdrops. But water wouldn't squirm that way.</p>
 <%if(window.story.state.tmp.args[2]==1 && window.story.state.vars.qUpperWear>0){window.story.state.vars.qUpperWear=0; %>
-<p>You quickly pull your T-shirt over your head to see what hit you. You quickly pull your T-shirt over your head to see what has hit you. You discover a few slimy, finger-sized slugs squirming on your T-shirt and drop it. You won't be wearing that again.  
+<p>You quickly pull your T-shirt over your head to see what hit you. You quickly pull your T-shirt over your head to see what has hit you. You discover a few slimy, finger-sized slugs squirming on your T-shirt. Disgusted, you drop it as you won't be wearing that again.  
 Now your upper body is <b>NAKED</b>. </p>
 <%}else if(window.story.state.tmp.args[2]==1 && window.story.state.vars.qUpperWear==0){%>
 <p>Something sticks to your back and moves. You shake yourself and try to reach for it with your hands. Several of these purple slugs fall off on their own and you catch the rest with your hands.</p>
 <p>Arousal +25</p><%window.story.state.vars.qArousal+=25;%>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Agility"){%>
+<p>TODO</p>
+<%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Strength"){%>
+<p>TODO</p>
 <%}%>
 <%window.story.state.tmp.args[2]=0;%> 
-<a0 onclick='window.story.show(window.gm.player.location)'>Next</a>
+<a0 onclick='window.story.show(window.story.state.DngSY.nextLocation)'>Next</a>
 </article><article id="LogPanel"></article></section>
 
 
@@ -334,7 +367,7 @@ It seems you explored everything around here but there might still be something 
 <%window.gm.player.location=window.passage.name;%>
 <p>This is the entry of the digging site.</p>
 <%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=3){%>
-<p>You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_B1]]</p>
+<p>You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_B1]]</p><br>
 <%}else{%>
 <p>There are still some corners that you might need to <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">explore</a> to find a way deeper into the mine.<p>
 <%}%>
@@ -389,12 +422,12 @@ It seems you explored everything around here but there might still be something 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p>The second level of the mine has the same large tunnels carved into the rock like in the entry area.</p>
+<a0 onclick='window.gm.player.location="WM_Lv1_A1",window.gm.triggerExploreEvt(window.gm.player.location)'>climb upstairs</a>
 <%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=4){%>
-<p>You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_C1]].</p>
+<p>You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_C1]].</p><br>
 <%}else{%>
 <p>There are still some corners that you might need to <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">explore</a> to find a way deeper into the mine.<p>
 <%}%>
-<a0 onclick='window.gm.player.location="WM_Lv1_A1",window.gm.triggerExploreEvt(window.gm.player.location)'>climb upstairs</a>
 <%=window.story.render("WM_Lv1_Navigation")%>
 <%=window.story.render("WM_Lv1_Debug")%>
 <%=window.story.render("WM_Lv1_Pickups")%>
@@ -446,12 +479,12 @@ It seems you explored everything around here but there might still be something 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p>The third level seems to be some natural caves. Several passages led into different directions.</p>
+<a0 onclick='window.gm.player.location="WM_Lv1_B1",window.gm.triggerExploreEvt(window.gm.player.location)'>climb upstairs</a>
 <%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=5){%>
-<p>You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_D1]].</p>
+<p>You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_D1]].</p><br>
 <%}else{%>
 <p>There are still some corners that you might need to <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">explore</a> to find a way deeper into the mine.<p>
 <%}%>
-<a0 onclick='window.gm.player.location="WM_Lv1_B1",window.gm.triggerExploreEvt(window.gm.player.location)'>climb upstairs</a>
 <%=window.story.render("WM_Lv1_Navigation")%>
 <%=window.story.render("WM_Lv1_Debug")%>
 <%=window.story.render("WM_Lv1_Pickups")%>
@@ -503,12 +536,12 @@ It seems you explored everything around here but there might still be something 
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p>The deepest level of the digsite consists of cavernous caves and dense rock crevices.</p>
+<a0 onclick='window.gm.player.location="WM_Lv1_C1",window.gm.triggerExploreEvt(window.gm.player.location)'>climb upstairs</a>
 <%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]>=5){%>
 <p>You explored all corners of this area maybe you missed out something in the upper floors.</p>
 <%}else{%>
 <p>There are still some corners that you might need to <a0 onclick="window.gm.triggerExploreEvt(window.passage.name)">explore</a> here.<p>
 <%}%>
-<a0 onclick='window.gm.player.location="WM_Lv1_C1",window.gm.triggerExploreEvt(window.gm.player.location)'>climb upstairs</a>
 <%=window.story.render("WM_Lv1_Navigation")%>
 <%=window.story.render("WM_Lv1_Debug")%>
 <%=window.story.render("WM_Lv1_Pickups")%>
