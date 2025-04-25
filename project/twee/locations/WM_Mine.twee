@@ -45,7 +45,7 @@ TODO: what are you wearing, are you restrained, are you feeling healthy
  '<a href=\"javascript:void(0)\" onclick=\'window.gm.printRemoveItem(window.story.state.vars.Inv['+slot+']);window.gm.refreshAllPanel();\' ' +((window.story.state.vars.Inv[slot])?"":"hidden")+'>discard '+window.story.state.vars.Inv[slot]+'</a><br>');}%>
 <hr><p>Inventory:</p>
 <%=use(0)%><%=use(1)%><%=use(2)%><%=use(3)%>
-<span <%=(window.story.state.vars.WM_Lv.qKey1!=0)?'':'hidden=""'%>>Metal Crank</span><span <%=(window.story.state.vars.WM_Lv.qFoundExit!=0)?'':'hidden=""'%>>(You found the exit but cant remember were it was exactly.)</span></br>
+<span <%=(window.story.state.vars.WM_Lv.qKey1!=0)?'':'hidden=""'%>>Metal Crank</span><span><%=(s.vars.WM_Lv.qFoundExit!=0)?'You remember the exit to be in '+window.gm.util.printLocationName(s.vars.WM_Lv.qLocExit):''%></span></br>
 <span <%=false?'':'hidden=""'%>>Whetstone</span></br>
 </article><article id="LogPanel"></article></section>
 
@@ -307,10 +307,9 @@ Now your upper body is <b>NAKED</b>. </p>
 <p>Arousal +25</p><p>Intelect -5</p>
 <%window.story.state.vars.qArousal+=25; 
 if(s.vars.WM_Lv.qEffects["Distracted"]==0 || s.vars.WM_Lv.qEffects["Distracted"]==undefined) {
-    s.vars.WM_Lv.qEffects["Distracted"]=1;
+    s.vars.WM_Lv.qEffects["Distracted"]=1;window.story.state.vars.qWisdom-=5;
 } else if(s.vars.WM_Lv.qEffects["Distracted"]>=1 && s.vars.WM_Lv.qEffects["Distracted"]<=2) {
-    s.vars.WM_Lv.qEffects["Distracted"]+=1;
-    window.story.state.vars.qWisdom-=5;}
+    s.vars.WM_Lv.qEffects["Distracted"]+=1;   window.story.state.vars.qWisdom-=5;}
 %>
 <p>Somehow the fumes in the air makes it hard to think. <i>Intelect reduced !</i></p>
 <%}else if(s.tmp.args[2]==2 && s.tmp.args[3]=="Intelect"){%>

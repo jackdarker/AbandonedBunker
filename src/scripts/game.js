@@ -177,7 +177,7 @@ window.gm.util.randomNormal=function(mu, sigma, nsamples){ // using central limi
   for(var i=0 ; i<nsamples ; i++){
      run_total += Math.random()
   }
-  return sigma*(run_total - nsamples/2)/(nsamples/2) + mu
+  return sigma*(run_total - nsamples/2)/(nsamples/2) + mu;  //5*(3.0-3/2)/(3/2)+7=12  5*(0.0-3/2)/(3/2)+7=2   
 }
 window.gm.util.selRandom=function(list){//picks element from []
   let _i=list.length;

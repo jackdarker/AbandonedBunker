@@ -1,11 +1,8 @@
 :: WM_Home
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
-<p>You need to prep before you have to go on adventure again.</p>
-<p><b>There are x hours daytime left that you should use wisely.</b></p>
-<p>[[Fix your shield|WM_Forge_Shield]] [[Sharpen your blade|WM_Forge_Blade]]</p>
-<p>[[Weave some wards|WM_Craft_Ward]] [[Meditate to recover mana |WM_Craft_Spell]] </p>
-<p>[[Sleep until morning|WM_Rest]]</p>
+<p>[[Upgrade shop|WM_Shop]] </p>
+<p>[[Depart to adventure|WM_Dungeon_Selection]]</p>
 </article><article id="LogPanel"></article></section>
 
 
@@ -53,8 +50,8 @@ Defiance Traits Discovered:
 
 :: WM_Dungeon_Selection
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
-<%window.gm.player.location=window.passage.name;%>
-<p>You have no choice then to enter the dungeon again:</p>
+<%window.gm.player.location=window.passage.name;%><%window.story.state.vars.qArousal=0;window.story.state.vars.qSanity=window.story.state.vars.qSanityMax%>
+<p>You have no choice then to enter some dungeon again:</p>
 <p><a0 onclick='enterMine()'>The abandoned mine'</a></p>
 <p><a0 onclick='enterHospital()'>The hospital'</a></p>
 </article><article id="LogPanel"></article></section>

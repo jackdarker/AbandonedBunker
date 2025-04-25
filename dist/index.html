@@ -701,7 +701,8 @@ window.gm.util.randomNormal=function(mu,sigma,nsamples){// using central limit
 if(!nsamples)nsamples=3;//how many throws f.e. 3dies
 if(!mu)mu=0;//mean of all throws  2dies=2..12-> 7
 if(!sigma)sigma=1;//  span from mean to max value 5
-var run_total=0;for(var i=0;i<nsamples;i++){run_total+=Math.random();}return sigma*(run_total-nsamples/2)/(nsamples/2)+mu;};window.gm.util.selRandom=function(list){//picks element from []
+var run_total=0;for(var i=0;i<nsamples;i++){run_total+=Math.random();}return sigma*(run_total-nsamples/2)/(nsamples/2)+mu;//5*(3.0-3/2)/(3/2)+7=12  5*(0.0-3/2)/(3/2)+7=2   
+};window.gm.util.selRandom=function(list){//picks element from []
 var _i=list.length;if(_i>0)return list[_.random(0,_i-1)];else throw new Error("empty list");};//exchange inner text of ctrl ;connect it with onclick of a link/button. 
 //list = [ ['red','1','classRed'],['green','2','classGreen'] ]  text,datavalue,css-class (notice space between [ [ !)
 //f.e. <p>This is really a <a0 onclick="window.gm.util.swapText(this,[ ['red Color','1','red'],['green color','2','green'] ])">blue</a> game.</p>
@@ -2881,10 +2882,11 @@ if(window.gm.getDeltaTime(window.gm.getTime(),evt.tick)>200)res*=2;else res=0;}r
 //call to navigate from current room to target
 //either you just walk move to target or some event happens; after the event continue to target or return to current 
 window.gm.triggerExploreEvt=function(targetLocation){var s=window.story.state,currentLocation=window.gm.player.location;var _Enc,_Encs,msg="";switch(s.vars.WM_Lv.qDng){//define Encounters
-case'WM_Lv1':_Encs=[{id:"WM_Lv1_VineSnare",Agility:40,Strength:40,Intelect:40,Rnd:10},{id:"WM_Lv1_VineGrab",Agility:40,Strength:40,Intelect:40,Rnd:10},{id:"WM_Lv1_VineFlower",Agility:40,Strength:40,Intelect:40,Rnd:10},{id:"WM_Lv1_SlugsDrop",Agility:40,Strength:40,Intelect:40,Rnd:10},{id:"WM_Lv1_ExploreFail",Rnd:10}];break;case'WM_Lv2':_Encs=[{id:"WM_Lv2_VixenNurse",roll:"Strength",min:40},{id:"WM_Lv2_Orderly",roll:"Agility",min:40},{id:"WM_Lv2_DrunkDoctor",roll:"Intelect",min:40}];break;default:break;}var possLocation=[targetLocation],loc,rnd2,rnd,bonus;//either we walk from RoomA to targetLocation or we search inside targetLocation
+case'WM_Lv1':_Encs=[{id:"WM_Lv1_VineSnare",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_VineGrab",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_VineFlower",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_SlugsDrop",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_ExploreFail",Rnd:10}];break;case'WM_Lv2':_Encs=[{id:"WM_Lv2_VixenNurse",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv2_Orderly",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv2_DrunkDoctor",Agility:60,Strength:60,Intelect:60,Rnd:10}];break;default:break;}var possLocation=[targetLocation],loc,rnd2,rnd,bonus;//either we walk from RoomA to targetLocation or we search inside targetLocation
 if(targetLocation=='WM_Lv1_A1'){possLocation=['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4','WM_Lv1_A5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_B1'){possLocation=['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4','WM_Lv1_B5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_C1'){possLocation=['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_C1'){possLocation=['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_D1'){possLocation=['WM_Lv1_D2','WM_Lv1_D3','WM_Lv1_D4','WM_Lv1_D5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv2_C1'){possLocation=['WM_Lv2_C2','WM_Lv2_C3'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}//pick encounter according location
 rnd2=_.random(0,_Encs.length-1);_Enc=_Encs[rnd2];rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];s.DngSY.nextLocation=loc;//do a roll and check roll+stat
-rnd=Math.round(window.gm.util.randomNormal(0,40,3));bonus=possLocation[0]==targetLocation?5:0;//reduce enc chance if visiting known location
+rnd=Math.round(window.gm.util.randomNormal(0,40,3));//+Intelect/10 ?
+bonus=possLocation[0]==targetLocation?5:0;//reduce enc chance if visiting known location
 if(rnd<0){//encounter 
 s.vars.WM_Lv.rollEncounter=_Enc;window.story.show(_Enc.id);}else{//Todo if horny roll if masturbation interception
 if(possLocation.length<=0){window.story.show("WM_Lv1_ExploredAll");}else{//if((rnd+bonus+cnt*10.0)>80){  //if rolled high enough move on //the more you have explored here the more likely to succeed
@@ -2896,14 +2898,15 @@ window.gm.pushLog('rolled '+rnd+' '+choice+' + bonus '+bonus+' against '+_Enc[ch
 s.DngSY.nextLocation=window.gm.player.location;//back to origin
 window.story.state.tmp.args=[null,choice+" roll failed.",1,choice];//1 used as seen mark
 }else{// pass
-window.story.state.tmp.args=[null,"",2,choice];}window.story.show(_Enc.id+"_Roll");};window.gm.printUseItem=function(what){window.story.state.tmp.args=[null,1];window.story.show("WM_Lv1_Use_"+what);};window.gm.printRemoveItem=function(what){var Inv=window.story.state.vars.Inv;for(var i=Inv.length-1;i>=0;i--){if(Inv[i]==what){Inv[i]='';break;}}};window.gm.printPickup=function(){var s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];var Text="",freeSlot=false;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){freeSlot=true;break;}}if(item==undefined||item=="")return"";if(item=="HealthUp"){Text="There is a healthpotion stashed away.";}else if(item=="Tshirt"){Text="There is a Tshirt stashed away.";}else if(item=="Shorts"){Text="Some cotton pants are stored here.";}else if(item=="Adrenalin"){Text="A syringe filled with a hormon cocktail to normalize your status ailments.";}else if(item=="Vibrator"){Text="Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";};if(freeSlot==false){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>';}return"<p>"+Text+"</p>";};window.gm.pickupItem=function(what,where){var s=window.story.state;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){s.vars.Inv[i]=what;s.vars.WM_Lv.qLocItems[where]="";break;}}window.story.show(window.passage.name);};//prints link to other passage
+window.story.state.tmp.args=[null,"",2,choice];}window.story.show(_Enc.id+"_Roll");};window.gm.printUseItem=function(what){window.story.state.tmp.args=[null,1];window.story.show("WM_Lv1_Use_"+what);};window.gm.printRemoveItem=function(what){var Inv=window.story.state.vars.Inv;for(var i=Inv.length-1;i>=0;i--){if(Inv[i]==what){Inv[i]='';break;}}};window.gm.printPickup=function(){var s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];var Text="",freeSlot=0;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){freeSlot++;}}if(item==undefined||item=="")return"";if(item=="HealthUp"){Text="There is a healthpotion stashed away."+window.gm.images._sizeTo(window.gm.images["Pill_S_Red"](),200,200);}else if(item=="Tshirt"){Text="There is a Tshirt stashed away."+window.gm.images._sizeTo(window.gm.images["Shirt_X_Plain"](),200,200);}else if(item=="Shorts"){Text="Some cotton pants are stored here."+window.gm.images._sizeTo(window.gm.images["Shorts_X_Plain"](),200,200);}else if(item=="Adrenalin"){Text="A syringe filled with a hormon cocktail to normalize your status ailments."+window.gm.images._sizeTo(window.gm.images["Syringe_M_Pink"](),200,200);}else if(item=="Vibrator"){Text="Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";};if(freeSlot<=0){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a> ('+freeSlot.toString()+' inventory slots left)';}return"<p>"+Text+"</p>";};window.gm.pickupItem=function(what,where){var s=window.story.state;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){s.vars.Inv[i]=what;s.vars.WM_Lv.qLocItems[where]="";break;}}window.story.show(window.passage.name);};//prints link to other passage
 window.gm.printGoto=function(location,cost,alias){var msg='',res={OK:true,msg:''};msg=window.gm.printDo("window.story.show(\""+location+"\");",cost,alias);return msg;};//prints link that executes doThat f.e. "window.story.show(\"NewGame\")";
 window.gm.printDo=function(doThat,cost,alias){var k='',msg='',res={OK:true,msg:''};var _cost=cost||{};//cost={time:30,energy:-10,will:-10,difficult:hard}  easy, average, hard
 _cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energy:0,_cost.will=cost&&cost.will?cost.will:0;_cost.difficult=cost&&cost.difficult?cost.difficult:'';k=(_cost.time>0?' '+_cost.time+'min':'')+(_cost.energy!==0?' '+_cost.energy+'E':'')+(_cost.will!==0?' '+_cost.will+'W':'')+(_cost.difficult?' <b>'+_cost.difficult+'</b>':'');if(k!=='')k=" ("+k+")";msg=window.gm.printLink((alias===''?location:alias)+k,"(function(){let v=window.story.state.vars;if(!(("+_cost.energy+"<0 && v.qBattery<"+-1*_cost.energy+")||("+_cost.will+"<0 && v.qSanity<"+-1*_cost.will+"))){"+"v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+"}else{alert(\"Cant do it!\")}}())",{class:!(_cost.energy<0&&window.story.state.vars.qBattery<-1*_cost.energy||_cost.will<0&&window.story.state.vars.qSanity<-1*_cost.will)?"":"done"});//TODO replace alert with ??
 return msg;};var Player=//fake class
 function Player(){_classCallCheck(this,Player);this.location='';this.id=this.name="Player";};/* bundles some utility operations*/window.gm.getSaveVersion=function(){return[0,1,0];};// reimplement to setup the game
 //_origInitGame = window.gm.initGame;
-window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);var s=window.story.state;window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);window.gm.images=imagesScenes(window.gm.images);s._gm.timeRL=s._gm.timeVR=s._gm.time;s._gm.dayRL=s._gm.dayVR=s._gm.day;//TODO set debug to 0 for distribution !
+window.gm.initGame=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;_origInitGame(forceReset,NGP);var s=window.story.state;window.gm.images=imagesBattlers(window.gm.images||{});window.gm.images=imagesMaps(window.gm.images);window.gm.images=imagesEquip(window.gm.images);window.gm.images=imagesIcons(window.gm.images);window.gm.images=imagesScenes(window.gm.images);window.gm.images=imagesItems(window.gm.images);//if svg have no size set, they use whole space, use this to force them to fit into a box
+window.gm.images._sizeTo=function(_pic,width,height){var node=SVG(_pic);node.width(width),node.height(height);return node.node.outerHTML;};s._gm.timeRL=s._gm.timeVR=s._gm.time;s._gm.dayRL=s._gm.dayVR=s._gm.day;//TODO set debug to 0 for distribution !
 s._gm.debug=1,s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.chars.player||forceReset){window.gm.player=new Player();s.chars[window.gm.player.id]=window.gm.player;}window.gm.initGameFlags(forceReset,NGP);window.gm.switchPlayer(window.gm.player.id);};//stuff for AB
 window.gm.initGameFlags=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;var s=window.story.state;function dataPrototype(){return{visitedTiles:[],mapReveal:[],tmp:{},version:0};}if(forceReset){s.NGP=s.Settings=s.DngSY=null;s.Lab=s.Known=null;}var Settings={autoSave:true,showCombatPictures:true,showNSFWPictures:true,showDungeonMap:true};if(!s.vars||forceReset){// storage of variables that doesnt fit player
 s.vars={activePlayer:'',//id of the character that the player controls currently
@@ -4061,7 +4064,7 @@ function readFile(input) {
  &#39;&lt;a href=\&quot;javascript:void(0)\&quot; onclick=\&#39;window.gm.printRemoveItem(window.story.state.vars.Inv[&#39;+slot+&#39;]);window.gm.refreshAllPanel();\&#39; &#39; +((window.story.state.vars.Inv[slot])?&quot;&quot;:&quot;hidden&quot;)+&#39;&gt;discard &#39;+window.story.state.vars.Inv[slot]+&#39;&lt;/a&gt;&lt;br&gt;&#39;);}%&gt;
 &lt;hr&gt;&lt;p&gt;Inventory:&lt;/p&gt;
 &lt;%=use(0)%&gt;&lt;%=use(1)%&gt;&lt;%=use(2)%&gt;&lt;%=use(3)%&gt;
-&lt;span &lt;%=(window.story.state.vars.WM_Lv.qKey1!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Metal Crank&lt;/span&gt;&lt;span &lt;%=(window.story.state.vars.WM_Lv.qFoundExit!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;(You found the exit but cant remember were it was exactly.)&lt;/span&gt;&lt;/br&gt;
+&lt;span &lt;%=(window.story.state.vars.WM_Lv.qKey1!=0)?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Metal Crank&lt;/span&gt;&lt;span&gt;&lt;%=(s.vars.WM_Lv.qFoundExit!=0)?&#39;You remember the exit to be in &#39;+window.gm.util.printLocationName(s.vars.WM_Lv.qLocExit):&#39;&#39;%&gt;&lt;/span&gt;&lt;/br&gt;
 &lt;span &lt;%=false?&#39;&#39;:&#39;hidden=&quot;&quot;&#39;%&gt;&gt;Whetstone&lt;/span&gt;&lt;/br&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="12" name="Relations" tags="_back_ _nodeffered_" position="225,225" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;) %&gt;
 [[Back|_back_]]&lt;/br&gt;
@@ -4842,11 +4845,8 @@ Now Inside Hull.
 &lt;%=window.story.render(&quot;Inv_Hud&quot;)%&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="82" name="WM_Home" tags="" position="225,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;You need to prep before you have to go on adventure again.&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;There are x hours daytime left that you should use wisely.&lt;/b&gt;&lt;/p&gt;
-&lt;p&gt;[[Fix your shield|WM_Forge_Shield]] [[Sharpen your blade|WM_Forge_Blade]]&lt;/p&gt;
-&lt;p&gt;[[Weave some wards|WM_Craft_Ward]] [[Meditate to recover mana |WM_Craft_Spell]] &lt;/p&gt;
-&lt;p&gt;[[Sleep until morning|WM_Rest]]&lt;/p&gt;
+&lt;p&gt;[[Upgrade shop|WM_Shop]] &lt;/p&gt;
+&lt;p&gt;[[Depart to adventure|WM_Dungeon_Selection]]&lt;/p&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="83" name="WM_Respawn" tags="" position="350,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;Damn,you lost most of your loot:&lt;/p&gt;
@@ -4878,8 +4878,8 @@ Defiance Traits Discovered:
 (if: &quot;Prudish&quot; is in $Events)[Prudish - clothes now restore +1 resistance when worn](else:)[Reach 8 Defiance to discover this trait]
 (if: &quot;Respite&quot; is in $Events)[Respite - occassionally dodge random encounters](else:)[Reach 12 Defiance to discover this trait]
 (if: &quot;Zealot&quot; is in $Events)[Zealot - unlocks &quot;Zealot Mode&quot;](else:)[Reach 17 Defiance to discover this trait]]</tw-passagedata><tw-passagedata pid="86" name="WM_Dungeon_Selection" tags="" position="725,1100" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
-&lt;%window.gm.player.location=window.passage.name;%&gt;
-&lt;p&gt;You have no choice then to enter the dungeon again:&lt;/p&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;&lt;%window.story.state.vars.qArousal=0;window.story.state.vars.qSanity=window.story.state.vars.qSanityMax%&gt;
+&lt;p&gt;You have no choice then to enter some dungeon again:&lt;/p&gt;
 &lt;p&gt;&lt;a0 onclick=&#39;enterMine()&#39;&gt;The abandoned mine&#39;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a0 onclick=&#39;enterHospital()&#39;&gt;The hospital&#39;&lt;/a&gt;&lt;/p&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
@@ -5336,10 +5336,9 @@ Now your upper body is &lt;b&gt;NAKED&lt;/b&gt;. &lt;/p&gt;
 &lt;p&gt;Arousal +25&lt;/p&gt;&lt;p&gt;Intelect -5&lt;/p&gt;
 &lt;%window.story.state.vars.qArousal+=25; 
 if(s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]==0 || s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]==undefined) {
-    s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]=1;
+    s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]=1;window.story.state.vars.qWisdom-=5;
 } else if(s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]&gt;=1 &amp;&amp; s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]&lt;=2) {
-    s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]+=1;
-    window.story.state.vars.qWisdom-=5;}
+    s.vars.WM_Lv.qEffects[&quot;Distracted&quot;]+=1;   window.story.state.vars.qWisdom-=5;}
 %&gt;
 &lt;p&gt;Somehow the fumes in the air makes it hard to think. &lt;i&gt;Intelect reduced !&lt;/i&gt;&lt;/p&gt;
 &lt;%}else if(s.tmp.args[2]==2 &amp;&amp; s.tmp.args[3]==&quot;Intelect&quot;){%&gt;
@@ -5411,12 +5410,12 @@ It seems you explored everything around here but there might still be something 
 &lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="133" name="WM_Lv1_B1" tags="name:Elevator_1.floor" position="350,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;The second level of the mine has the same large tunnels carved into the rock like in the entry area.&lt;/p&gt;
+&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_A1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
 &lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=4){%&gt;
 &lt;p&gt;You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_C1]].&lt;/p&gt;&lt;br&gt;
 &lt;%}else{%&gt;
 &lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; to find a way deeper into the mine.&lt;p&gt;
 &lt;%}%&gt;
-&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_A1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
@@ -5448,12 +5447,12 @@ It seems you explored everything around here but there might still be something 
 &lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="138" name="WM_Lv1_C1" tags="name:Cave_Labyrinth" position="975,1725" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;The third level seems to be some natural caves. Several passages led into different directions.&lt;/p&gt;
+&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_B1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
 &lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=5){%&gt;
 &lt;p&gt;You explored all corners of this area and might now decend [[down the stairs|WM_Lv1_D1]].&lt;/p&gt;&lt;br&gt;
 &lt;%}else{%&gt;
 &lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; to find a way deeper into the mine.&lt;p&gt;
 &lt;%}%&gt;
-&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_B1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
@@ -5485,12 +5484,12 @@ It seems you explored everything around here but there might still be something 
 &lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="143" name="WM_Lv1_D1" tags="name:Deep_Caves" position="350,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;The deepest level of the digsite consists of cavernous caves and dense rock crevices.&lt;/p&gt;
+&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_C1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
 &lt;%if(window.story.state.vars.WM_Lv.Explored[window.passage.name]&gt;=5){%&gt;
 &lt;p&gt;You explored all corners of this area maybe you missed out something in the upper floors.&lt;/p&gt;
 &lt;%}else{%&gt;
 &lt;p&gt;There are still some corners that you might need to &lt;a0 onclick=&quot;window.gm.triggerExploreEvt(window.passage.name)&quot;&gt;explore&lt;/a&gt; here.&lt;p&gt;
 &lt;%}%&gt;
-&lt;a0 onclick=&#39;window.gm.player.location=&quot;WM_Lv1_C1&quot;,window.gm.triggerExploreEvt(window.gm.player.location)&#39;&gt;climb upstairs&lt;/a&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;

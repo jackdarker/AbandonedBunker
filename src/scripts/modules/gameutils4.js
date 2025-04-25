@@ -8,18 +8,18 @@ window.gm.triggerExploreEvt=function(targetLocation){
     switch(s.vars.WM_Lv.qDng){  //define Encounters
         case 'WM_Lv1':
             _Encs=[
-            {id:"WM_Lv1_VineSnare",Agility:40,Strength:40,Intelect:40,Rnd:10},
-             {id:"WM_Lv1_VineGrab",Agility:40,Strength:40,Intelect:40,Rnd:10},
-            {id:"WM_Lv1_VineFlower",Agility:40,Strength:40,Intelect:40,Rnd:10},
-            {id:"WM_Lv1_SlugsDrop",Agility:40,Strength:40,Intelect:40,Rnd:10},
+            {id:"WM_Lv1_VineSnare",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv1_VineGrab",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv1_VineFlower",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv1_SlugsDrop",Agility:60,Strength:60,Intelect:60,Rnd:10},
             {id:"WM_Lv1_ExploreFail",Rnd:10}
             ]
         break;
         case 'WM_Lv2':
             _Encs=[
-            {id:"WM_Lv2_VixenNurse",roll:"Strength",min:40},
-            {id:"WM_Lv2_Orderly",roll:"Agility",min:40},
-            {id:"WM_Lv2_DrunkDoctor",roll:"Intelect",min:40}
+            {id:"WM_Lv2_VixenNurse",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv2_Orderly",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv2_DrunkDoctor",Agility:60,Strength:60,Intelect:60,Rnd:10},
             ]
         break;
         default:break;
@@ -45,7 +45,7 @@ window.gm.triggerExploreEvt=function(targetLocation){
     rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];
     s.DngSY.nextLocation=loc;
     //do a roll and check roll+stat
-    rnd=Math.round(window.gm.util.randomNormal(0,40,3))  
+    rnd=Math.round(window.gm.util.randomNormal(0,40,3))  //+Intelect/10 ?
     bonus=(possLocation[0]==targetLocation)?5:0; //reduce enc chance if visiting known location
 
     if(rnd<0){   //encounter 
@@ -101,26 +101,26 @@ window.gm.printRemoveItem=function(what){
 }
 window.gm.printPickup=function(){
     let s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];
-    let Text="",freeSlot=false;
+    let Text="",freeSlot=0;
     for(var i=s.vars.Inv.length-1;i>=0;i--){
-        if(s.vars.Inv[i]=="") { freeSlot=true;break}
+        if(s.vars.Inv[i]=="") { freeSlot++}
     }
     if(item==undefined || item=="") return("");
     if(item=="HealthUp"){
-        Text="There is a healthpotion stashed away.";
+        Text=window.gm.images._sizeTo(window.gm.images["Pill_S_Red"](),100,100)+"<br>There is a healthpotion stashed away.";
     } else if(item=="Tshirt"){
-        Text="There is a Tshirt stashed away.";
+        Text=window.gm.images._sizeTo(window.gm.images["Shirt_X_Plain"](),200,200)+"<br>There is a Tshirt stashed away.";
     } else if(item=="Shorts"){
-        Text="Some cotton pants are stored here.";
+        Text=window.gm.images._sizeTo(window.gm.images["Shorts_X_Plain"](),200,200)+"<br>Some cotton pants are stored here.";
     } else if(item=="Adrenalin"){
-        Text="A syringe filled with a hormon cocktail to normalize your status ailments.";
+        Text=window.gm.images._sizeTo(window.gm.images["Syringe_M_Pink"](),100,100)+"<br>A syringe filled with a hormon cocktail to normalize your status ailments.";
     } else if(item=="Vibrator"){
-        Text="Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";
+        Text=window.gm.images._sizeTo(window.gm.images["Vibrator_S_Bullet"](),100,100)+"Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";
     };
-    if(freeSlot==false){
+    if(freeSlot<=0){
         Text+="Unfortunatly your inventory is already full."
     } else {
-        Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a>'
+        Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a> ('+freeSlot.toString()+' inventory slots left)';
     }
 
     return("<p>"+Text+"</p>");
@@ -177,6 +177,13 @@ _origInitGame(forceReset,NGP);
     window.gm.images = imagesEquip(window.gm.images);
     window.gm.images = imagesIcons(window.gm.images);
     window.gm.images = imagesScenes(window.gm.images);
+    window.gm.images = imagesItems(window.gm.images);
+    //if svg have no size set, they use whole space, use this to force them to fit into a box
+    window.gm.images._sizeTo = function(_pic,width,height){ 
+    var node = SVG(_pic);
+    node.width(width),node.height(height)
+    return(node.node.outerHTML);
+  }
     s._gm.timeRL= s._gm.timeVR = s._gm.time;
     s._gm.dayRL= s._gm.dayVR = s._gm.day;
     //TODO set debug to 0 for distribution !
