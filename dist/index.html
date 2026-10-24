@@ -2881,8 +2881,9 @@ window.gm.encounterChance=function(evt){var res=100.0,s=window.story.state,dng=w
 if(window.gm.getDeltaTime(window.gm.getTime(),evt.tick)>200)res*=2;else res=0;}return res;};return{map:map,data:data};};"use strict";//special stuff for AB
 //call to navigate from current room to target
 //either you just walk move to target or some event happens; after the event continue to target or return to current 
-window.gm.triggerExploreEvt=function(targetLocation){var s=window.story.state,currentLocation=window.gm.player.location;var _Enc,_Encs,msg="";switch(s.vars.WM_Lv.qDng){//define Encounters
-case'WM_Lv1':_Encs=[{id:"WM_Lv1_VineSnare",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_VineGrab",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_VineFlower",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_SlugsDrop",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv1_ExploreFail",Rnd:10}];break;case'WM_Lv2':_Encs=[{id:"WM_Lv2_VixenNurse",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv2_Orderly",Agility:60,Strength:60,Intelect:60,Rnd:10},{id:"WM_Lv2_DrunkDoctor",Agility:60,Strength:60,Intelect:60,Rnd:10}];break;default:break;}var possLocation=[targetLocation],loc,rnd2,rnd,bonus;//either we walk from RoomA to targetLocation or we search inside targetLocation
+window.gm.triggerExploreEvt=function(targetLocation){var s=window.story.state,currentLocation=window.gm.player.location;var _Enc,_Encs,msg="";var _Roll=45.0+s.vars.qDifficult*5;// startstat=40 & +-20 normal-distribution;
+switch(s.vars.WM_Lv.qDng){//define Encounters roll-tresholds
+case'WM_Lv1':_Encs=[{id:"WM_Lv1_VineSnare",Agility:_Roll-5,Strength:_Roll,Intelect:_Roll-5,Rnd:10},{id:"WM_Lv1_VineGrab",Agility:_Roll,Strength:_Roll-5,Intelect:_Roll+5,Rnd:10},{id:"WM_Lv1_VineFlower",Agility:_Roll-5,Strength:_Roll,Intelect:_Roll-5,Rnd:10},{id:"WM_Lv1_SlugsDrop",Agility:_Roll+5,Strength:_Roll+5,Intelect:_Roll-5,Rnd:10},{id:"WM_Lv1_ExploreFail",Rnd:10}];break;case'WM_Lv2':_Encs=[{id:"WM_Lv2_VixenNurse",Agility:_Roll-5,Strength:_Roll,Intelect:_Roll,Rnd:10},{id:"WM_Lv2_Orderly",Agility:_Roll,Strength:_Roll+5,Intelect:_Roll-5,Rnd:10},{id:"WM_Lv2_DrunkDoctor",Agility:_Roll-5,Strength:_Roll-5,Intelect:_Roll+5,Rnd:10}];break;default:break;}var possLocation=[targetLocation],loc,rnd2,rnd,bonus;//either we walk from RoomA to targetLocation or we search inside targetLocation
 if(targetLocation=='WM_Lv1_A1'){possLocation=['WM_Lv1_A2','WM_Lv1_A3','WM_Lv1_A4','WM_Lv1_A5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_B1'){possLocation=['WM_Lv1_B2','WM_Lv1_B3','WM_Lv1_B4','WM_Lv1_B5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_C1'){possLocation=['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_C1'){possLocation=['WM_Lv1_C2','WM_Lv1_C3','WM_Lv1_C4','WM_Lv1_C5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv1_D1'){possLocation=['WM_Lv1_D2','WM_Lv1_D3','WM_Lv1_D4','WM_Lv1_D5'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}else if(targetLocation=='WM_Lv2_C1'){possLocation=['WM_Lv2_C2','WM_Lv2_C3'].filter(function(x){return!s.vars.WM_Lv.Explored[x]>0;});}//pick encounter according location
 rnd2=_.random(0,_Encs.length-1);_Enc=_Encs[rnd2];rnd2=_.random(0,possLocation.length-1),loc=possLocation[rnd2];s.DngSY.nextLocation=loc;//do a roll and check roll+stat
 rnd=Math.round(window.gm.util.randomNormal(0,40,3));//+Intelect/10 ?
@@ -2898,7 +2899,7 @@ window.gm.pushLog('rolled '+rnd+' '+choice+' + bonus '+bonus+' against '+_Enc[ch
 s.DngSY.nextLocation=window.gm.player.location;//back to origin
 window.story.state.tmp.args=[null,choice+" roll failed.",1,choice];//1 used as seen mark
 }else{// pass
-window.story.state.tmp.args=[null,"",2,choice];}window.story.show(_Enc.id+"_Roll");};window.gm.printUseItem=function(what){window.story.state.tmp.args=[null,1];window.story.show("WM_Lv1_Use_"+what);};window.gm.printRemoveItem=function(what){var Inv=window.story.state.vars.Inv;for(var i=Inv.length-1;i>=0;i--){if(Inv[i]==what){Inv[i]='';break;}}};window.gm.printPickup=function(){var s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];var Text="",freeSlot=0;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){freeSlot++;}}if(item==undefined||item=="")return"";if(item=="HealthUp"){Text="There is a healthpotion stashed away."+window.gm.images._sizeTo(window.gm.images["Pill_S_Red"](),200,200);}else if(item=="Tshirt"){Text="There is a Tshirt stashed away."+window.gm.images._sizeTo(window.gm.images["Shirt_X_Plain"](),200,200);}else if(item=="Shorts"){Text="Some cotton pants are stored here."+window.gm.images._sizeTo(window.gm.images["Shorts_X_Plain"](),200,200);}else if(item=="Adrenalin"){Text="A syringe filled with a hormon cocktail to normalize your status ailments."+window.gm.images._sizeTo(window.gm.images["Syringe_M_Pink"](),200,200);}else if(item=="Vibrator"){Text="Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";};if(freeSlot<=0){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a> ('+freeSlot.toString()+' inventory slots left)';}return"<p>"+Text+"</p>";};window.gm.pickupItem=function(what,where){var s=window.story.state;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){s.vars.Inv[i]=what;s.vars.WM_Lv.qLocItems[where]="";break;}}window.story.show(window.passage.name);};//prints link to other passage
+window.story.state.tmp.args=[null,"",2,choice];}window.story.show(_Enc.id+"_Roll");};window.gm.printUseItem=function(what){window.story.state.tmp.args=[null,1];window.story.show("WM_Lv1_Use_"+what);};window.gm.printRemoveItem=function(what){var Inv=window.story.state.vars.Inv;for(var i=Inv.length-1;i>=0;i--){if(Inv[i]==what){Inv[i]='';break;}}};window.gm.printPickup=function(){var s=window.story.state,item=s.vars.WM_Lv.qLocItems[window.passage.name];var Text="",freeSlot=0;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){freeSlot++;}}if(item==undefined||item=="")return"";if(item=="HealthUp"){Text=window.gm.images._sizeTo(window.gm.images["Pill_S_Red"](),100,100)+"<br>There is a healthpotion stashed away.";}else if(item=="Tshirt"){Text=window.gm.images._sizeTo(window.gm.images["Shirt_X_Plain"](),200,200)+"<br>There is a Tshirt stashed away.";}else if(item=="Shorts"){Text=window.gm.images._sizeTo(window.gm.images["Shorts_X_Plain"](),200,200)+"<br>Some cotton pants are stored here.";}else if(item=="Adrenalin"){Text=window.gm.images._sizeTo(window.gm.images["Syringe_M_Pink"](),100,100)+"<br>A syringe filled with a hormon cocktail to normalize your status ailments.";}else if(item=="Vibrator"){Text=window.gm.images._sizeTo(window.gm.images["Vibrator_S_Bullet"](),100,100)+"Some sort of bullet-vibrator, could be useful in your times of 'need'. Using it will lower arousal somewhat.";};if(freeSlot<=0){Text+="Unfortunatly your inventory is already full.";}else{Text+='Would you like to <a0 onclick=window.gm.pickupItem(\"'+item+'\",\"'+window.passage.name+'\")>pick it up?</a> ('+freeSlot.toString()+' inventory slots left)';}return"<p>"+Text+"</p>";};window.gm.pickupItem=function(what,where){var s=window.story.state;for(var i=s.vars.Inv.length-1;i>=0;i--){if(s.vars.Inv[i]==""){s.vars.Inv[i]=what;s.vars.WM_Lv.qLocItems[where]="";break;}}window.story.show(window.passage.name);};//prints link to other passage
 window.gm.printGoto=function(location,cost,alias){var msg='',res={OK:true,msg:''};msg=window.gm.printDo("window.story.show(\""+location+"\");",cost,alias);return msg;};//prints link that executes doThat f.e. "window.story.show(\"NewGame\")";
 window.gm.printDo=function(doThat,cost,alias){var k='',msg='',res={OK:true,msg:''};var _cost=cost||{};//cost={time:30,energy:-10,will:-10,difficult:hard}  easy, average, hard
 _cost.time=cost&&cost.time?cost.time:0,_cost.energy=cost&&cost.energy?cost.energy:0,_cost.will=cost&&cost.will?cost.will:0;_cost.difficult=cost&&cost.difficult?cost.difficult:'';k=(_cost.time>0?' '+_cost.time+'min':'')+(_cost.energy!==0?' '+_cost.energy+'E':'')+(_cost.will!==0?' '+_cost.will+'W':'')+(_cost.difficult?' <b>'+_cost.difficult+'</b>':'');if(k!=='')k=" ("+k+")";msg=window.gm.printLink((alias===''?location:alias)+k,"(function(){let v=window.story.state.vars;if(!(("+_cost.energy+"<0 && v.qBattery<"+-1*_cost.energy+")||("+_cost.will+"<0 && v.qSanity<"+-1*_cost.will+"))){"+"v.qBattery+="+_cost.energy+";v.qSanity+="+_cost.will+";window.gm.addTime("+_cost.time.toString()+");"+doThat+";"+"}else{alert(\"Cant do it!\")}}())",{class:!(_cost.energy<0&&window.story.state.vars.qBattery<-1*_cost.energy||_cost.will<0&&window.story.state.vars.qSanity<-1*_cost.will)?"":"done"});//TODO replace alert with ??
@@ -2910,7 +2911,8 @@ window.gm.images._sizeTo=function(_pic,width,height){var node=SVG(_pic);node.wid
 s._gm.debug=1,s._gm.dbgShowCombatRoll=true,s._gm.dbgShowQuestInfo=true;s._gm.dbgShowMoreInfo=true;if(!s.chars.player||forceReset){window.gm.player=new Player();s.chars[window.gm.player.id]=window.gm.player;}window.gm.initGameFlags(forceReset,NGP);window.gm.switchPlayer(window.gm.player.id);};//stuff for AB
 window.gm.initGameFlags=function(forceReset){var NGP=arguments.length>1&&arguments[1]!==undefined?arguments[1]:null;var s=window.story.state;function dataPrototype(){return{visitedTiles:[],mapReveal:[],tmp:{},version:0};}if(forceReset){s.NGP=s.Settings=s.DngSY=null;s.Lab=s.Known=null;}var Settings={autoSave:true,showCombatPictures:true,showNSFWPictures:true,showDungeonMap:true};if(!s.vars||forceReset){// storage of variables that doesnt fit player
 s.vars={activePlayer:'',//id of the character that the player controls currently
-qSanity:100,qSanityMax:100,qArousal:0,qArousalMax:50,qAgility:40,qAgilityMax:40,qStrength:40,qStrengthMax:40,qWisdom:40,qWisdomMax:40,qUpperWear:1,qLowerWear:1,qUnusedSP:0,qCoin:0};s.vars.Inv=[];//Inventory
+qSanity:100,qSanityMax:100,qPoise:0,qPoiseMax:100,qAdvantage:0,qAdvantageMax:100,qArousal:0,qArousalMax:50,qAgility:40,qAgilityMax:40,qStrength:40,qStrengthMax:40,qWisdom:40,qWisdomMax:40,qUpperWear:1,qLowerWear:1,qUnusedSP:0,qCoin:0,qDifficult:1// base difficult for rolls; 0= easy ..3=though 
+};s.vars.Inv=[];//Inventory
 s.vars.U={//Unlockables
 ShowRooms:1,ShowRoll:1};s.vars.WM_Lv={};//flags of the current dungeon
 s.vars.WM_Lv1={};//persitent data between playthrough
@@ -5291,8 +5293,8 @@ Giving up resistance...
 foo(false)
 &lt;/script&gt;</tw-passagedata><tw-passagedata pid="118" name="WM_Lv1_VineSnare" tags="_nosave_" position="975,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p&gt;As you walk along, some tentacle push from the ground beneath you.&lt;/p&gt;
-&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Agility&quot;)&#39;&gt;Dodge away&lt;/a&gt;
-&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Strength&quot;)&#39;&gt;Stand still&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Agility&quot;)&#39;&gt;Dodge away (Agility)&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Strength&quot;)&#39;&gt;Stand still (Strength)&lt;/a&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="119" name="WM_Lv1_VineSnare_Roll" tags="_nosave_" position="1100,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
 &lt;%if(s.tmp.args[2]==1 &amp;&amp; s.vars.qLowerWear&gt;0){s.vars.qLowerWear=0; %&gt;
@@ -5310,8 +5312,8 @@ Now your lower body is &lt;b&gt;NAKED&lt;/b&gt;. &lt;/p&gt;
 &lt;a0 onclick=&#39;window.story.show(window.story.state.DngSY.nextLocation)&#39;&gt;Next&lt;/a&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="120" name="WM_Lv1_VineGrab" tags="_nosave_" position="1225,1475" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;p&gt;As you walk along, some tentacle push from the walls above you.&lt;/p&gt;
-&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Agility&quot;)&#39;&gt;Dodge away&lt;/a&gt;
-&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Strength&quot;)&#39;&gt;Stand still&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Agility&quot;)&#39;&gt;Dodge away (Agility)&lt;/a&gt;
+&lt;a0 onclick=&#39;window.gm.trialExploreEvt(&quot;Strength&quot;)&#39;&gt;Stand still (Strength)&lt;/a&gt;
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="121" name="WM_Lv1_VineGrab_Roll" tags="_nosave_" position="100,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_RollDebug&quot;)%&gt;
 &lt;%if(window.story.state.tmp.args[2]==1 &amp;&amp; window.story.state.vars.qUpperWear&gt;0){window.story.state.vars.qUpperWear=0; %&gt;
@@ -5382,6 +5384,7 @@ It seems you explored everything around here but there might still be something 
 &lt;%=window.story.render(&quot;WM_Lv1_Navigation&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Debug&quot;)%&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+[[WM_Lv1_Fight_TentaclePit_Intro]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="129" name="WM_Lv1_A2" tags="name:Mine_Trench" position="1100,1600" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
@@ -5512,13 +5515,129 @@ It seems you explored everything around here but there might still be something 
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_D1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="147" name="WM_Lv1_D5" tags="name:Subterranean_Garden" position="850,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="147" name="WM_Lv1_D5" tags="name:Subterranean_Garden" position="675,775" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;%window.gm.player.location=window.passage.name;%&gt;
 &lt;p&gt;A surprising patch of vibrant mushrooms and moss, faintly luminescent and unnervingly alive.&lt;/p&gt;
 &lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
 [[Back where you came from|WM_Lv1_D1]]
 &lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
-&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="148" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;</tw-passagedata><tw-passagedata pid="148" name="WM_Lv1_Fight_TentaclePit_Intro" tags="" position="975,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;%window.gm.player.location=window.passage.name;%&gt;
+&lt;%;%&gt;
+&lt;p&gt;There is a hole in the top of the room&#39;s roof. Up there in the dark you spot some movement of firehoose like appendages. &lt;/p&gt;
+&lt;p&gt;Unfortunately the item you are looking for is just in the oposite corner of the room and the only way is through this mess just below the opening. &lt;/p&gt;
+&lt;p&gt;You better be prepared for anything the lurks up there.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Pickups&quot;)%&gt;
+&lt;a0 onclick=&#39;start();&#39;&gt;Face the threat&lt;/a&gt;
+[[Back where you came from|WM_Lv1_D1]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;%=window.story.render(&quot;WM_Lv1_Encounters&quot;)%&gt;
+&lt;script&gt;
+function start(){  
+    let setup=window.story.state.vars.WM_Lv;
+    //those entries init variables for combat participants
+    setup[&quot;enemy&quot;]={name:&quot;TentaclePit&quot;,
+        hp:4,sta_dmg:6,poi_dmg:10,aro_dmg:10,       //health &amp; damage stats
+        c_beh:[&quot;attack&quot;,&quot;attack&quot;,&quot;trip&quot;,&quot;trip&quot;,&quot;grope&quot;],    //combat moveset
+        g_beh:[&quot;grope&quot;,&quot;grope&quot;], //grapple-moveset
+    }
+    setup[&quot;player&quot;]={
+        adv_start:30,adv_g:8,    //start-advantage &amp; gain
+        poi_start:50,
+    }
+    // init vars
+    setup.enemy[&quot;c_mov&quot;]=setup.enemy.c_beh; 
+    setup.enemy[&quot;g_mov&quot;]=setup.enemy.g_beh;
+    setup.enemy[&quot;move&quot;]=&quot;&quot;;
+    window.story.state.vars.qAdvantage=setup.player.adv_start;
+    window.story.state.vars.qPoise=setup.player.poi_start;
+    setup[&quot;c_scene&quot;]=&quot;WM_Lv_Fight_&quot;+setup.enemy.name;
+    setup[&quot;g_scene&quot;]=&quot;WM_Lv_Grapple_&quot;+setup.enemy.name;
+    setup[&quot;v_scene&quot;]=&quot;WM_Lv_Victory_&quot;+setup.enemy.name;
+    setup[&quot;d_scene&quot;]=&quot;WM_Lv_Defeat_&quot;+setup.enemy.name;
+    setup[&quot;c_state&quot;]=&quot;c&quot;;
+    window.story.show(setup.c_scene);
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="149" name="WM_Battle_Options" tags="" position="1100,1850" size="100,100">&lt;%let s=window.story.state;let setup=s.vars.WM_Lv; %&gt;
+&lt;p&gt;Health: &lt;%=setup.enemy.hp%&gt;&lt;/p&gt;
+&lt;p&gt;Moves: &lt;%=setup.enemy.c_mov%&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Modifiers:&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Actions:&lt;/p&gt;
+&lt;% if(setup.c_state==&quot;c&quot;){ %&gt;
+&lt;a0 onclick=&#39;posture()&#39;&gt;Posture&lt;/a&gt;&lt;sp&gt;gain &lt;%=window.story.state.vars.WM_Lv.player.adv_g%&gt;% advantage&lt;/sp&gt;&lt;br&gt;
+&lt;a0 onclick=&#39;attack()&#39;&gt;Attack&lt;/a&gt;&lt;sp&gt;&lt;%=window.story.state.vars.qAdvantage%&gt;% to deal damage&lt;/sp&gt;&lt;br&gt;
+&lt;a0 onclick=&#39;block()&#39;&gt;Block&lt;/a&gt;&lt;sp&gt;block an ATTACK to reduce stamina damage&lt;/sp&gt;&lt;br&gt;
+&lt;a0 onclick=&#39;steady()&#39;&gt;Block&lt;/a&gt;&lt;sp&gt;brace against TRIP to nullify poise damage&lt;/sp&gt;&lt;br&gt;
+&lt;a0 onclick=&#39;focus()&#39;&gt;Block&lt;/a&gt;&lt;sp&gt;reduce arousal from a GROPE&lt;/sp&gt;&lt;br&gt;
+&lt;%}else{%&gt;
+&lt;a0 onclick=&#39;breakfree()&#39;&gt;Break free&lt;/a&gt;&lt;sp&gt;&lt;%=s.vars.qPoise%&gt;% to break the grapple&lt;/sp&gt;&lt;br&gt;
+&lt;a0 onclick=&#39;struggle()&#39;&gt;Struggle&lt;/a&gt;&lt;sp&gt;try to weaken the grip on you (increase poise)&lt;/sp&gt;&lt;br&gt;
+&lt;a0 onclick=&#39;endure()&#39;&gt;Block&lt;/a&gt;&lt;sp&gt;catch a breather&lt;/sp&gt;&lt;br&gt;
+&lt;%}%&gt;
+&lt;script&gt;
+window.gm.dbgHelper()
+function getEnemyMove(){
+    let setup= window.story.state.vars.WM_Lv;
+    if(setup.c_state==&quot;c&quot;){
+        if(setup.enemy.c_mov.length===0){
+            setup.enemy.c_mov=setup.enemy.c_beh;
+            setup.enemy.move=&quot;special&quot;;
+        } else {
+            setup.enemy.move = setup.enemy.c_mov.splice(_.random(0,setup.enemy.c_mov.length-1),1);
+        }
+    } else {//grapple
+        if(setup.enemy.g_mov.length===0){
+            setup.enemy.g_mov=setup.enemy.g_beh;
+            setup.enemy.move=&quot;special&quot;;
+        } else {
+            setup.enemy.move = setup.enemy.g_mov.splice(_.random(0,setup.enemy.g_mov.length-1),1);
+        }
+    }
+    setup.enemy.roll=_.random(0,100);
+}
+function attack(){
+    let setup= window.story.state.vars.WM_Lv;
+    getEnemyMove()
+    window.story.show(setup.c_scene+&quot;_Attack&quot;);
+}
+function posture(){
+    let setup= window.story.state.vars.WM_Lv;
+    getEnemyMove()
+    window.story.show(window.story.state.vars.WM_Lv.c_scene+&quot;_Posture&quot;)
+}
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="150" name="WM_Lv_Fight_TentaclePit" tags="_nosave_" position="1225,1850" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;!--%window.gm.player.location=window.passage.name;%--&gt;
+&lt;p&gt;tentacles are squirming out of the hole in the center of the room.&lt;/p&gt;
+&lt;%=window.story.render(&quot;WM_Battle_Options&quot;)%&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;
+&lt;% if(window.story.state.vars.WM_Lv.enemy.hp&lt;=0) { window.story.show(setup.v_scene); }
+else if(window.story.state.vars.qSanity&lt;=0){ window.story.show(setup.d_scene) }
+else if(window.story.state.vars.qPoise&lt;=0){ window.story.show(setup.g_scene) }
+else if(window.story.state.vars.qArousal&gt;=window.story.state.vars.qArousalMax){ window.story.show(setup.a_scene) }
+%&gt;</tw-passagedata><tw-passagedata pid="151" name="WM_Lv_Fight_TentaclePit_Attack" tags="" position="100,1975" size="100,100">&lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
+&lt;!--%window.gm.player.location=window.passage.name;%--&gt;
+&lt;%let s=window.story.state;let setup=s.vars.WM_Lv; %&gt;
+&lt;%if((setup.enemy.move==&#39;special&#39; &amp;&amp; setup.enemy.roll/2&lt;=setup.player.adv) || setup.enemy.roll&lt;=setup.player.adv ){
+    setup.enemy.hp-=1; %&gt;
+&lt;p&gt;You landed a sucessful hit and the tentacles recoils back somewhat.&lt;/p&gt;
+&lt;%} else if(true){%&gt;
+&lt;p&gt;Your attack missed its target and left you open for the enemys move.&lt;/p&gt;
+&lt;p&gt;-5 Poise&lt;/p&gt;&lt;%setup.player.poi=Math.max(0,setup.player.poi-5)%&gt;
+&lt;p&gt;Enemy uses &lt;%=setup.enemy.move%&gt;&lt;/p&gt;
+&lt;%if(setup.enemy.move==&#39;attack&#39;){  s.vars.qSanity=Math.max(0,s.vars.qSanity-setup.enemy.sta_dmg) %&gt;
+&lt;p&gt;A bunch of tentacles slap you.&lt;/p&gt;
+&lt;%} else if (setup.enemy.move==&#39;trip&#39;){ s.vars.qPoise=Math.max(0,s.vars.qPoise-setup.enemy.poi_dmg) %&gt;
+&lt;p&gt;A bunch of tentacles slap you.&lt;/p&gt;
+&lt;%} else if (setup.enemy.move==&#39;grope&#39;){ s.vars.qArousal=Math.max(0,s.vars.qArousal-setup.enemy.aro_dmg)%&gt;
+&lt;p&gt;A bunch of tentacles slap you.&lt;/p&gt;
+&lt;%} else if (setup.enemy.move==&#39;grab&#39;){%&gt;
+&lt;p&gt;A bunch of tentacles slap you.&lt;/p&gt;
+&lt;%}%&gt;
+&lt;%}%&gt;
+[[Continue|&lt;%=s.vars.WM_Lv.c_scene%&gt;]]
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="152" name="downgrade" tags="" position="900,800" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 That didnt work out as expected. &lt;/br&gt;
@@ -5545,7 +5664,7 @@ function downgrade_option(elmnt) {
 function downgrade_option2(elmnt) {
     window.gm.onSelect(elmnt,&quot;div#choice table tbody tr td img&quot;,&quot;div#choice table tbody tr td span&quot;);
 }
-&lt;/script&gt;</tw-passagedata><tw-passagedata pid="149" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
+&lt;/script&gt;</tw-passagedata><tw-passagedata pid="153" name="downgrade_Done" tags="" position="900,900" size="100,100">&lt;section&gt; 
 &lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;!--set next location before--&gt;
 You selected the icon and flickers up while the others vanish. &lt;/br&gt;
@@ -5556,22 +5675,22 @@ Thankfully you straighten up and timidly glance back at it. &lt;/br&gt;
 Making some steps backward the robot gives you some room but seems still to stare at you.&lt;/br&gt;
 
 [[Better go with them|Home]]&lt;/br&gt;
-&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="150" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;/article&gt;&lt;article id=&quot;LogPanel&quot;&gt;&lt;/article&gt;&lt;/section&gt;</tw-passagedata><tw-passagedata pid="154" name="Lisa_Anal_Vortex" tags="" position="300,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_anal_vortex&quot; width=&quot;64&quot; src=&quot;assets/icon/Icon_Vortex.png&quot; style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;lisa_anal_vortex&quot;&gt;Swirling vortex, a black hole that sucks everthing in. Or portal that sends you home?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="151" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="155" name="Lisa_Armbinder" tags="" position="100,875" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;lisa_armbinder&quot; width=&quot;64&quot; src=&quot;assets/icon/lisa_armbinder.png&quot;style=&#39;background: url(&quot;assets/icon/Icon_Lisa.png&quot;) no-repeat center,url(&quot;assets/icon/Icon_bg.png&quot;) no-repeat center;color:black;&#39;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&#39;lisa_armbinder&#39;&gt;That could be a person. Not sure what that V-shape means. Some kind of outfit?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="152" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Lisa.upArmbinder+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="156" name="Kor_MalePlus" tags="" position="100,1350" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_plus&quot; width=&quot;64&quot; src=&quot;assets/icon/kor_malePlus.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_plus&quot; &gt;Symbol for male, thats easy. But what does it stand for and whats the meaning of the cross?&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="153" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMale+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="157" name="Kor_MaleX" tags="" position="100,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_male_X&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_male_X&quot; &gt;That symbol you saw already. The cross looks different this time.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="154" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMaleX+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="158" name="Kor_Tongue" tags="" position="200,1700" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_tongue&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Tongue.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_tongue&quot; &gt;A tongue maybe? Or something ompletely different.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="155" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="159" name="Kor_Mouth" tags="" position="200,1800" size="100,100">&lt;tr&gt;&lt;td&gt;&lt;img id=&quot;kor_mouth&quot; width=&quot;64&quot; src=&quot;assets/icon/Kor_Mouth.png&quot;&gt;&lt;/td&gt;
 &lt;td&gt;&lt;span id=&quot;kor_mouth&quot; &gt;Are those lips? A mouth that speaks. I think I get insane if I dont meet someone to speak with soon.&lt;/br&gt;
-&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="156" name="Start" tags="" position="200,400" size="100,100">Select a Link:
+&lt;a0 onclick=&#39;(function(){window.story.state.Kor.upMouth+=1;window.story.show(&quot;downgrade_Done&quot;);}())&#39;&gt;Choose this icon&lt;/a&gt;&lt;/span&gt;&lt;/td&gt;&lt;/tr&gt;</tw-passagedata><tw-passagedata pid="160" name="Start" tags="" position="200,400" size="100,100">Select a Link:
 &lt;ul&gt;
     &lt;li&gt;[[StartPage]]&lt;/li&gt;
-&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="157" name="GenericPassage" tags="_nosave_" position="850,1975" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
+&lt;/ul&gt;</tw-passagedata><tw-passagedata pid="161" name="GenericPassage" tags="_nosave_" position="100,2100" size="100,100">&lt;!--call this passage after setting tmp.args !--&gt;
 &lt;section&gt;&lt;aside id=&quot;sidebar&quot;&gt;&lt;/aside&gt;&lt;article&gt;&lt;%=window.story.render(&quot;CenterDialogs&quot;)%&gt;
 &lt;div id=&#39;panel&#39;&gt;&lt;/div&gt;&lt;!--description is rendered here--&gt;
 &lt;div id=&#39;choice&#39;&gt;&lt;/div&gt; &lt;!--choice is rendered here--&gt;

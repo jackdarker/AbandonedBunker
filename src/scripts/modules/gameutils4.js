@@ -5,21 +5,22 @@
 window.gm.triggerExploreEvt=function(targetLocation){
     let s=window.story.state,currentLocation=window.gm.player.location;
     let _Enc,_Encs,msg="";
-    switch(s.vars.WM_Lv.qDng){  //define Encounters
+    let _Roll = 45.0 + s.vars.qDifficult*5;     // startstat=40 & +-20 normal-distribution;
+    switch(s.vars.WM_Lv.qDng){  //define Encounters roll-tresholds
         case 'WM_Lv1':
             _Encs=[
-            {id:"WM_Lv1_VineSnare",Agility:60,Strength:60,Intelect:60,Rnd:10},
-            {id:"WM_Lv1_VineGrab",Agility:60,Strength:60,Intelect:60,Rnd:10},
-            {id:"WM_Lv1_VineFlower",Agility:60,Strength:60,Intelect:60,Rnd:10},
-            {id:"WM_Lv1_SlugsDrop",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv1_VineSnare",     Agility:_Roll-5,    Strength:_Roll,    Intelect:_Roll-5,  Rnd:10},
+            {id:"WM_Lv1_VineGrab",      Agility:_Roll,      Strength:_Roll-5,  Intelect:_Roll+5,  Rnd:10},
+            {id:"WM_Lv1_VineFlower",    Agility:_Roll-5,    Strength:_Roll,    Intelect:_Roll-5,  Rnd:10},
+            {id:"WM_Lv1_SlugsDrop",     Agility:_Roll+5,    Strength:_Roll+5,  Intelect:_Roll-5, Rnd:10},
             {id:"WM_Lv1_ExploreFail",Rnd:10}
             ]
         break;
         case 'WM_Lv2':
             _Encs=[
-            {id:"WM_Lv2_VixenNurse",Agility:60,Strength:60,Intelect:60,Rnd:10},
-            {id:"WM_Lv2_Orderly",Agility:60,Strength:60,Intelect:60,Rnd:10},
-            {id:"WM_Lv2_DrunkDoctor",Agility:60,Strength:60,Intelect:60,Rnd:10},
+            {id:"WM_Lv2_VixenNurse",    Agility:_Roll-5,    Strength:_Roll,    Intelect:_Roll,      Rnd:10},
+            {id:"WM_Lv2_Orderly",       Agility:_Roll,      Strength:_Roll+5,  Intelect:_Roll-5,    Rnd:10},
+            {id:"WM_Lv2_DrunkDoctor",   Agility:_Roll-5,    Strength:_Roll-5,  Intelect:_Roll+5,    Rnd:10},
             ]
         break;
         default:break;
@@ -217,6 +218,10 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
         activePlayer : '', //id of the character that the player controls currently
         qSanity:100,
         qSanityMax:100,
+        qPoise:0,
+        qPoiseMax:100,
+        qAdvantage:0,
+        qAdvantageMax:100,
         qArousal:0,
         qArousalMax:50,
         qAgility:40,
@@ -229,6 +234,7 @@ window.gm.initGameFlags = function(forceReset,NGP=null) {
         qLowerWear:1,
         qUnusedSP:0,
         qCoin:0,
+        qDifficult:1,   // base difficult for rolls; 0= easy ..3=though 
         };
         s.vars.Inv=[]; //Inventory
         s.vars.U={  //Unlockables

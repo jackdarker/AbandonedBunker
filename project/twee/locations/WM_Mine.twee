@@ -242,8 +242,8 @@ foo(false)
 :: WM_Lv1_VineSnare [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <p>As you walk along, some tentacle push from the ground beneath you.</p>
-<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away</a>
-<a0 onclick='window.gm.trialExploreEvt("Strength")'>Stand still</a>
+<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away (Agility)</a>
+<a0 onclick='window.gm.trialExploreEvt("Strength")'>Stand still (Strength)</a>
 </article><article id="LogPanel"></article></section>
 
 
@@ -269,8 +269,8 @@ Now your lower body is <b>NAKED</b>. </p>
 :: WM_Lv1_VineGrab [_nosave_]
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <p>As you walk along, some tentacle push from the walls above you.</p>
-<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away</a>
-<a0 onclick='window.gm.trialExploreEvt("Strength")'>Stand still</a>
+<a0 onclick='window.gm.trialExploreEvt("Agility")'>Dodge away (Agility)</a>
+<a0 onclick='window.gm.trialExploreEvt("Strength")'>Stand still (Strength)</a>
 </article><article id="LogPanel"></article></section>
 
 
@@ -373,6 +373,7 @@ It seems you explored everything around here but there might still be something 
 <%=window.story.render("WM_Lv1_Navigation")%>
 <%=window.story.render("WM_Lv1_Debug")%>
 <%=window.story.render("WM_Lv1_Pickups")%>
+[[WM_Lv1_Fight_TentaclePit_Intro]]
 </article><article id="LogPanel"></article></section>
 <%=window.story.render("WM_Lv1_Encounters")%>
 
@@ -578,7 +579,7 @@ It seems you explored everything around here but there might still be something 
 <%=window.story.render("WM_Lv1_Encounters")%>
 
 
-:: WM_Lv1_D5 [name:Subterranean_Garden]
+:: WM_Lv1_D5 [name:Subterranean_Garden] {"position":"675,775"}
 <section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
 <%window.gm.player.location=window.passage.name;%>
 <p>A surprising patch of vibrant mushrooms and moss, faintly luminescent and unnervingly alive.</p>
@@ -586,3 +587,132 @@ It seems you explored everything around here but there might still be something 
 [[Back where you came from|WM_Lv1_D1]]
 </article><article id="LogPanel"></article></section>
 <%=window.story.render("WM_Lv1_Encounters")%>
+
+:: WM_Lv1_Fight_TentaclePit_Intro
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<%window.gm.player.location=window.passage.name;%>
+<%;%>
+<p>There is a hole in the top of the room's roof. Up there in the dark you spot some movement of firehoose like appendages. </p>
+<p>Unfortunately the item you are looking for is just in the oposite corner of the room and the only way is through this mess just below the opening. </p>
+<p>You better be prepared for anything the lurks up there.</p>
+<%=window.story.render("WM_Lv1_Pickups")%>
+<a0 onclick='start();'>Face the threat</a>
+[[Back where you came from|WM_Lv1_D1]]
+</article><article id="LogPanel"></article></section>
+<%=window.story.render("WM_Lv1_Encounters")%>
+<script>
+function start(){  
+    let setup=window.story.state.vars.WM_Lv;
+    //those entries init variables for combat participants
+    setup["enemy"]={name:"TentaclePit",
+        hp:4,sta_dmg:6,poi_dmg:10,aro_dmg:10,       //health & damage stats
+        c_beh:["attack","attack","trip","trip","grope"],    //combat moveset
+        g_beh:["grope","grope"], //grapple-moveset
+    }
+    setup["player"]={
+        adv_start:30,adv_g:8,    //start-advantage & gain
+        poi_start:50,
+    }
+    // init vars
+    setup.enemy["c_mov"]=setup.enemy.c_beh; 
+    setup.enemy["g_mov"]=setup.enemy.g_beh;
+    setup.enemy["move"]="";
+    window.story.state.vars.qAdvantage=setup.player.adv_start;
+    window.story.state.vars.qPoise=setup.player.poi_start;
+    setup["c_scene"]="WM_Lv_Fight_"+setup.enemy.name;
+    setup["g_scene"]="WM_Lv_Grapple_"+setup.enemy.name;
+    setup["v_scene"]="WM_Lv_Victory_"+setup.enemy.name;
+    setup["d_scene"]="WM_Lv_Defeat_"+setup.enemy.name;
+    setup["c_state"]="c";
+    window.story.show(setup.c_scene);
+}
+</script>
+
+:: WM_Battle_Options
+<%let s=window.story.state;let setup=s.vars.WM_Lv; %>
+<p>Health: <%=setup.enemy.hp%></p>
+<p>Moves: <%=setup.enemy.c_mov%></p>
+<hr>
+<p>Modifiers:</p>
+<hr>
+<p>Actions:</p>
+<% if(setup.c_state=="c"){ %>
+<a0 onclick='posture()'>Posture</a><sp>gain <%=window.story.state.vars.WM_Lv.player.adv_g%>% advantage</sp><br>
+<a0 onclick='attack()'>Attack</a><sp><%=window.story.state.vars.qAdvantage%>% to deal damage</sp><br>
+<a0 onclick='block()'>Block</a><sp>block an ATTACK to reduce stamina damage</sp><br>
+<a0 onclick='steady()'>Block</a><sp>brace against TRIP to nullify poise damage</sp><br>
+<a0 onclick='focus()'>Block</a><sp>reduce arousal from a GROPE</sp><br>
+<%}else{%>
+<a0 onclick='breakfree()'>Break free</a><sp><%=s.vars.qPoise%>% to break the grapple</sp><br>
+<a0 onclick='struggle()'>Struggle</a><sp>try to weaken the grip on you (increase poise)</sp><br>
+<a0 onclick='endure()'>Block</a><sp>catch a breather</sp><br>
+<%}%>
+<script>
+window.gm.dbgHelper()
+function getEnemyMove(){
+    let setup= window.story.state.vars.WM_Lv;
+    if(setup.c_state=="c"){
+        if(setup.enemy.c_mov.length===0){
+            setup.enemy.c_mov=setup.enemy.c_beh;
+            setup.enemy.move="special";
+        } else {
+            setup.enemy.move = setup.enemy.c_mov.splice(_.random(0,setup.enemy.c_mov.length-1),1);
+        }
+    } else {//grapple
+        if(setup.enemy.g_mov.length===0){
+            setup.enemy.g_mov=setup.enemy.g_beh;
+            setup.enemy.move="special";
+        } else {
+            setup.enemy.move = setup.enemy.g_mov.splice(_.random(0,setup.enemy.g_mov.length-1),1);
+        }
+    }
+    setup.enemy.roll=_.random(0,100);
+}
+function attack(){
+    let setup= window.story.state.vars.WM_Lv;
+    getEnemyMove()
+    window.story.show(setup.c_scene+"_Attack");
+}
+function posture(){
+    let setup= window.story.state.vars.WM_Lv;
+    getEnemyMove()
+    window.story.show(window.story.state.vars.WM_Lv.c_scene+"_Posture")
+}
+</script>
+
+
+:: WM_Lv_Fight_TentaclePit [_nosave_]
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<!--%window.gm.player.location=window.passage.name;%-->
+<p>tentacles are squirming out of the hole in the center of the room.</p>
+<%=window.story.render("WM_Battle_Options")%>
+</article><article id="LogPanel"></article></section>
+<% if(window.story.state.vars.WM_Lv.enemy.hp<=0) { window.story.show(setup.v_scene); }
+else if(window.story.state.vars.qSanity<=0){ window.story.show(setup.d_scene) }
+else if(window.story.state.vars.qPoise<=0){ window.story.show(setup.g_scene) }
+else if(window.story.state.vars.qArousal>=window.story.state.vars.qArousalMax){ window.story.show(setup.a_scene) }
+%>
+
+:: WM_Lv_Fight_TentaclePit_Attack
+<section><aside id="sidebar"></aside><article><%=window.story.render("CenterDialogs")%>
+<!--%window.gm.player.location=window.passage.name;%-->
+<%let s=window.story.state;let setup=s.vars.WM_Lv; %>
+<%if((setup.enemy.move=='special' && setup.enemy.roll/2<=setup.player.adv) || setup.enemy.roll<=setup.player.adv ){
+    setup.enemy.hp-=1; %>
+<p>You landed a sucessful hit and the tentacles recoils back somewhat.</p>
+<%} else if(true){%>
+<p>Your attack missed its target and left you open for the enemys move.</p>
+<p>-5 Poise</p><%setup.player.poi=Math.max(0,setup.player.poi-5)%>
+<p>Enemy uses <%=setup.enemy.move%></p>
+<%if(setup.enemy.move=='attack'){  s.vars.qSanity=Math.max(0,s.vars.qSanity-setup.enemy.sta_dmg) %>
+<p>A bunch of tentacles slap you.</p>
+<%} else if (setup.enemy.move=='trip'){ s.vars.qPoise=Math.max(0,s.vars.qPoise-setup.enemy.poi_dmg) %>
+<p>A bunch of tentacles slap you.</p>
+<%} else if (setup.enemy.move=='grope'){ s.vars.qArousal=Math.max(0,s.vars.qArousal-setup.enemy.aro_dmg)%>
+<p>A bunch of tentacles slap you.</p>
+<%} else if (setup.enemy.move=='grab'){%>
+<p>A bunch of tentacles slap you.</p>
+<%}%>
+<%}%>
+[[Continue|<%=s.vars.WM_Lv.c_scene%>]]
+</article><article id="LogPanel"></article></section>
